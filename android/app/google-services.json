@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "366906461622",
+    "project_id": "style-board-2a885",
+    "storage_bucket": "style-board-2a885.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366906461622:android:b59b7e727eb11d63a14517",
+        "android_client_info": {
+          "package_name": "com.example.style_board"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIcLMWxeeIkOq3yiG9Lm6WMNjVp3Hquvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
