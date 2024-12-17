@@ -32,7 +32,7 @@ migrate_working_dir/
 /build/
 
 # Firebase 관련 파일 제외
-google-services.json
+android/app/google-services.json
 
 # Symbolication related
 app.*.symbols
