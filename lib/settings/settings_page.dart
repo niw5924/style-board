@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
           // 프로필 이미지 (있으면 네트워크 이미지, 없으면 배경색)
           CircleAvatar(
             radius: 50,
-            backgroundColor: Colors.grey.shade300, // 기본 배경색
+            backgroundColor: Colors.grey,
             backgroundImage: user?.photoURL != null
                 ? NetworkImage(user!.photoURL!) // 프로필 이미지가 있을 때
                 : null, // 이미지가 없을 때는 배경색만 표시
