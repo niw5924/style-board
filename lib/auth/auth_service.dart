@@ -4,9 +4,17 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:style_board/auth/firebase_custom_token_service.dart';
 
 class AuthService {
+  // 싱글턴 인스턴스
+  static final AuthService _instance = AuthService._internal();
+
+  factory AuthService() => _instance;
+
+  AuthService._internal();
+
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final firebase_auth.FirebaseAuth _firebaseAuth =
       firebase_auth.FirebaseAuth.instance;
+  String? _currentLoginMethod; // 로그인 방식 ('google' 또는 'kakao')
 
   // Google 로그인 및 Firebase 연결
   Future<firebase_auth.User?> signInWithGoogle() async {
@@ -23,8 +31,11 @@ class AuthService {
 
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);
+      final user = userCredential.user;
+
       print('Firebase Google 로그인 성공');
-      return userCredential.user;
+      _currentLoginMethod = 'google'; // 로그인 방식 저장
+      return user;
     } catch (e) {
       print('Google 로그인 실패: $e');
     }
@@ -34,7 +45,6 @@ class AuthService {
   // Kakao 로그인 및 Firebase 연결
   Future<firebase_auth.User?> signInWithKakao() async {
     try {
-      // Kakao 로그인 수행
       OAuthToken token;
       if (await isKakaoTalkInstalled()) {
         token = await UserApi.instance.loginWithKakaoTalk();
@@ -44,36 +54,29 @@ class AuthService {
         print('Kakao 계정 로그인 성공: ${token.accessToken}');
       }
 
-      // Kakao 사용자 정보 가져오기
       final userResponse = await UserApi.instance.me();
       final kakaoProfile = userResponse.kakaoAccount?.profile;
-      final kakaoName = kakaoProfile?.nickname ?? "사용자 이름";
+      final kakaoName = kakaoProfile?.nickname;
       final profileImageUrl = kakaoProfile?.profileImageUrl;
 
-      print('Kakao 사용자 이름: $kakaoName');
-      print('Kakao 프로필 이미지: $profileImageUrl');
-
-      // Firebase Custom Token 요청
       final customToken =
           await FirebaseCustomTokenService.getFirebaseCustomToken(
-              token.accessToken);
+        token.accessToken,
+      );
       if (customToken == null) {
         print('Firebase Custom Token 요청 실패');
         return null;
       }
 
-      // Firebase 로그인
       final userCredential =
           await _firebaseAuth.signInWithCustomToken(customToken);
       final user = userCredential.user;
 
-      // Firebase 사용자 프로필 업데이트
       await user?.updateDisplayName(kakaoName);
-      if (profileImageUrl != null) {
-        await user?.updatePhotoURL(profileImageUrl);
-      }
+      await user?.updatePhotoURL(profileImageUrl);
 
       print('Firebase Kakao 로그인 성공');
+      _currentLoginMethod = 'kakao'; // 로그인 방식 저장
       return user;
     } catch (e) {
       print('Kakao 로그인 실패: $e');
@@ -83,8 +86,26 @@ class AuthService {
 
   // 로그아웃
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
-    await _googleSignIn.signOut();
-    print('로그아웃 성공');
+    try {
+      switch (_currentLoginMethod) {
+        case 'google':
+          await _firebaseAuth.signOut();
+          await _googleSignIn.signOut();
+          print('Google 로그아웃 성공');
+          break;
+
+        case 'kakao':
+          await _firebaseAuth.signOut();
+          await UserApi.instance.logout();
+          print('Kakao 로그아웃 성공');
+          break;
+
+        default:
+          print('로그아웃 실패: 로그인된 사용자가 없습니다.');
+      }
+      _currentLoginMethod = null; // 로그인 방식 초기화
+    } catch (e) {
+      print('로그아웃 중 오류 발생: $e');
+    }
   }
 }

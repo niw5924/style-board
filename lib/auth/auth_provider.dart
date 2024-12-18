@@ -12,6 +12,9 @@ class AuthProvider with ChangeNotifier {
   void setUser(User? user) {
     _user = user;
     notifyListeners();
+    print("로그인 성공");
+    print(_user?.displayName);
+    print(_user?.photoURL);
   }
 
   void logout() async {
