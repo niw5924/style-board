@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:style_board/auth/auth_provider.dart';
@@ -10,6 +11,8 @@ import 'package:style_board/auth/login_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Firebase 초기화
+  KakaoSdk.init(nativeAppKey: '91b7fda359f04e90e8e17447a18a5432');
+
   runApp(
     MultiProvider(
       providers: [

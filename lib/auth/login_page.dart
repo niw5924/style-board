@@ -22,9 +22,9 @@ class _LoginPageState extends State<LoginPage> {
         }
         break;
       case "Kakao":
-        final token = await _authService.signInWithKakao();
-        if (token != null) {
-          print('Kakao 로그인 성공: $token');
+        final user = await _authService.signInWithKakao();
+        if (user != null) {
+          Provider.of<AuthProvider>(context, listen: false).setUser(user);
         }
         break;
       default:

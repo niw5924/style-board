@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth; // 별칭 추가
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -32,16 +32,6 @@ class SettingsPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8), // 간격
-
-          // 이메일
-          Text(
-            user?.email ?? '이메일 정보 없음', // 이메일 표시
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
             ),
           ),
         ],
