@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/home/home_page_state.dart';
 import '../closet/closet_page.dart';
@@ -26,22 +24,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
     final homeCubit = context.read<HomePageCubit>();
 
     return BlocBuilder<HomePageCubit, HomePageState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Style Board'),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () {
-                  authProvider.logout();
-                },
-              ),
-            ],
+            title: const Text('스타일보드'),
           ),
           body: _getBody(state.selectedIndex),
           bottomNavigationBar: BottomNavigationBar(
@@ -50,7 +39,7 @@ class HomePage extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.checkroom), label: '옷장'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.camera_alt), label: '사진 찍기'),
+                  icon: Icon(Icons.camera_alt), label: '카메라'),
               BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
             ],
           ),
