@@ -20,6 +20,7 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
           .collection('users')
           .doc(_userId)
           .collection('photos')
+          .orderBy('timestamp', descending: false) // 오래된 순으로 정렬
           .get();
 
       final photoPaths =

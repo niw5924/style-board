@@ -32,39 +32,48 @@ class _PhotoPageState extends State<PhotoPage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // 사진 찍기 로직 실행
                     context.read<PhotoPageCubit>().takePhoto();
                   },
                   child: const Text('사진 찍기'),
                 ),
                 Expanded(
-                  child: ListView.builder(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, // 한 줄에 세 개의 항목
+                      crossAxisSpacing: 8.0, // 가로 간격
+                      mainAxisSpacing: 8.0, // 세로 간격
+                      childAspectRatio: 0.8, // 이미지 + 텍스트 비율 조정
+                    ),
+                    padding: const EdgeInsets.all(8.0),
                     itemCount: state.photoPaths.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            // 이미지 표시
-                            ClipRRect(
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4, // 전체 셀에서 4/5 높이 차지
+                            child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.file(
                                 File(state.photoPaths[index]),
-                                width: 50,
-                                height: 50,
+                                width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(width: 16), // 간격
-                            // 사진 제목 표시
-                            Expanded(
+                          ),
+                          const SizedBox(height: 8),
+                          Expanded(
+                            flex: 1, // 전체 셀에서 1/5 높이 차지
+                            child: Center(
                               child: Text(
                                 '사진 ${index + 1}',
                                 style: const TextStyle(fontSize: 16),
+                                overflow: TextOverflow.ellipsis, // 텍스트 오버플로우 처리
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       );
                     },
                   ),
