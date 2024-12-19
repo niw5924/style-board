@@ -7,6 +7,7 @@ import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/home/home_page.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/auth/login_page.dart';
+import 'package:style_board/photo/photo_page_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,9 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         BlocProvider(create: (_) => HomePageCubit()),
+        BlocProvider(
+          create: (context) => PhotoPageCubit(context.read<AuthProvider>()),
+        ),
       ],
       child: const StyleBoard(),
     ),
