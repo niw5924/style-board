@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'photo_page_cubit.dart';
 import 'photo_page_state.dart';
@@ -32,6 +33,7 @@ class _PhotoPageState extends State<PhotoPage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    HapticFeedback.mediumImpact();
                     context.read<PhotoPageCubit>().takePhoto();
                   },
                   child: const Text('사진 찍기'),
