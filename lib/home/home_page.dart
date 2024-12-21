@@ -37,9 +37,8 @@ class HomePage extends StatelessWidget {
             currentIndex: state.selectedIndex,
             onTap: (index) => homeCubit.changeTab(index),
             items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.accessibility), label: '코디'),
               BottomNavigationBarItem(icon: Icon(Icons.checkroom), label: '옷장'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.camera_alt), label: '카메라'),
               BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
             ],
           ),
