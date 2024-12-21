@@ -12,7 +12,6 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
 
   String get _userId => authProvider.user!.uid;
 
-  // Firestore에서 사용자별 사진 로드
   Future<void> loadUserPhotos() async {
     emit(state.copyWith(isLoading: true));
     try {
@@ -20,47 +19,74 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
           .collection('users')
           .doc(_userId)
           .collection('photos')
-          .orderBy('timestamp', descending: false) // 오래된 순으로 정렬
+          .orderBy('timestamp', descending: false)
           .get();
 
       final photoPaths =
           snapshot.docs.map((doc) => doc['path'] as String).toList();
-      emit(state.copyWith(photoPaths: photoPaths, isLoading: false));
+      final photoCategories =
+          snapshot.docs.map((doc) => doc['category'] as String).toList();
+      final photoTags = snapshot.docs
+          .map((doc) => Map<String, String?>.from(doc['tags'] as Map))
+          .toList();
+
+      emit(state.copyWith(
+        photoPaths: photoPaths,
+        photoCategories: photoCategories,
+        photoTags: photoTags,
+        isLoading: false,
+      ));
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }
 
-  // 카메라로 사진 찍고 Firestore에 저장
-  Future<void> takePhoto() async {
+  Future<XFile?> takePhoto() async {
     emit(state.copyWith(isLoading: true));
     try {
-      // 1. 카메라로 사진 찍기
       final XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.camera,
       );
 
-      if (pickedFile == null) {
-        emit(state.copyWith(isLoading: false));
-        return; // 사진 찍기가 취소된 경우
-      }
+      emit(state.copyWith(isLoading: false));
+      return pickedFile;
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      return null;
+    }
+  }
 
-      final filePath = pickedFile.path; // 로컬 경로 가져오기
-
-      // 2. Firestore에 사진 경로 저장
+  Future<void> savePhotoWithDetails({
+    required String filePath,
+    required String category,
+    required Map<String, String?> tags,
+  }) async {
+    emit(state.copyWith(isLoading: true));
+    try {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(_userId)
           .collection('photos')
           .add({
-        'path': filePath, // 로컬 경로 저장
+        'path': filePath,
+        'category': category,
+        'tags': tags,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      // 3. 상태 업데이트
       final updatedPhotoPaths = List<String>.from(state.photoPaths)
         ..add(filePath);
-      emit(state.copyWith(photoPaths: updatedPhotoPaths, isLoading: false));
+      final updatedPhotoCategories = List<String>.from(state.photoCategories)
+        ..add(category);
+      final updatedPhotoTags = List<Map<String, String?>>.from(state.photoTags)
+        ..add(tags);
+
+      emit(state.copyWith(
+        photoPaths: updatedPhotoPaths,
+        photoCategories: updatedPhotoCategories,
+        photoTags: updatedPhotoTags,
+        isLoading: false,
+      ));
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
