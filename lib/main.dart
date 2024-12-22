@@ -41,6 +41,9 @@ class StyleBoard extends StatelessWidget {
           seedColor: Colors.teal,
           surface: const Color(0xFFF7F7F7),
         ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Color(0xFF333333)),
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFFF7F7F7),
           elevation: 0,
@@ -62,6 +65,16 @@ class StyleBoard extends StatelessWidget {
           backgroundColor: Color(0xFFF7F7F7),
           selectedItemColor: Color(0xFF0077CC),
           unselectedItemColor: Color(0xFFA0A0A0),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF0077CC),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          ),
         ),
       ),
       home: Consumer<AuthProvider>(

@@ -38,16 +38,7 @@ class SettingsPage extends StatelessWidget {
             onPressed: () {
               authProvider.logout();
             },
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              '로그아웃',
-              style: TextStyle(fontSize: 16),
-            ),
+            child: const Text('로그아웃'),
           ),
         ],
       ),

@@ -25,35 +25,46 @@ class _PhotoPageState extends State<PhotoPage> {
     return Scaffold(
       body: Column(
         children: [
-          // 사진 찍기 버튼
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                HapticFeedback.mediumImpact();
-                final pickedFile =
-                    await context.read<PhotoPageCubit>().takePhoto();
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    HapticFeedback.mediumImpact();
+                    final pickedFile =
+                        await context.read<PhotoPageCubit>().takePhoto();
 
-                if (pickedFile != null) {
-                  final categoryTagData = await showCategoryTagPopup(context);
+                    if (pickedFile != null) {
+                      final categoryTagData =
+                          await showCategoryTagPopup(context);
 
-                  if (categoryTagData != null) {
-                    final category = categoryTagData['category'] as String;
-                    final tags =
-                        categoryTagData['tags'] as Map<String, String?>;
+                      if (categoryTagData != null) {
+                        final category = categoryTagData['category'] as String;
+                        final tags =
+                            categoryTagData['tags'] as Map<String, String?>;
 
-                    context.read<PhotoPageCubit>().savePhotoWithDetails(
-                          filePath: pickedFile.path,
-                          category: category,
-                          tags: tags,
-                        );
-                  }
-                }
-              },
-              child: const Text('사진 찍기'),
+                        context.read<PhotoPageCubit>().savePhotoWithDetails(
+                              filePath: pickedFile.path,
+                              category: category,
+                              tags: tags,
+                            );
+                      }
+                    }
+                  },
+                  child: const Text('사진 찍기'),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () async {
+                    HapticFeedback.mediumImpact();
+                  },
+                  child: const Text('갤러리에서 가져오기'),
+                ),
+              ],
             ),
           ),
-          // 사진 목록
           Expanded(
             child: BlocBuilder<PhotoPageCubit, PhotoPageState>(
               builder: (context, state) {
@@ -65,12 +76,13 @@ class _PhotoPageState extends State<PhotoPage> {
                   return GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 한 줄에 두 개의 아이템
+                      crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
                       childAspectRatio: 2 / 3,
                     ),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, bottom: 8.0),
                     itemCount: state.photoPaths.length,
                     itemBuilder: (context, index) {
                       final category = state.photoCategories[index];
@@ -78,56 +90,62 @@ class _PhotoPageState extends State<PhotoPage> {
 
                       return Column(
                         children: [
-                          // 사진과 태그 (Stack)
                           Stack(
                             children: [
-                              // 사진
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.file(
                                   File(state.photoPaths[index]),
                                 ),
                               ),
-                              // 왼쪽 위 (시즌)
                               Positioned(
                                 top: 0,
                                 left: 0,
                                 child: Chip(
-                                  label: Text(tags['season']!),
-                                  backgroundColor: Colors.green.shade100,
+                                  label: Text(
+                                    tags['season']!,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: const Color(0xFF333333),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 4, vertical: 2),
                                 ),
                               ),
-                              // 오른쪽 위 (색깔)
                               Positioned(
                                 top: 0,
                                 right: 0,
                                 child: Chip(
-                                  label: Text(tags['color']!),
-                                  backgroundColor: Colors.orange.shade100,
+                                  label: Text(
+                                    tags['color']!,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: const Color(0xFF333333),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 4, vertical: 2),
                                 ),
                               ),
-                              // 왼쪽 아래 (스타일)
                               Positioned(
                                 bottom: 0,
                                 left: 0,
                                 child: Chip(
-                                  label: Text(tags['style']!),
-                                  backgroundColor: Colors.purple.shade100,
+                                  label: Text(
+                                    tags['style']!,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: const Color(0xFF333333),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 4, vertical: 2),
                                 ),
                               ),
-                              // 오른쪽 아래 (용도)
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: Chip(
-                                  label: Text(tags['purpose']!),
-                                  backgroundColor: Colors.red.shade100,
+                                  label: Text(
+                                    tags['purpose']!,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: const Color(0xFF333333),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 4, vertical: 2),
                                 ),
@@ -135,7 +153,6 @@ class _PhotoPageState extends State<PhotoPage> {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          // 카테고리 텍스트
                           Text(
                             category,
                             style: const TextStyle(
