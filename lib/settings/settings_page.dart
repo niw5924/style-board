@@ -11,20 +11,19 @@ class SettingsPage extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
     final firebase_auth.User? user = authProvider.user;
 
-    return SizedBox(
+    return Container(
       width: double.infinity,
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 프로필 이미지 (있으면 네트워크 이미지, 없으면 배경색)
           CircleAvatar(
             radius: 50,
             backgroundColor: Colors.grey,
             backgroundImage:
                 user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
           ),
-          const SizedBox(height: 16),
-          // 사용자 이름
+          const SizedBox(height: 8),
           Text(
             user?.displayName ?? '사용자 이름',
             style: const TextStyle(
@@ -32,8 +31,7 @@ class SettingsPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
-          // 로그아웃 버튼
+          const SizedBox(height: 8),
           ElevatedButton(
             onPressed: () {
               authProvider.logout();
