@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
-Future<Map<String, dynamic>?> showCategoryTagPopup(BuildContext context) {
+Future<Map<String, dynamic>?> showCategoryTagPopup(
+    BuildContext context, File? photoFile) {
   String? selectedCategory;
   String? selectedSeason;
   String? selectedColor;
@@ -16,120 +18,153 @@ Future<Map<String, dynamic>?> showCategoryTagPopup(BuildContext context) {
   return showDialog<Map<String, dynamic>>(
     context: context,
     builder: (context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  '카테고리 및 태그 설정',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                _buildDropdown(
-                  label: '카테고리 선택',
-                  items: categories,
-                  onChanged: (value) {
-                    selectedCategory = value;
-                  },
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildDropdown(
-                        label: '계절 선택',
-                        items: seasons,
-                        onChanged: (value) {
-                          selectedSeason = value;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _buildDropdown(
-                        label: '색상 선택',
-                        items: colors,
-                        onChanged: (value) {
-                          selectedColor = value;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildDropdown(
-                        label: '스타일 선택',
-                        items: styles,
-                        onChanged: (value) {
-                          selectedStyle = value;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _buildDropdown(
-                        label: '용도 선택',
-                        items: purposes,
-                        onChanged: (value) {
-                          selectedPurpose = value;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('취소'),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (selectedCategory != null &&
-                            selectedSeason != null &&
-                            selectedColor != null &&
-                            selectedStyle != null &&
-                            selectedPurpose != null) {
-                          Navigator.pop(context, {
-                            'category': selectedCategory,
-                            'tags': {
-                              'season': selectedSeason,
-                              'color': selectedColor,
-                              'style': selectedStyle,
-                              'purpose': selectedPurpose,
-                            },
-                          });
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('모든 태그를 설정해주세요.')),
-                          );
-                        }
-                      },
-                      child: const Text('완료'),
-                    ),
-                  ],
-                ),
-              ],
+      bool showError = false;
+
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-        ),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (photoFile != null)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          photoFile,
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    if (photoFile != null) const SizedBox(height: 16),
+                    const Text(
+                      '카테고리 및 태그 설정',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildDropdown(
+                      label: '카테고리 선택',
+                      items: categories,
+                      onChanged: (value) {
+                        selectedCategory = value;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildDropdown(
+                            label: '계절 선택',
+                            items: seasons,
+                            onChanged: (value) {
+                              selectedSeason = value;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _buildDropdown(
+                            label: '색상 선택',
+                            items: colors,
+                            onChanged: (value) {
+                              selectedColor = value;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildDropdown(
+                            label: '스타일 선택',
+                            items: styles,
+                            onChanged: (value) {
+                              selectedStyle = value;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _buildDropdown(
+                            label: '용도 선택',
+                            items: purposes,
+                            onChanged: (value) {
+                              selectedPurpose = value;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    if (showError)
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          '모든 태그를 설정해주세요.',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('취소'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (selectedCategory != null &&
+                                selectedSeason != null &&
+                                selectedColor != null &&
+                                selectedStyle != null &&
+                                selectedPurpose != null) {
+                              Navigator.pop(context, {
+                                'category': selectedCategory,
+                                'tags': {
+                                  'season': selectedSeason,
+                                  'color': selectedColor,
+                                  'style': selectedStyle,
+                                  'purpose': selectedPurpose,
+                                },
+                              });
+                            } else {
+                              setState(() {
+                                showError = true;
+                              });
+                              Future.delayed(const Duration(seconds: 2), () {
+                                setState(() {
+                                  showError = false;
+                                });
+                              });
+                            }
+                          },
+                          child: const Text('완료'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       );
     },
   );

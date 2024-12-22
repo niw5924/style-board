@@ -37,8 +37,8 @@ class _PhotoPageState extends State<PhotoPage> {
                         await context.read<PhotoPageCubit>().takePhoto();
 
                     if (pickedFile != null) {
-                      final categoryTagData =
-                          await showCategoryTagPopup(context);
+                      final categoryTagData = await showCategoryTagPopup(
+                          context, File(pickedFile.path));
 
                       if (categoryTagData != null) {
                         final category = categoryTagData['category'] as String;
