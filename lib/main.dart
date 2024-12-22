@@ -11,7 +11,7 @@ import 'package:style_board/photo/photo_page_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Firebase 초기화
+  await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: '91b7fda359f04e90e8e17447a18a5432');
 
   runApp(
@@ -37,7 +37,32 @@ class StyleBoard extends StatelessWidget {
       title: 'Style Board',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+          surface: const Color(0xFFF7F7F7),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFF7F7F7),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          iconTheme: IconThemeData(color: Color(0xFF0077CC)),
+          titleTextStyle: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          shape: Border(
+            bottom: BorderSide(
+              color: Color(0xFFE3E3E3),
+              width: 0.5,
+            ),
+          ),
+        ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color(0xFFF7F7F7),
+          selectedItemColor: Color(0xFF0077CC),
+          unselectedItemColor: Color(0xFFA0A0A0),
+        ),
       ),
       home: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {
