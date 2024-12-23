@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:style_board/weather/weather_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -37,6 +38,16 @@ class SettingsPage extends StatelessWidget {
               authProvider.logout();
             },
             child: const Text('로그아웃'),
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WeatherPage()),
+              );
+            },
+            child: const Text('코디 추천'),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,11 +9,13 @@ import 'package:style_board/home/home_page.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/auth/login_page.dart';
 import 'package:style_board/photo/photo_page_cubit.dart';
+import 'package:style_board/weather/weather_page_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(); // .env 파일 로드
   await Firebase.initializeApp();
-  KakaoSdk.init(nativeAppKey: '91b7fda359f04e90e8e17447a18a5432');
+  KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']!);
 
   runApp(
     MultiProvider(
@@ -22,6 +25,7 @@ void main() async {
         BlocProvider(
           create: (context) => PhotoPageCubit(context.read<AuthProvider>()),
         ),
+        BlocProvider(create: (_) => WeatherCubit()),
       ],
       child: const StyleBoard(),
     ),

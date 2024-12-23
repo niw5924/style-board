@@ -37,7 +37,7 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
         isLoading: false,
       ));
     } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(state.copyWith(isLoading: false));
     }
   }
 
@@ -51,7 +51,7 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
       emit(state.copyWith(isLoading: false));
       return pickedFile;
     } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(state.copyWith(isLoading: false));
       return null;
     }
   }
@@ -66,7 +66,7 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
       emit(state.copyWith(isLoading: false));
       return pickedFile;
     } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(state.copyWith(isLoading: false));
       return null;
     }
   }
@@ -103,7 +103,7 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
         isLoading: false,
       ));
     } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(state.copyWith(isLoading: false));
     }
   }
 }

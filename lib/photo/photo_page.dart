@@ -94,8 +94,6 @@ class _PhotoPageState extends State<PhotoPage> {
               builder: (context, state) {
                 if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (state.errorMessage != null) {
-                  return Center(child: Text('오류: ${state.errorMessage}'));
                 } else {
                   return GridView.builder(
                     gridDelegate:

@@ -16,14 +16,13 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PhotoPageState {
+  bool get isLoading => throw _privateConstructorUsedError;
   List<String> get photoPaths =>
       throw _privateConstructorUsedError; // 저장된 사진 경로 목록
   List<String> get photoCategories =>
       throw _privateConstructorUsedError; // 각 사진의 카테고리
   List<Map<String, String?>> get photoTags =>
-      throw _privateConstructorUsedError; // 각 사진의 태그 정보
-  bool get isLoading => throw _privateConstructorUsedError; // 로딩 상태
-  String? get errorMessage => throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError;
 
   /// Create a copy of PhotoPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -39,11 +38,10 @@ abstract class $PhotoPageStateCopyWith<$Res> {
       _$PhotoPageStateCopyWithImpl<$Res, PhotoPageState>;
   @useResult
   $Res call(
-      {List<String> photoPaths,
+      {bool isLoading,
+      List<String> photoPaths,
       List<String> photoCategories,
-      List<Map<String, String?>> photoTags,
-      bool isLoading,
-      String? errorMessage});
+      List<Map<String, String?>> photoTags});
 }
 
 /// @nodoc
@@ -61,13 +59,16 @@ class _$PhotoPageStateCopyWithImpl<$Res, $Val extends PhotoPageState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isLoading = null,
     Object? photoPaths = null,
     Object? photoCategories = null,
     Object? photoTags = null,
-    Object? isLoading = null,
-    Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       photoPaths: null == photoPaths
           ? _value.photoPaths
           : photoPaths // ignore: cast_nullable_to_non_nullable
@@ -80,14 +81,6 @@ class _$PhotoPageStateCopyWithImpl<$Res, $Val extends PhotoPageState>
           ? _value.photoTags
           : photoTags // ignore: cast_nullable_to_non_nullable
               as List<Map<String, String?>>,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 }
@@ -101,11 +94,10 @@ abstract class _$$PhotoPageStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<String> photoPaths,
+      {bool isLoading,
+      List<String> photoPaths,
       List<String> photoCategories,
-      List<Map<String, String?>> photoTags,
-      bool isLoading,
-      String? errorMessage});
+      List<Map<String, String?>> photoTags});
 }
 
 /// @nodoc
@@ -121,13 +113,16 @@ class __$$PhotoPageStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isLoading = null,
     Object? photoPaths = null,
     Object? photoCategories = null,
     Object? photoTags = null,
-    Object? isLoading = null,
-    Object? errorMessage = freezed,
   }) {
     return _then(_$PhotoPageStateImpl(
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       photoPaths: null == photoPaths
           ? _value._photoPaths
           : photoPaths // ignore: cast_nullable_to_non_nullable
@@ -140,14 +135,6 @@ class __$$PhotoPageStateImplCopyWithImpl<$Res>
           ? _value._photoTags
           : photoTags // ignore: cast_nullable_to_non_nullable
               as List<Map<String, String?>>,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -156,15 +143,17 @@ class __$$PhotoPageStateImplCopyWithImpl<$Res>
 
 class _$PhotoPageStateImpl implements _PhotoPageState {
   const _$PhotoPageStateImpl(
-      {final List<String> photoPaths = const [],
+      {this.isLoading = false,
+      final List<String> photoPaths = const [],
       final List<String> photoCategories = const [],
-      final List<Map<String, String?>> photoTags = const [],
-      this.isLoading = false,
-      this.errorMessage})
+      final List<Map<String, String?>> photoTags = const []})
       : _photoPaths = photoPaths,
         _photoCategories = photoCategories,
         _photoTags = photoTags;
 
+  @override
+  @JsonKey()
+  final bool isLoading;
   final List<String> _photoPaths;
   @override
   @JsonKey()
@@ -196,17 +185,9 @@ class _$PhotoPageStateImpl implements _PhotoPageState {
     return EqualUnmodifiableListView(_photoTags);
   }
 
-// 각 사진의 태그 정보
-  @override
-  @JsonKey()
-  final bool isLoading;
-// 로딩 상태
-  @override
-  final String? errorMessage;
-
   @override
   String toString() {
-    return 'PhotoPageState(photoPaths: $photoPaths, photoCategories: $photoCategories, photoTags: $photoTags, isLoading: $isLoading, errorMessage: $errorMessage)';
+    return 'PhotoPageState(isLoading: $isLoading, photoPaths: $photoPaths, photoCategories: $photoCategories, photoTags: $photoTags)';
   }
 
   @override
@@ -214,26 +195,23 @@ class _$PhotoPageStateImpl implements _PhotoPageState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PhotoPageStateImpl &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
             const DeepCollectionEquality()
                 .equals(other._photoPaths, _photoPaths) &&
             const DeepCollectionEquality()
                 .equals(other._photoCategories, _photoCategories) &&
             const DeepCollectionEquality()
-                .equals(other._photoTags, _photoTags) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                .equals(other._photoTags, _photoTags));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      isLoading,
       const DeepCollectionEquality().hash(_photoPaths),
       const DeepCollectionEquality().hash(_photoCategories),
-      const DeepCollectionEquality().hash(_photoTags),
-      isLoading,
-      errorMessage);
+      const DeepCollectionEquality().hash(_photoTags));
 
   /// Create a copy of PhotoPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -247,22 +225,19 @@ class _$PhotoPageStateImpl implements _PhotoPageState {
 
 abstract class _PhotoPageState implements PhotoPageState {
   const factory _PhotoPageState(
-      {final List<String> photoPaths,
+      {final bool isLoading,
+      final List<String> photoPaths,
       final List<String> photoCategories,
-      final List<Map<String, String?>> photoTags,
-      final bool isLoading,
-      final String? errorMessage}) = _$PhotoPageStateImpl;
+      final List<Map<String, String?>> photoTags}) = _$PhotoPageStateImpl;
 
+  @override
+  bool get isLoading;
   @override
   List<String> get photoPaths; // 저장된 사진 경로 목록
   @override
   List<String> get photoCategories; // 각 사진의 카테고리
   @override
-  List<Map<String, String?>> get photoTags; // 각 사진의 태그 정보
-  @override
-  bool get isLoading; // 로딩 상태
-  @override
-  String? get errorMessage;
+  List<Map<String, String?>> get photoTags;
 
   /// Create a copy of PhotoPageState
   /// with the given fields replaced by the non-null parameter values.

@@ -31,6 +31,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Environment files
+.env
+
 # Firebase 관련 파일 제외
 android/app/google-services.json
 
