@@ -59,6 +59,30 @@ class _PhotoPageState extends State<PhotoPage> {
                 ElevatedButton(
                   onPressed: () async {
                     HapticFeedback.mediumImpact();
+                    final pickedFile = await context
+                        .read<PhotoPageCubit>()
+                        .pickPhotoFromGallery();
+
+                    if (pickedFile != null) {
+                      final categoryTagData = await showCategoryTagPopup(
+                        context,
+                        File(pickedFile.path),
+                      );
+
+                      if (categoryTagData != null) {
+                        final category = categoryTagData['category'] as String;
+                        final tags =
+                            categoryTagData['tags'] as Map<String, String?>;
+
+                        await context
+                            .read<PhotoPageCubit>()
+                            .savePhotoWithDetails(
+                              filePath: pickedFile.path,
+                              category: category,
+                              tags: tags,
+                            );
+                      }
+                    }
                   },
                   child: const Text('갤러리에서 가져오기'),
                 ),
@@ -79,7 +103,7 @@ class _PhotoPageState extends State<PhotoPage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      childAspectRatio: 2 / 3,
+                      childAspectRatio: 0.8,
                     ),
                     padding: const EdgeInsets.only(
                         left: 8.0, right: 8.0, bottom: 8.0),
@@ -96,6 +120,9 @@ class _PhotoPageState extends State<PhotoPage> {
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.file(
                                   File(state.photoPaths[index]),
+                                  width: 300,
+                                  height: 200,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                               Positioned(

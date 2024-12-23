@@ -56,6 +56,21 @@ class PhotoPageCubit extends Cubit<PhotoPageState> {
     }
   }
 
+  Future<XFile?> pickPhotoFromGallery() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+      );
+
+      emit(state.copyWith(isLoading: false));
+      return pickedFile;
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      return null;
+    }
+  }
+
   Future<void> savePhotoWithDetails({
     required String filePath,
     required String category,
