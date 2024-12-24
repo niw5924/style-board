@@ -5,12 +5,7 @@ class LocationService {
     // 위치 서비스가 활성화되어 있는지 확인
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // 사용자에게 위치 서비스를 활성화하라고 요청
-      await Geolocator.openLocationSettings();
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        throw Exception("위치 서비스가 비활성화되어 있습니다.");
-      }
+      throw Exception("위치 서비스가 비활성화되어 있습니다.");
     }
 
     // 위치 권한 확인 및 요청

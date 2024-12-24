@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$WeatherState {
   bool get isLoading => throw _privateConstructorUsedError;
-  Map<String, dynamic>? get filteredData => throw _privateConstructorUsedError;
+  Map<String, dynamic> get filteredData => throw _privateConstructorUsedError;
 
   /// Create a copy of WeatherState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +32,7 @@ abstract class $WeatherStateCopyWith<$Res> {
           WeatherState value, $Res Function(WeatherState) then) =
       _$WeatherStateCopyWithImpl<$Res, WeatherState>;
   @useResult
-  $Res call({bool isLoading, Map<String, dynamic>? filteredData});
+  $Res call({bool isLoading, Map<String, dynamic> filteredData});
 }
 
 /// @nodoc
@@ -51,17 +51,17 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? filteredData = freezed,
+    Object? filteredData = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      filteredData: freezed == filteredData
+      filteredData: null == filteredData
           ? _value.filteredData
           : filteredData // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
+              as Map<String, dynamic>,
     ) as $Val);
   }
 }
@@ -74,7 +74,7 @@ abstract class _$$WeatherStateImplCopyWith<$Res>
       __$$WeatherStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, Map<String, dynamic>? filteredData});
+  $Res call({bool isLoading, Map<String, dynamic> filteredData});
 }
 
 /// @nodoc
@@ -91,17 +91,17 @@ class __$$WeatherStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? filteredData = freezed,
+    Object? filteredData = null,
   }) {
     return _then(_$WeatherStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      filteredData: freezed == filteredData
+      filteredData: null == filteredData
           ? _value._filteredData
           : filteredData // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -110,20 +110,20 @@ class __$$WeatherStateImplCopyWithImpl<$Res>
 
 class _$WeatherStateImpl implements _WeatherState {
   const _$WeatherStateImpl(
-      {this.isLoading = false, final Map<String, dynamic>? filteredData})
+      {this.isLoading = false,
+      final Map<String, dynamic> filteredData = const {}})
       : _filteredData = filteredData;
 
   @override
   @JsonKey()
   final bool isLoading;
-  final Map<String, dynamic>? _filteredData;
+  final Map<String, dynamic> _filteredData;
   @override
-  Map<String, dynamic>? get filteredData {
-    final value = _filteredData;
-    if (value == null) return null;
+  @JsonKey()
+  Map<String, dynamic> get filteredData {
     if (_filteredData is EqualUnmodifiableMapView) return _filteredData;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
+    return EqualUnmodifiableMapView(_filteredData);
   }
 
   @override
@@ -158,12 +158,12 @@ class _$WeatherStateImpl implements _WeatherState {
 abstract class _WeatherState implements WeatherState {
   const factory _WeatherState(
       {final bool isLoading,
-      final Map<String, dynamic>? filteredData}) = _$WeatherStateImpl;
+      final Map<String, dynamic> filteredData}) = _$WeatherStateImpl;
 
   @override
   bool get isLoading;
   @override
-  Map<String, dynamic>? get filteredData;
+  Map<String, dynamic> get filteredData;
 
   /// Create a copy of WeatherState
   /// with the given fields replaced by the non-null parameter values.

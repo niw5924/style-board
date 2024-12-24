@@ -59,7 +59,8 @@ class WeatherCubit extends Cubit<WeatherState> {
 
       emit(state.copyWith(isLoading: false, filteredData: result));
     } catch (e) {
-      emit(state.copyWith(isLoading: false));
+      print(e.toString());
+      emit(state.copyWith(isLoading: false, filteredData: {}));
     }
   }
 }

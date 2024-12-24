@@ -6,6 +6,6 @@ part 'weather_page_state.freezed.dart';
 class WeatherState with _$WeatherState {
   const factory WeatherState({
     @Default(false) bool isLoading,
-    Map<String, dynamic>? filteredData, // 가공된 날씨 데이터
+    @Default({}) Map<String, dynamic> filteredData,
   }) = _WeatherState;
 }

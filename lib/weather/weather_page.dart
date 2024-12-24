@@ -34,23 +34,22 @@ class _WeatherPageState extends State<WeatherPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       buildIconWithText(
-                        state.filteredData!['온도'],
                         Icons.thermostat_outlined,
+                        state.filteredData['온도'] ?? "-",
                       ),
                       buildIconWithText(
-                        _skyDetails(
-                            state.filteredData!['하늘 상태'])['description'],
-                        _skyDetails(state.filteredData!['하늘 상태'])['icon'],
+                        _skyDetails(state.filteredData['하늘 상태'])['icon'],
+                        _skyDetails(state.filteredData['하늘 상태'])['description'],
                       ),
                       buildIconWithText(
                         _precipitationDetails(
-                            state.filteredData!['강수 형태'])['description'],
+                            state.filteredData['강수 형태'])['icon'],
                         _precipitationDetails(
-                            state.filteredData!['강수 형태'])['icon'],
+                            state.filteredData['강수 형태'])['description'],
                       ),
                       buildIconWithText(
-                        state.filteredData!['강수 확률'],
                         Icons.water_drop,
+                        state.filteredData['강수 확률'] ?? "-",
                       ),
                     ],
                   ),
@@ -63,7 +62,7 @@ class _WeatherPageState extends State<WeatherPage> {
     );
   }
 
-  Widget buildIconWithText(String description, IconData icon) {
+  Widget buildIconWithText(IconData icon, String description) {
     return Row(
       children: [
         Icon(icon, size: 24),
@@ -85,7 +84,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case '4':
         return {'icon': Icons.cloud_outlined, 'description': '흐림'};
       default:
-        return {'icon': Icons.help_outline, 'description': '알 수 없음'};
+        return {'icon': Icons.help_outline, 'description': '-'};
     }
   }
 
@@ -102,7 +101,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case '4':
         return {'icon': Icons.shower, 'description': '소나기'};
       default:
-        return {'icon': Icons.help_outline, 'description': '알 수 없음'};
+        return {'icon': Icons.help_outline, 'description': '-'};
     }
   }
 }
