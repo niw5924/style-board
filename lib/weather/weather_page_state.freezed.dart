@@ -110,7 +110,7 @@ class __$$WeatherStateImplCopyWithImpl<$Res>
 
 class _$WeatherStateImpl implements _WeatherState {
   const _$WeatherStateImpl(
-      {this.isLoading = false,
+      {this.isLoading = true,
       final Map<String, dynamic> filteredData = const {}})
       : _filteredData = filteredData;
 

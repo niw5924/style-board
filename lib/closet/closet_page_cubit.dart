@@ -14,6 +14,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
 
   Future<void> loadUserPhotos() async {
     emit(state.copyWith(isLoading: true));
+
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -42,31 +43,27 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   }
 
   Future<XFile?> takePhoto() async {
-    emit(state.copyWith(isLoading: true));
     try {
       final XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.camera,
       );
 
-      emit(state.copyWith(isLoading: false));
       return pickedFile;
     } catch (e) {
-      emit(state.copyWith(isLoading: false));
+      print(e.toString());
       return null;
     }
   }
 
   Future<XFile?> pickPhotoFromGallery() async {
-    emit(state.copyWith(isLoading: true));
     try {
       final XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,
       );
 
-      emit(state.copyWith(isLoading: false));
       return pickedFile;
     } catch (e) {
-      emit(state.copyWith(isLoading: false));
+      print(e.toString());
       return null;
     }
   }

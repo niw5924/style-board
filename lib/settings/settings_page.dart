@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:style_board/settings/profile/profile_page.dart';
 import 'package:style_board/weather/weather_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -10,7 +10,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final firebase_auth.User? user = authProvider.user;
+    final userName = authProvider.user?.displayName ?? '사용자 이름';
 
     return Container(
       width: double.infinity,
@@ -18,28 +18,27 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.grey,
-            backgroundImage:
-                user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
+          GestureDetector(
+            onTap: () {
+              _showProfileModal(context);
+            },
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.grey,
+              backgroundImage: authProvider.user?.photoURL != null
+                  ? NetworkImage(authProvider.user!.photoURL!)
+                  : null,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
-            user?.displayName ?? '사용자 이름',
+            userName,
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {
-              authProvider.logout();
-            },
-            child: const Text('로그아웃'),
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               Navigator.push(
@@ -47,10 +46,30 @@ class SettingsPage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const WeatherPage()),
               );
             },
-            child: const Text('코디 추천'),
+            child: const Text(
+              '코디 추천',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showProfileModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return const FractionallySizedBox(
+          heightFactor: 0.9,
+          child: ProfilePage(),
+        );
+      },
     );
   }
 }

@@ -14,7 +14,6 @@ class WeatherCubit extends Cubit<WeatherState> {
 
   Future<void> fetchWeather() async {
     emit(state.copyWith(isLoading: true));
-
     try {
       // 위치 가져오기
       Position position = await _locationService.getCurrentLocation();

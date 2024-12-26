@@ -143,7 +143,7 @@ class __$$ClosetPageStateImplCopyWithImpl<$Res>
 
 class _$ClosetPageStateImpl implements _ClosetPageState {
   const _$ClosetPageStateImpl(
-      {this.isLoading = false,
+      {this.isLoading = true,
       final List<String> photoPaths = const [],
       final List<String> photoCategories = const [],
       final List<Map<String, String?>> photoTags = const []})
