@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/home/home_page_state.dart';
+import '../styling/styling_page.dart';
 import '../closet/closet_page.dart';
-import '../photo/photo_page.dart';
 import '../settings/settings_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,9 +12,9 @@ class HomePage extends StatelessWidget {
   Widget _getBody(int index) {
     switch (index) {
       case 0:
-        return const ClosetPage();
+        return const StylingPage();
       case 1:
-        return const PhotoPage();
+        return const ClosetPage();
       case 2:
         return const SettingsPage();
       default:
@@ -37,7 +37,8 @@ class HomePage extends StatelessWidget {
             currentIndex: state.selectedIndex,
             onTap: (index) => homeCubit.changeTab(index),
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.accessibility), label: '코디'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.accessibility), label: '코디'),
               BottomNavigationBarItem(icon: Icon(Icons.checkroom), label: '옷장'),
               BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
             ],

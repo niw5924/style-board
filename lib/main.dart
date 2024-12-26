@@ -8,7 +8,7 @@ import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/home/home_page.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/auth/login_page.dart';
-import 'package:style_board/photo/photo_page_cubit.dart';
+import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/weather/weather_page_cubit.dart';
 
 void main() async {
@@ -23,7 +23,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         BlocProvider(create: (_) => HomePageCubit()),
         BlocProvider(
-          create: (context) => PhotoPageCubit(context.read<AuthProvider>()),
+          create: (context) => ClosetPageCubit(context.read<AuthProvider>()),
         ),
         BlocProvider(create: (_) => WeatherCubit()),
       ],

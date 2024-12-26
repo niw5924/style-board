@@ -2,13 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'photo_page_state.dart';
+import 'package:style_board/closet/closet_page_state.dart';
 
-class PhotoPageCubit extends Cubit<PhotoPageState> {
+class ClosetPageCubit extends Cubit<ClosetPageState> {
   final AuthProvider authProvider;
   final ImagePicker _imagePicker = ImagePicker();
 
-  PhotoPageCubit(this.authProvider) : super(const PhotoPageState());
+  ClosetPageCubit(this.authProvider) : super(const ClosetPageState());
 
   String get _userId => authProvider.user!.uid;
 

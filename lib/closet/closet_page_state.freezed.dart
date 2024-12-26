@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'photo_page_state.dart';
+part of 'closet_page_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$PhotoPageState {
+mixin _$ClosetPageState {
   bool get isLoading => throw _privateConstructorUsedError;
   List<String> get photoPaths =>
       throw _privateConstructorUsedError; // 저장된 사진 경로 목록
@@ -24,18 +24,18 @@ mixin _$PhotoPageState {
   List<Map<String, String?>> get photoTags =>
       throw _privateConstructorUsedError;
 
-  /// Create a copy of PhotoPageState
+  /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $PhotoPageStateCopyWith<PhotoPageState> get copyWith =>
+  $ClosetPageStateCopyWith<ClosetPageState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PhotoPageStateCopyWith<$Res> {
-  factory $PhotoPageStateCopyWith(
-          PhotoPageState value, $Res Function(PhotoPageState) then) =
-      _$PhotoPageStateCopyWithImpl<$Res, PhotoPageState>;
+abstract class $ClosetPageStateCopyWith<$Res> {
+  factory $ClosetPageStateCopyWith(
+          ClosetPageState value, $Res Function(ClosetPageState) then) =
+      _$ClosetPageStateCopyWithImpl<$Res, ClosetPageState>;
   @useResult
   $Res call(
       {bool isLoading,
@@ -45,16 +45,16 @@ abstract class $PhotoPageStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PhotoPageStateCopyWithImpl<$Res, $Val extends PhotoPageState>
-    implements $PhotoPageStateCopyWith<$Res> {
-  _$PhotoPageStateCopyWithImpl(this._value, this._then);
+class _$ClosetPageStateCopyWithImpl<$Res, $Val extends ClosetPageState>
+    implements $ClosetPageStateCopyWith<$Res> {
+  _$ClosetPageStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PhotoPageState
+  /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -86,11 +86,11 @@ class _$PhotoPageStateCopyWithImpl<$Res, $Val extends PhotoPageState>
 }
 
 /// @nodoc
-abstract class _$$PhotoPageStateImplCopyWith<$Res>
-    implements $PhotoPageStateCopyWith<$Res> {
-  factory _$$PhotoPageStateImplCopyWith(_$PhotoPageStateImpl value,
-          $Res Function(_$PhotoPageStateImpl) then) =
-      __$$PhotoPageStateImplCopyWithImpl<$Res>;
+abstract class _$$ClosetPageStateImplCopyWith<$Res>
+    implements $ClosetPageStateCopyWith<$Res> {
+  factory _$$ClosetPageStateImplCopyWith(_$ClosetPageStateImpl value,
+          $Res Function(_$ClosetPageStateImpl) then) =
+      __$$ClosetPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -101,14 +101,14 @@ abstract class _$$PhotoPageStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$PhotoPageStateImplCopyWithImpl<$Res>
-    extends _$PhotoPageStateCopyWithImpl<$Res, _$PhotoPageStateImpl>
-    implements _$$PhotoPageStateImplCopyWith<$Res> {
-  __$$PhotoPageStateImplCopyWithImpl(
-      _$PhotoPageStateImpl _value, $Res Function(_$PhotoPageStateImpl) _then)
+class __$$ClosetPageStateImplCopyWithImpl<$Res>
+    extends _$ClosetPageStateCopyWithImpl<$Res, _$ClosetPageStateImpl>
+    implements _$$ClosetPageStateImplCopyWith<$Res> {
+  __$$ClosetPageStateImplCopyWithImpl(
+      _$ClosetPageStateImpl _value, $Res Function(_$ClosetPageStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PhotoPageState
+  /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -118,7 +118,7 @@ class __$$PhotoPageStateImplCopyWithImpl<$Res>
     Object? photoCategories = null,
     Object? photoTags = null,
   }) {
-    return _then(_$PhotoPageStateImpl(
+    return _then(_$ClosetPageStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -141,8 +141,8 @@ class __$$PhotoPageStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PhotoPageStateImpl implements _PhotoPageState {
-  const _$PhotoPageStateImpl(
+class _$ClosetPageStateImpl implements _ClosetPageState {
+  const _$ClosetPageStateImpl(
       {this.isLoading = false,
       final List<String> photoPaths = const [],
       final List<String> photoCategories = const [],
@@ -187,14 +187,14 @@ class _$PhotoPageStateImpl implements _PhotoPageState {
 
   @override
   String toString() {
-    return 'PhotoPageState(isLoading: $isLoading, photoPaths: $photoPaths, photoCategories: $photoCategories, photoTags: $photoTags)';
+    return 'ClosetPageState(isLoading: $isLoading, photoPaths: $photoPaths, photoCategories: $photoCategories, photoTags: $photoTags)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PhotoPageStateImpl &&
+            other is _$ClosetPageStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality()
@@ -213,22 +213,22 @@ class _$PhotoPageStateImpl implements _PhotoPageState {
       const DeepCollectionEquality().hash(_photoCategories),
       const DeepCollectionEquality().hash(_photoTags));
 
-  /// Create a copy of PhotoPageState
+  /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PhotoPageStateImplCopyWith<_$PhotoPageStateImpl> get copyWith =>
-      __$$PhotoPageStateImplCopyWithImpl<_$PhotoPageStateImpl>(
+  _$$ClosetPageStateImplCopyWith<_$ClosetPageStateImpl> get copyWith =>
+      __$$ClosetPageStateImplCopyWithImpl<_$ClosetPageStateImpl>(
           this, _$identity);
 }
 
-abstract class _PhotoPageState implements PhotoPageState {
-  const factory _PhotoPageState(
+abstract class _ClosetPageState implements ClosetPageState {
+  const factory _ClosetPageState(
       {final bool isLoading,
       final List<String> photoPaths,
       final List<String> photoCategories,
-      final List<Map<String, String?>> photoTags}) = _$PhotoPageStateImpl;
+      final List<Map<String, String?>> photoTags}) = _$ClosetPageStateImpl;
 
   @override
   bool get isLoading;
@@ -239,10 +239,10 @@ abstract class _PhotoPageState implements PhotoPageState {
   @override
   List<Map<String, String?>> get photoTags;
 
-  /// Create a copy of PhotoPageState
+  /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PhotoPageStateImplCopyWith<_$PhotoPageStateImpl> get copyWith =>
+  _$$ClosetPageStateImplCopyWith<_$ClosetPageStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
