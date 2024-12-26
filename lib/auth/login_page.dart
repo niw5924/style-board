@@ -61,9 +61,10 @@ class _LoginPageState extends State<LoginPage> {
                 GestureDetector(
                   onTap: () => _handleLogin("Google"),
                   child: _buildLoginButton(
-                    color: const Color(0xFFF05654),
-                    iconPath: 'assets/images/google_icon.png',
+                    color: Colors.white,
+                    iconPath: 'assets/images/google_logo.png',
                     text: 'Google 계정으로 로그인',
+                    textColor: Colors.black.withOpacity(0.54),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -71,8 +72,9 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: () => _handleLogin("Kakao"),
                   child: _buildLoginButton(
                     color: const Color(0xFFFEE500),
-                    iconPath: 'assets/images/kakao_icon.png',
+                    iconPath: 'assets/images/kakao_logo.png',
                     text: '카카오 계정으로 로그인',
+                    textColor: Colors.black.withOpacity(0.85),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -93,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
     required Color color,
     required String iconPath,
     required String text,
+    required Color textColor,
   }) {
     return Container(
       width: double.infinity,
@@ -106,14 +109,14 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Image.asset(
             iconPath,
-            width: 24,
-            height: 24,
+            width: 18,
+            height: 18,
           ),
           const SizedBox(width: 12),
           Text(
             text,
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: textColor,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
