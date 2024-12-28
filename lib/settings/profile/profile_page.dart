@@ -148,9 +148,9 @@ class _ProfilePageState extends State<ProfilePage> {
           padding: const EdgeInsets.only(left: 5.0),
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
               fontSize: 16,
-              color: Color(0xFF0077CC),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -179,9 +179,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Text(
                       entry.value,
-                      style: const TextStyle(
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
                         fontSize: 16,
-                        color: Colors.grey,
                       ),
                     ),
                   ],

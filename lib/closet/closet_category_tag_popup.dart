@@ -110,12 +110,12 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
                     ),
                     const SizedBox(height: 16),
                     if (showError)
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
                           '모든 태그를 설정해주세요.',
                           style: TextStyle(
-                            color: Colors.red,
+                            color: Theme.of(context).colorScheme.error,
                             fontSize: 14,
                           ),
                         ),
@@ -178,17 +178,17 @@ Widget _buildDropdown({
   return DropdownButtonFormField<String>(
     decoration: InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Colors.grey),
+      labelStyle: const TextStyle(color: Color(0xFF333333)),
       filled: true,
       fillColor: Colors.grey.shade200,
       contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.grey),
+        borderSide: const BorderSide(color: Color(0xFF333333)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.grey),
+        borderSide: const BorderSide(color: Color(0xFF333333)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
