@@ -44,6 +44,7 @@ dependencies:
   permission_handler: ^11.3.1
   flutter_dotenv: ^5.2.1
   geolocator: ^13.0.2
+  lottie: ^3.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -54,7 +55,6 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.4.13
   freezed: ^2.5.7
-
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -76,6 +76,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/lotties/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

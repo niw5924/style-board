@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:style_board/weather/weather_page_cubit.dart';
 import 'package:style_board/weather/weather_page_state.dart';
 
@@ -53,6 +54,15 @@ class _WeatherPageState extends State<WeatherPage> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 16),
+                  Lottie.asset(
+                    _getLottiePath(
+                      skyState: state.filteredData['하늘 상태'],
+                      precipitationType: state.filteredData['강수 형태'],
+                    ),
+                    width: 200,
+                    height: 200,
+                  ),
                 ],
               ),
             );
@@ -102,6 +112,31 @@ class _WeatherPageState extends State<WeatherPage> {
         return {'icon': Icons.shower, 'description': '소나기'};
       default:
         return {'icon': Icons.help_outline, 'description': '-'};
+    }
+  }
+
+  String _getLottiePath(
+      {required String? skyState, required String? precipitationType}) {
+    switch (precipitationType) {
+      case '1':
+      case '4':
+        return 'assets/lotties/rain_lottie.json';
+      case '2':
+      case '3':
+        return 'assets/lotties/snow_lottie.json';
+      case '0':
+        switch (skyState) {
+          case '1':
+            return 'assets/lotties/clear_lottie.json';
+          case '3':
+            return 'assets/lotties/partly_cloudy_lottie.json';
+          case '4':
+            return 'assets/lotties/cloudy_lottie.json';
+          default:
+            return 'assets/lotties/clear_lottie.json';
+        }
+      default:
+        return 'assets/lotties/clear_lottie.json';
     }
   }
 }
