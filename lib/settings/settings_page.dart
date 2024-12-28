@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/settings/profile/profile_page.dart';
@@ -20,6 +21,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+              HapticFeedback.mediumImpact();
               _showProfileModal(context);
             },
             child: CircleAvatar(
