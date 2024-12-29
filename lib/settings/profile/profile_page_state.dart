@@ -6,6 +6,9 @@ part 'profile_page_state.freezed.dart';
 class ProfilePageState with _$ProfilePageState {
   const factory ProfilePageState({
     @Default(true) bool isLoading,
+    @Default('') String gender,
+    @Default(0) int age,
+    @Default(0) int height,
     @Default(0) int clothingCount, // 총 옷 개수
     @Default({}) Map<String, int> category, // 카테고리 항목 (각 카테고리별 개수)
     @Default({}) Map<String, int> seasonTags, // season 태그
