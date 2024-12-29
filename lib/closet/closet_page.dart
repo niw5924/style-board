@@ -94,6 +94,13 @@ class _ClosetPageState extends State<ClosetPage> {
               builder: (context, state) {
                 if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
+                } else if (state.photoPaths.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "저장된 사진이 없습니다.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
                 } else {
                   return GridView.builder(
                     gridDelegate:
