@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'closet_reset_dialog.dart';
 import 'profile_page_cubit.dart';
 import 'profile_page_state.dart';
 
@@ -45,7 +46,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 10),
-
               // 사용자 이름
               Text(
                 context
@@ -60,7 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 20),
-
               // 총 옷 개수
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +80,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               // 카테고리 섹션 (각 카테고리별 개수를 표시)
               _buildSectionBox(
                 title: '카테고리',
@@ -92,9 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   '기타': '${state.category['기타'] ?? 0}개',
                 },
               ),
-
               const SizedBox(height: 20),
-
               // 최다 태그 섹션 (가장 많이 선택된 태그와 그 개수만 표시)
               _buildSectionBox(
                 title: '최다 태그',
@@ -105,8 +101,26 @@ class _ProfilePageState extends State<ProfilePage> {
                   '용도': '$topPurpose (${state.purposeTags[topPurpose] ?? 0})',
                 },
               ),
-
               const Spacer(),
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ClosetResetDialog(
+                      onConfirm: () {
+                        context.read<ProfilePageCubit>().resetCloset();
+                      },
+                    ),
+                  );
+                },
+                child: const Text(
+                  '옷장 초기화',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);

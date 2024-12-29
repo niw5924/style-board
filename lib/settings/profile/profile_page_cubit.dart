@@ -61,7 +61,6 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
         }
       }
 
-      // 상태 업데이트
       emit(state.copyWith(
         isLoading: false,
         clothingCount: clothingCount,
@@ -74,6 +73,38 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
     } catch (e) {
       emit(state.copyWith(isLoading: false));
       print('Error loading profile data: $e');
+    }
+  }
+
+  Future<void> resetCloset() async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final userId = authProvider.user!.uid;
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('photos')
+          .get();
+
+      // 각 문서를 삭제
+      for (var doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      emit(state.copyWith(
+        isLoading: false,
+        clothingCount: 0,
+        category: {},
+        seasonTags: {},
+        colorTags: {},
+        styleTags: {},
+        purposeTags: {},
+      ));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false));
+      print('옷장 초기화 중 오류 발생: $e');
     }
   }
 }

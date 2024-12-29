@@ -24,9 +24,10 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
         builder: (context, setState) {
           return Dialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             ),
-            insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+            insetPadding: const EdgeInsets.all(16),
+            backgroundColor: Theme.of(context).colorScheme.surface,
             child: Container(
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(16),
