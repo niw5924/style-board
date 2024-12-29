@@ -27,6 +27,11 @@ class _WeatherPageState extends State<WeatherPage> {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           } else {
+            final lottiePath = _getLottiePath(
+              skyState: state.filteredData['하늘 상태'],
+              precipitationType: state.filteredData['강수 형태'],
+            );
+
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -55,14 +60,12 @@ class _WeatherPageState extends State<WeatherPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Lottie.asset(
-                    _getLottiePath(
-                      skyState: state.filteredData['하늘 상태'],
-                      precipitationType: state.filteredData['강수 형태'],
+                  if (lottiePath != null)
+                    Lottie.asset(
+                      lottiePath,
+                      width: 200,
+                      height: 200,
                     ),
-                    width: 200,
-                    height: 200,
-                  ),
                 ],
               ),
             );
@@ -105,7 +108,6 @@ class _WeatherPageState extends State<WeatherPage> {
       case '1':
         return {'icon': Icons.grain, 'description': '비'};
       case '2':
-        return {'icon': Icons.ac_unit, 'description': '비/눈'};
       case '3':
         return {'icon': Icons.ac_unit, 'description': '눈'};
       case '4':
@@ -115,7 +117,7 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
-  String _getLottiePath(
+  String? _getLottiePath(
       {required String? skyState, required String? precipitationType}) {
     switch (precipitationType) {
       case '1':
@@ -133,10 +135,10 @@ class _WeatherPageState extends State<WeatherPage> {
           case '4':
             return 'assets/lotties/cloudy_lottie.json';
           default:
-            return 'assets/lotties/clear_lottie.json';
+            return null;
         }
       default:
-        return 'assets/lotties/clear_lottie.json';
+        return null;
     }
   }
 }
