@@ -13,47 +13,50 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
 
     try {
       final userId = authProvider.user!.uid;
+      final userRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
 
-      final snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('photos')
-          .get();
+      // Firestore에서 bodyInfo 데이터 가져오기
+      final userDocument = await userRef.get();
+      final bodyInfo =
+          userDocument.data()?['bodyInfo'] as Map<String, dynamic>?;
 
-      int clothingCount = snapshot.docs.length;
+      final gender = bodyInfo?['gender'] as String? ?? '';
+      final height = bodyInfo?['height'] as int? ?? 0;
+      final weight = bodyInfo?['weight'] as int? ?? 0;
 
-      // 카운트 초기화
-      final Map<String, int> category = {}; // 카테고리 항목 (각 카테고리별 개수)
-      final Map<String, int> seasonTags = {}; // season 태그
-      final Map<String, int> colorTags = {}; // color 태그
-      final Map<String, int> styleTags = {}; // style 태그
-      final Map<String, int> purposeTags = {}; // purpose 태그
+      // photos 컬렉션에서 옷 데이터 가져오기
+      final photosSnapshot = await userRef.collection('photos').get();
+      final clothingCount = photosSnapshot.docs.length;
 
-      // Firebase 데이터를 순회하며 카테고리와 태그 집계
-      for (var doc in snapshot.docs) {
-        // 카테고리 업데이트 (각 카테고리별 개수 증가)
-        final categoryItem = doc['category'] as String?;
-        if (categoryItem != null) {
-          category[categoryItem] = (category[categoryItem] ?? 0) + 1;
+      final Map<String, int> categoryCounts = {};
+      final Map<String, int> seasonTagCounts = {};
+      final Map<String, int> colorTagCounts = {};
+      final Map<String, int> styleTagCounts = {};
+      final Map<String, int> purposeTagCounts = {};
+
+      for (var photo in photosSnapshot.docs) {
+        final category = photo['category'] as String?;
+        if (category != null) {
+          categoryCounts[category] = (categoryCounts[category] ?? 0) + 1;
         }
 
-        // 태그 업데이트 (각 태그별 개수 증가)
-        final tags = doc['tags'] as Map<String, dynamic>?;
+        final tags = photo['tags'] as Map<String, dynamic>?;
         if (tags != null) {
           tags.forEach((key, value) {
             if (value is String) {
               switch (key) {
                 case 'season':
-                  seasonTags[value] = (seasonTags[value] ?? 0) + 1;
+                  seasonTagCounts[value] = (seasonTagCounts[value] ?? 0) + 1;
                   break;
                 case 'color':
-                  colorTags[value] = (colorTags[value] ?? 0) + 1;
+                  colorTagCounts[value] = (colorTagCounts[value] ?? 0) + 1;
                   break;
                 case 'style':
-                  styleTags[value] = (styleTags[value] ?? 0) + 1;
+                  styleTagCounts[value] = (styleTagCounts[value] ?? 0) + 1;
                   break;
                 case 'purpose':
-                  purposeTags[value] = (purposeTags[value] ?? 0) + 1;
+                  purposeTagCounts[value] = (purposeTagCounts[value] ?? 0) + 1;
                   break;
               }
             }
@@ -63,12 +66,15 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
 
       emit(state.copyWith(
         isLoading: false,
+        gender: gender,
+        height: height,
+        weight: weight,
         clothingCount: clothingCount,
-        category: category,
-        seasonTags: seasonTags,
-        colorTags: colorTags,
-        styleTags: styleTags,
-        purposeTags: purposeTags,
+        category: categoryCounts,
+        seasonTags: seasonTagCounts,
+        colorTags: colorTagCounts,
+        styleTags: styleTagCounts,
+        purposeTags: purposeTagCounts,
       ));
     } catch (e) {
       emit(state.copyWith(isLoading: false));

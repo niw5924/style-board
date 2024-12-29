@@ -18,8 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProfilePageState {
   bool get isLoading => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
-  int get age => throw _privateConstructorUsedError;
   int get height => throw _privateConstructorUsedError;
+  int get weight => throw _privateConstructorUsedError;
   int get clothingCount => throw _privateConstructorUsedError; // 총 옷 개수
   Map<String, int> get category =>
       throw _privateConstructorUsedError; // 카테고리 항목 (각 카테고리별 개수)
@@ -47,8 +47,8 @@ abstract class $ProfilePageStateCopyWith<$Res> {
   $Res call(
       {bool isLoading,
       String gender,
-      int age,
       int height,
+      int weight,
       int clothingCount,
       Map<String, int> category,
       Map<String, int> seasonTags,
@@ -74,8 +74,8 @@ class _$ProfilePageStateCopyWithImpl<$Res, $Val extends ProfilePageState>
   $Res call({
     Object? isLoading = null,
     Object? gender = null,
-    Object? age = null,
     Object? height = null,
+    Object? weight = null,
     Object? clothingCount = null,
     Object? category = null,
     Object? seasonTags = null,
@@ -92,13 +92,13 @@ class _$ProfilePageStateCopyWithImpl<$Res, $Val extends ProfilePageState>
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as String,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
       height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
+              as int,
+      weight: null == weight
+          ? _value.weight
+          : weight // ignore: cast_nullable_to_non_nullable
               as int,
       clothingCount: null == clothingCount
           ? _value.clothingCount
@@ -139,8 +139,8 @@ abstract class _$$ProfilePageStateImplCopyWith<$Res>
   $Res call(
       {bool isLoading,
       String gender,
-      int age,
       int height,
+      int weight,
       int clothingCount,
       Map<String, int> category,
       Map<String, int> seasonTags,
@@ -164,8 +164,8 @@ class __$$ProfilePageStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? gender = null,
-    Object? age = null,
     Object? height = null,
+    Object? weight = null,
     Object? clothingCount = null,
     Object? category = null,
     Object? seasonTags = null,
@@ -182,13 +182,13 @@ class __$$ProfilePageStateImplCopyWithImpl<$Res>
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as String,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
       height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
+              as int,
+      weight: null == weight
+          ? _value.weight
+          : weight // ignore: cast_nullable_to_non_nullable
               as int,
       clothingCount: null == clothingCount
           ? _value.clothingCount
@@ -224,8 +224,8 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
   const _$ProfilePageStateImpl(
       {this.isLoading = true,
       this.gender = '',
-      this.age = 0,
       this.height = 0,
+      this.weight = 0,
       this.clothingCount = 0,
       final Map<String, int> category = const {},
       final Map<String, int> seasonTags = const {},
@@ -246,10 +246,10 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
   final String gender;
   @override
   @JsonKey()
-  final int age;
+  final int height;
   @override
   @JsonKey()
-  final int height;
+  final int weight;
   @override
   @JsonKey()
   final int clothingCount;
@@ -310,7 +310,7 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
 
   @override
   String toString() {
-    return 'ProfilePageState(isLoading: $isLoading, gender: $gender, age: $age, height: $height, clothingCount: $clothingCount, category: $category, seasonTags: $seasonTags, colorTags: $colorTags, styleTags: $styleTags, purposeTags: $purposeTags)';
+    return 'ProfilePageState(isLoading: $isLoading, gender: $gender, height: $height, weight: $weight, clothingCount: $clothingCount, category: $category, seasonTags: $seasonTags, colorTags: $colorTags, styleTags: $styleTags, purposeTags: $purposeTags)';
   }
 
   @override
@@ -321,8 +321,8 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.age, age) || other.age == age) &&
             (identical(other.height, height) || other.height == height) &&
+            (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.clothingCount, clothingCount) ||
                 other.clothingCount == clothingCount) &&
             const DeepCollectionEquality().equals(other._category, _category) &&
@@ -341,8 +341,8 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
       runtimeType,
       isLoading,
       gender,
-      age,
       height,
+      weight,
       clothingCount,
       const DeepCollectionEquality().hash(_category),
       const DeepCollectionEquality().hash(_seasonTags),
@@ -364,8 +364,8 @@ abstract class _ProfilePageState implements ProfilePageState {
   const factory _ProfilePageState(
       {final bool isLoading,
       final String gender,
-      final int age,
       final int height,
+      final int weight,
       final int clothingCount,
       final Map<String, int> category,
       final Map<String, int> seasonTags,
@@ -378,9 +378,9 @@ abstract class _ProfilePageState implements ProfilePageState {
   @override
   String get gender;
   @override
-  int get age;
-  @override
   int get height;
+  @override
+  int get weight;
   @override
   int get clothingCount; // 총 옷 개수
   @override

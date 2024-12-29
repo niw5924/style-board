@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   data: {
                     '성별': state.gender.isNotEmpty ? state.gender : '정보 없음',
                     '키': state.height > 0 ? '${state.height} cm' : '정보 없음',
-                    '나이': state.age > 0 ? '${state.age}세' : '정보 없음',
+                    '몸무게': state.weight > 0 ? '${state.weight} kg' : '정보 없음',
                   },
                 ),
                 const SizedBox(height: 16),

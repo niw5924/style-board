@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/settings/profile/body_info_popup.dart';
 import 'package:style_board/settings/profile/profile_page.dart';
 import 'package:style_board/weather/weather_page.dart';
 
@@ -38,6 +39,19 @@ class SettingsPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const BodyInfoPopup(),
+              );
+            },
+            child: const Text(
+              '신체정보',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 16),
