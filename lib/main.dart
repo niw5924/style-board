@@ -78,11 +78,11 @@ class StyleBoard extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF0077CC),
-            foregroundColor: Colors.white,
+            foregroundColor: const Color(0xFFF7F7F7),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
         ),
       ),

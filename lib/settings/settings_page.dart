@@ -16,56 +16,61 @@ class SettingsPage extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () {
-              HapticFeedback.mediumImpact();
-              _showProfileModal(context);
-            },
-            child: CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.grey,
-              backgroundImage: authProvider.user?.photoURL != null
-                  ? NetworkImage(authProvider.user!.photoURL!)
-                  : null,
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.mediumImpact();
+                _showProfileModal(context);
+              },
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Theme.of(context).colorScheme.onSurface,
+                backgroundImage: authProvider.user?.photoURL != null
+                    ? NetworkImage(authProvider.user!.photoURL!)
+                    : null,
+              ),
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            userName,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Center(
+            child: Text(
+              userName,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
+          _buildOptionCard(
+            context,
+            icon: Icons.info_outline,
+            title: '신체정보',
+            subtitle: '신체정보를 설정합니다.',
+            onTap: () {
               showDialog(
                 context: context,
                 builder: (context) => const BodyInfoPopup(),
               );
             },
-            child: const Text(
-              '신체정보',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
+          const SizedBox(height: 12),
+          _buildOptionCard(
+            context,
+            icon: Icons.style_outlined,
+            title: '코디 추천',
+            subtitle: '날씨에 따른 코디 추천을 확인합니다.',
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const WeatherPage()),
               );
             },
-            child: const Text(
-              '코디 추천',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
           ),
         ],
       ),
@@ -86,6 +91,59 @@ class SettingsPage extends StatelessWidget {
           child: ProfilePage(),
         );
       },
+    );
+  }
+
+  Widget _buildOptionCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(icon, color: Theme.of(context).colorScheme.surface),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.arrow_forward_ios,
+                  size: 16, color: Theme.of(context).colorScheme.onSurface),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
