@@ -44,121 +44,136 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
       insetPadding: const EdgeInsets.all(16),
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                '신체정보 입력',
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.info,
+                    size: 24, color: Theme.of(context).colorScheme.onSurface),
+                const SizedBox(width: 8),
+                const Text(
+                  '신체정보 입력',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: '성별 선택',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              items: genders
+                  .map((gender) => DropdownMenuItem(
+                        value: gender,
+                        child: Text(gender),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedGender = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: heightController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: '키 (cm)',
+                prefixIcon: const Icon(Icons.height),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: weightController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: '몸무게 (kg)',
+                prefixIcon: const Icon(Icons.monitor_weight),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            AnimatedOpacity(
+              opacity: showError ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: Text(
+                errorMessage,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.error,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: '성별 선택',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('취소'),
                 ),
-                items: genders
-                    .map((gender) =>
-                        DropdownMenuItem(value: gender, child: Text(gender)))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: heightController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: '키 (cm)',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: weightController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: '몸무게 (kg)',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (showError)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    errorMessage,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('취소'),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final height =
-                          int.tryParse(heightController.text.trim()) ?? 0;
-                      final weight =
-                          int.tryParse(weightController.text.trim()) ?? 0;
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: () async {
+                    final height =
+                        int.tryParse(heightController.text.trim()) ?? 0;
+                    final weight =
+                        int.tryParse(weightController.text.trim()) ?? 0;
 
-                      if (selectedGender == null ||
-                          heightController.text.trim().isEmpty ||
-                          weightController.text.trim().isEmpty) {
-                        setState(() {
-                          errorMessage = '모든 정보를 입력해주세요.';
-                          showError = true;
-                        });
-                      } else if (height <= 0 || weight <= 0) {
-                        setState(() {
-                          errorMessage = '키와 몸무게는 0보다 큰 값을 입력해주세요.';
-                          showError = true;
-                        });
-                      } else {
+                    if (selectedGender == null ||
+                        heightController.text.trim().isEmpty ||
+                        weightController.text.trim().isEmpty) {
+                      setState(() {
+                        errorMessage = '모든 정보를 입력해주세요.';
+                        showError = true;
+                      });
+                    } else if (height <= 0 || weight <= 0) {
+                      setState(() {
+                        errorMessage = '키와 몸무게는 0보다 큰 값을 입력해주세요.';
+                        showError = true;
+                      });
+                    } else {
+                      setState(() {
+                        showError = false;
+                        errorMessage = '';
+                      });
+                      await saveBodyInfoToFirestore(userId);
+                      Navigator.pop(context);
+                    }
+
+                    if (showError) {
+                      Future.delayed(const Duration(seconds: 2), () {
                         setState(() {
                           showError = false;
                           errorMessage = '';
                         });
-                        await saveBodyInfoToFirestore(userId);
-                        Navigator.pop(context);
-                      }
-
-                      if (showError) {
-                        Future.delayed(const Duration(seconds: 2), () {
-                          setState(() {
-                            showError = false;
-                            errorMessage = '';
-                          });
-                        });
-                      }
-                    },
-                    child: const Text('저장'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                      });
+                    }
+                  },
+                  child: const Text('저장'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

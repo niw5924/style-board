@@ -19,6 +19,7 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
     context: context,
     builder: (context) {
       bool showError = false;
+      String errorMessage = '';
 
       return StatefulBuilder(
         builder: (context, setState) {
@@ -28,140 +29,151 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
             ),
             insetPadding: const EdgeInsets.all(16),
             backgroundColor: Theme.of(context).colorScheme.surface,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (photoFile != null)
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(
-                          photoFile,
-                          width: 200,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    if (photoFile != null) const SizedBox(height: 16),
-                    const Text(
-                      '카테고리 및 태그 설정',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (photoFile != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        photoFile,
+                        height: 200,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    _buildDropdown(
-                      label: '카테고리 선택',
-                      items: categories,
-                      onChanged: (value) {
+                  if (photoFile != null) const SizedBox(height: 24),
+                  const Text(
+                    '카테고리 및 태그 설정',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildDropdown(
+                    label: '카테고리 선택',
+                    items: categories,
+                    onChanged: (value) {
+                      setState(() {
                         selectedCategory = value;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildDropdown(
-                            label: '계절 선택',
-                            items: seasons,
-                            onChanged: (value) {
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildDropdown(
+                          label: '계절 선택',
+                          items: seasons,
+                          onChanged: (value) {
+                            setState(() {
                               selectedSeason = value;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: _buildDropdown(
-                            label: '색상 선택',
-                            items: colors,
-                            onChanged: (value) {
-                              selectedColor = value;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildDropdown(
-                            label: '스타일 선택',
-                            items: styles,
-                            onChanged: (value) {
-                              selectedStyle = value;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: _buildDropdown(
-                            label: '용도 선택',
-                            items: purposes,
-                            onChanged: (value) {
-                              selectedPurpose = value;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    if (showError)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          '모든 태그를 설정해주세요.',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                            fontSize: 14,
-                          ),
+                            });
+                          },
                         ),
                       ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('취소'),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (selectedCategory != null &&
-                                selectedSeason != null &&
-                                selectedColor != null &&
-                                selectedStyle != null &&
-                                selectedPurpose != null) {
-                              Navigator.pop(context, {
-                                'category': selectedCategory,
-                                'tags': {
-                                  'season': selectedSeason,
-                                  'color': selectedColor,
-                                  'style': selectedStyle,
-                                  'purpose': selectedPurpose,
-                                },
-                              });
-                            } else {
-                              setState(() {
-                                showError = true;
-                              });
-                              Future.delayed(const Duration(seconds: 2), () {
-                                setState(() {
-                                  showError = false;
-                                });
-                              });
-                            }
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _buildDropdown(
+                          label: '색상 선택',
+                          items: colors,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedColor = value;
+                            });
                           },
-                          child: const Text('완료'),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildDropdown(
+                          label: '스타일 선택',
+                          items: styles,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedStyle = value;
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _buildDropdown(
+                          label: '용도 선택',
+                          items: purposes,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedPurpose = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  AnimatedOpacity(
+                    opacity: showError ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
+                      errorMessage,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('취소'),
+                      ),
+                      const SizedBox(width: 12),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (selectedCategory != null &&
+                              selectedSeason != null &&
+                              selectedColor != null &&
+                              selectedStyle != null &&
+                              selectedPurpose != null) {
+                            Navigator.pop(context, {
+                              'category': selectedCategory,
+                              'tags': {
+                                'season': selectedSeason,
+                                'color': selectedColor,
+                                'style': selectedStyle,
+                                'purpose': selectedPurpose,
+                              },
+                            });
+                          } else {
+                            setState(() {
+                              errorMessage = '모든 태그를 설정해주세요.';
+                              showError = true;
+                            });
+                            Future.delayed(const Duration(seconds: 2), () {
+                              setState(() {
+                                showError = false;
+                                errorMessage = '';
+                              });
+                            });
+                          }
+                        },
+                        child: const Text('완료'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );
@@ -179,21 +191,11 @@ Widget _buildDropdown({
   return DropdownButtonFormField<String>(
     decoration: InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Color(0xFF333333)),
-      filled: true,
-      fillColor: Colors.grey.shade200,
-      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF333333)),
+        borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF333333)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF0077CC), width: 2),
+        borderRadius: BorderRadius.circular(8),
       ),
     ),
     items: items
