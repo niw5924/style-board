@@ -15,6 +15,7 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
   final TextEditingController weightController = TextEditingController();
   String? selectedGender;
   bool showError = false;
+  String errorMessage = '';
 
   final genders = ['남성', '여성'];
 
@@ -77,30 +78,36 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
               TextField(
                 controller: heightController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: '키 (cm)',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: weightController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: '몸무게 (kg)',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               if (showError)
-                Text(
-                  '모든 정보를 입력해주세요.',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                    fontSize: 14,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -111,18 +118,37 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () async {
-                      if (selectedGender != null &&
-                          heightController.text.isNotEmpty &&
-                          weightController.text.isNotEmpty) {
-                        await saveBodyInfoToFirestore(userId);
-                        Navigator.pop(context);
-                      } else {
+                      final height =
+                          int.tryParse(heightController.text.trim()) ?? 0;
+                      final weight =
+                          int.tryParse(weightController.text.trim()) ?? 0;
+
+                      if (selectedGender == null ||
+                          heightController.text.trim().isEmpty ||
+                          weightController.text.trim().isEmpty) {
                         setState(() {
+                          errorMessage = '모든 정보를 입력해주세요.';
                           showError = true;
                         });
+                      } else if (height <= 0 || weight <= 0) {
+                        setState(() {
+                          errorMessage = '키와 몸무게는 0보다 큰 값을 입력해주세요.';
+                          showError = true;
+                        });
+                      } else {
+                        setState(() {
+                          showError = false;
+                          errorMessage = '';
+                        });
+                        await saveBodyInfoToFirestore(userId);
+                        Navigator.pop(context);
+                      }
+
+                      if (showError) {
                         Future.delayed(const Duration(seconds: 2), () {
                           setState(() {
                             showError = false;
+                            errorMessage = '';
                           });
                         });
                       }
