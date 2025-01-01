@@ -22,7 +22,8 @@ mixin _$ClosetPageState {
   List<String> get photoCategories =>
       throw _privateConstructorUsedError; // 각 사진의 카테고리
   List<Map<String, String?>> get photoTags =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // 각 사진의 태그 정보
+  List<bool> get photoLikes => throw _privateConstructorUsedError;
 
   /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,7 +42,8 @@ abstract class $ClosetPageStateCopyWith<$Res> {
       {bool isLoading,
       List<String> photoPaths,
       List<String> photoCategories,
-      List<Map<String, String?>> photoTags});
+      List<Map<String, String?>> photoTags,
+      List<bool> photoLikes});
 }
 
 /// @nodoc
@@ -63,6 +65,7 @@ class _$ClosetPageStateCopyWithImpl<$Res, $Val extends ClosetPageState>
     Object? photoPaths = null,
     Object? photoCategories = null,
     Object? photoTags = null,
+    Object? photoLikes = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -81,6 +84,10 @@ class _$ClosetPageStateCopyWithImpl<$Res, $Val extends ClosetPageState>
           ? _value.photoTags
           : photoTags // ignore: cast_nullable_to_non_nullable
               as List<Map<String, String?>>,
+      photoLikes: null == photoLikes
+          ? _value.photoLikes
+          : photoLikes // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
     ) as $Val);
   }
 }
@@ -97,7 +104,8 @@ abstract class _$$ClosetPageStateImplCopyWith<$Res>
       {bool isLoading,
       List<String> photoPaths,
       List<String> photoCategories,
-      List<Map<String, String?>> photoTags});
+      List<Map<String, String?>> photoTags,
+      List<bool> photoLikes});
 }
 
 /// @nodoc
@@ -117,6 +125,7 @@ class __$$ClosetPageStateImplCopyWithImpl<$Res>
     Object? photoPaths = null,
     Object? photoCategories = null,
     Object? photoTags = null,
+    Object? photoLikes = null,
   }) {
     return _then(_$ClosetPageStateImpl(
       isLoading: null == isLoading
@@ -135,6 +144,10 @@ class __$$ClosetPageStateImplCopyWithImpl<$Res>
           ? _value._photoTags
           : photoTags // ignore: cast_nullable_to_non_nullable
               as List<Map<String, String?>>,
+      photoLikes: null == photoLikes
+          ? _value._photoLikes
+          : photoLikes // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
     ));
   }
 }
@@ -146,10 +159,12 @@ class _$ClosetPageStateImpl implements _ClosetPageState {
       {this.isLoading = true,
       final List<String> photoPaths = const [],
       final List<String> photoCategories = const [],
-      final List<Map<String, String?>> photoTags = const []})
+      final List<Map<String, String?>> photoTags = const [],
+      final List<bool> photoLikes = const []})
       : _photoPaths = photoPaths,
         _photoCategories = photoCategories,
-        _photoTags = photoTags;
+        _photoTags = photoTags,
+        _photoLikes = photoLikes;
 
   @override
   @JsonKey()
@@ -185,9 +200,20 @@ class _$ClosetPageStateImpl implements _ClosetPageState {
     return EqualUnmodifiableListView(_photoTags);
   }
 
+// 각 사진의 태그 정보
+  final List<bool> _photoLikes;
+// 각 사진의 태그 정보
+  @override
+  @JsonKey()
+  List<bool> get photoLikes {
+    if (_photoLikes is EqualUnmodifiableListView) return _photoLikes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_photoLikes);
+  }
+
   @override
   String toString() {
-    return 'ClosetPageState(isLoading: $isLoading, photoPaths: $photoPaths, photoCategories: $photoCategories, photoTags: $photoTags)';
+    return 'ClosetPageState(isLoading: $isLoading, photoPaths: $photoPaths, photoCategories: $photoCategories, photoTags: $photoTags, photoLikes: $photoLikes)';
   }
 
   @override
@@ -202,7 +228,9 @@ class _$ClosetPageStateImpl implements _ClosetPageState {
             const DeepCollectionEquality()
                 .equals(other._photoCategories, _photoCategories) &&
             const DeepCollectionEquality()
-                .equals(other._photoTags, _photoTags));
+                .equals(other._photoTags, _photoTags) &&
+            const DeepCollectionEquality()
+                .equals(other._photoLikes, _photoLikes));
   }
 
   @override
@@ -211,7 +239,8 @@ class _$ClosetPageStateImpl implements _ClosetPageState {
       isLoading,
       const DeepCollectionEquality().hash(_photoPaths),
       const DeepCollectionEquality().hash(_photoCategories),
-      const DeepCollectionEquality().hash(_photoTags));
+      const DeepCollectionEquality().hash(_photoTags),
+      const DeepCollectionEquality().hash(_photoLikes));
 
   /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -228,7 +257,8 @@ abstract class _ClosetPageState implements ClosetPageState {
       {final bool isLoading,
       final List<String> photoPaths,
       final List<String> photoCategories,
-      final List<Map<String, String?>> photoTags}) = _$ClosetPageStateImpl;
+      final List<Map<String, String?>> photoTags,
+      final List<bool> photoLikes}) = _$ClosetPageStateImpl;
 
   @override
   bool get isLoading;
@@ -237,7 +267,9 @@ abstract class _ClosetPageState implements ClosetPageState {
   @override
   List<String> get photoCategories; // 각 사진의 카테고리
   @override
-  List<Map<String, String?>> get photoTags;
+  List<Map<String, String?>> get photoTags; // 각 사진의 태그 정보
+  @override
+  List<bool> get photoLikes;
 
   /// Create a copy of ClosetPageState
   /// with the given fields replaced by the non-null parameter values.

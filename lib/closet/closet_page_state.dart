@@ -9,5 +9,6 @@ class ClosetPageState with _$ClosetPageState {
     @Default([]) List<String> photoPaths, // 저장된 사진 경로 목록
     @Default([]) List<String> photoCategories, // 각 사진의 카테고리
     @Default([]) List<Map<String, String?>> photoTags, // 각 사진의 태그 정보
+    @Default([]) List<bool> photoLikes, // 각 사진의 좋아요 상태
   }) = _ClosetPageState;
 }

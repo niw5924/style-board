@@ -8,6 +8,7 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
   String? selectedColor;
   String? selectedStyle;
   String? selectedPurpose;
+  bool isLiked = false;
 
   final categories = ['상의', '하의', '아우터', '기타'];
   final seasons = ['봄', '여름', '가을', '겨울'];
@@ -36,15 +37,35 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (photoFile != null)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        photoFile,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      ),
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.file(
+                            photoFile,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_border,
+                              color: isLiked ? Colors.red : Colors.black,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isLiked = !isLiked;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  if (photoFile != null) const SizedBox(height: 24),
+                  if (photoFile != null) const SizedBox(height: 16),
                   const Text(
                     '카테고리 및 태그 설정',
                     textAlign: TextAlign.center,
@@ -53,7 +74,7 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
                       fontSize: 20,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   _buildDropdown(
                     label: '카테고리 선택',
                     items: categories,
@@ -125,10 +146,10 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
                     duration: const Duration(milliseconds: 300),
                     child: Text(
                       errorMessage,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.error,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -155,11 +176,12 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
                                 'style': selectedStyle,
                                 'purpose': selectedPurpose,
                               },
+                              'isLiked': isLiked,
                             });
                           } else {
                             setState(() {
-                              errorMessage = '모든 태그를 설정해주세요.';
                               showError = true;
+                              errorMessage = '모든 태그를 설정해주세요.';
                             });
                             Future.delayed(const Duration(seconds: 2), () {
                               setState(() {

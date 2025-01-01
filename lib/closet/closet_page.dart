@@ -44,11 +44,15 @@ class _ClosetPageState extends State<ClosetPage> {
                         final category = categoryTagData['category'] as String;
                         final tags =
                             categoryTagData['tags'] as Map<String, String?>;
+                        final isLiked = categoryTagData['isLiked'] as bool;
 
-                        context.read<ClosetPageCubit>().savePhotoWithDetails(
+                        await context
+                            .read<ClosetPageCubit>()
+                            .savePhotoWithDetails(
                               filePath: pickedFile.path,
                               category: category,
                               tags: tags,
+                              isLiked: isLiked,
                             );
                       }
                     }
@@ -71,6 +75,7 @@ class _ClosetPageState extends State<ClosetPage> {
                         final category = categoryTagData['category'] as String;
                         final tags =
                             categoryTagData['tags'] as Map<String, String?>;
+                        final isLiked = categoryTagData['isLiked'] as bool;
 
                         await context
                             .read<ClosetPageCubit>()
@@ -78,6 +83,7 @@ class _ClosetPageState extends State<ClosetPage> {
                               filePath: pickedFile.path,
                               category: category,
                               tags: tags,
+                              isLiked: isLiked,
                             );
                       }
                     }
@@ -122,15 +128,40 @@ class _ClosetPageState extends State<ClosetPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(12),
-                              ),
-                              child: Image.file(
-                                File(state.photoPaths[index]),
-                                height: 160,
-                                fit: BoxFit.cover,
-                              ),
+                            Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(12),
+                                  ),
+                                  child: Image.file(
+                                    File(state.photoPaths[index]),
+                                    width: double.infinity,
+                                    height: 160,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 2,
+                                  right: 2,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      state.photoLikes[index]
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: state.photoLikes[index]
+                                          ? Colors.red
+                                          : Colors.black,
+                                      size: 24,
+                                    ),
+                                    onPressed: () {
+                                      context
+                                          .read<ClosetPageCubit>()
+                                          .togglePhotoLike(index);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),

@@ -117,10 +117,10 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
               duration: const Duration(milliseconds: 300),
               child: Text(
                 errorMessage,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 16),
@@ -143,13 +143,13 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
                         heightController.text.trim().isEmpty ||
                         weightController.text.trim().isEmpty) {
                       setState(() {
-                        errorMessage = '모든 정보를 입력해주세요.';
                         showError = true;
+                        errorMessage = '모든 정보를 입력해주세요.';
                       });
                     } else if (height <= 0 || weight <= 0) {
                       setState(() {
-                        errorMessage = '키와 몸무게는 0보다 큰 값을 입력해주세요.';
                         showError = true;
+                        errorMessage = '키와 몸무게는 0보다 큰 값을 입력해주세요.';
                       });
                     } else {
                       setState(() {

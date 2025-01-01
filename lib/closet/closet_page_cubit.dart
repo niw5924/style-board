@@ -30,11 +30,14 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
       final photoTags = snapshot.docs
           .map((doc) => Map<String, String?>.from(doc['tags'] as Map))
           .toList();
+      final photoLikes =
+          snapshot.docs.map((doc) => doc['isLiked'] as bool).toList();
 
       emit(state.copyWith(
         photoPaths: photoPaths,
         photoCategories: photoCategories,
         photoTags: photoTags,
+        photoLikes: photoLikes,
         isLoading: false,
       ));
     } catch (e) {
@@ -47,7 +50,6 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
       final XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.camera,
       );
-
       return pickedFile;
     } catch (e) {
       print(e.toString());
@@ -60,7 +62,6 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
       final XFile? pickedFile = await _imagePicker.pickImage(
         source: ImageSource.gallery,
       );
-
       return pickedFile;
     } catch (e) {
       print(e.toString());
@@ -72,6 +73,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     required String filePath,
     required String category,
     required Map<String, String?> tags,
+    required bool isLiked,
   }) async {
     emit(state.copyWith(isLoading: true));
     try {
@@ -83,6 +85,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
         'path': filePath,
         'category': category,
         'tags': tags,
+        'isLiked': isLiked,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -92,15 +95,43 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
         ..add(category);
       final updatedPhotoTags = List<Map<String, String?>>.from(state.photoTags)
         ..add(tags);
+      final updatedPhotoLikes = List<bool>.from(state.photoLikes)..add(isLiked);
 
       emit(state.copyWith(
         photoPaths: updatedPhotoPaths,
         photoCategories: updatedPhotoCategories,
         photoTags: updatedPhotoTags,
+        photoLikes: updatedPhotoLikes,
         isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  void togglePhotoLike(int index) async {
+    final updatedLikes = List<bool>.from(state.photoLikes);
+    updatedLikes[index] = !updatedLikes[index];
+
+    emit(state.copyWith(photoLikes: updatedLikes));
+
+    try {
+      final photoPath = state.photoPaths[index];
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_userId)
+          .collection('photos')
+          .where('path', isEqualTo: photoPath)
+          .get()
+          .then((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          snapshot.docs.first.reference.update({
+            'isLiked': updatedLikes[index],
+          });
+        }
+      });
+    } catch (e) {
+      print("Error updating like status: $e");
     }
   }
 }
