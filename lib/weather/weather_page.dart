@@ -27,11 +27,6 @@ class _WeatherPageState extends State<WeatherPage> {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            final lottiePath = _getLottiePath(
-              skyState: state.filteredData['하늘 상태'],
-              precipitationType: state.filteredData['강수 형태'],
-            );
-
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -60,12 +55,35 @@ class _WeatherPageState extends State<WeatherPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  if (lottiePath != null)
+                  if (state.filteredData['하늘 상태'] != null &&
+                      state.filteredData['강수 형태'] != null)
                     Lottie.asset(
-                      lottiePath,
+                      _getLottiePath(
+                        skyState: state.filteredData['하늘 상태'],
+                        precipitationType: state.filteredData['강수 형태'],
+                      )!,
                       width: 200,
                       height: 200,
                     ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "추천 코디",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  if (state.recommendations.isNotEmpty)
+                    ...state.recommendations.entries.map((entry) {
+                      return Row(
+                        children: [
+                          Text("${entry.key}: ",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          Text(entry.value),
+                        ],
+                      );
+                    })
+                  else
+                    const Text("추천 코디 정보를 가져올 수 없습니다."),
                 ],
               ),
             );
@@ -108,6 +126,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case '1':
         return {'icon': Icons.grain, 'description': '비'};
       case '2':
+        return {'icon': Icons.ac_unit, 'description': '비/눈'};
       case '3':
         return {'icon': Icons.ac_unit, 'description': '눈'};
       case '4':
@@ -117,8 +136,10 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
-  String? _getLottiePath(
-      {required String? skyState, required String? precipitationType}) {
+  String? _getLottiePath({
+    required String? skyState,
+    required String? precipitationType,
+  }) {
     switch (precipitationType) {
       case '1':
       case '4':

@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           '상의': '${state.category['상의'] ?? 0}개',
                           '하의': '${state.category['하의'] ?? 0}개',
                           '아우터': '${state.category['아우터'] ?? 0}개',
-                          '기타': '${state.category['기타'] ?? 0}개',
+                          '신발': '${state.category['신발'] ?? 0}개',
                         },
                       ),
                       const SizedBox(height: 16),

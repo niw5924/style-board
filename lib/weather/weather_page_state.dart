@@ -7,5 +7,6 @@ class WeatherState with _$WeatherState {
   const factory WeatherState({
     @Default(true) bool isLoading,
     @Default({}) Map<String, dynamic> filteredData,
+    @Default({}) Map<String, String> recommendations,
   }) = _WeatherState;
 }

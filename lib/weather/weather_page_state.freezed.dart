@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$WeatherState {
   bool get isLoading => throw _privateConstructorUsedError;
   Map<String, dynamic> get filteredData => throw _privateConstructorUsedError;
+  Map<String, String> get recommendations => throw _privateConstructorUsedError;
 
   /// Create a copy of WeatherState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +33,10 @@ abstract class $WeatherStateCopyWith<$Res> {
           WeatherState value, $Res Function(WeatherState) then) =
       _$WeatherStateCopyWithImpl<$Res, WeatherState>;
   @useResult
-  $Res call({bool isLoading, Map<String, dynamic> filteredData});
+  $Res call(
+      {bool isLoading,
+      Map<String, dynamic> filteredData,
+      Map<String, String> recommendations});
 }
 
 /// @nodoc
@@ -52,6 +56,7 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
   $Res call({
     Object? isLoading = null,
     Object? filteredData = null,
+    Object? recommendations = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -62,6 +67,10 @@ class _$WeatherStateCopyWithImpl<$Res, $Val extends WeatherState>
           ? _value.filteredData
           : filteredData // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      recommendations: null == recommendations
+          ? _value.recommendations
+          : recommendations // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
     ) as $Val);
   }
 }
@@ -74,7 +83,10 @@ abstract class _$$WeatherStateImplCopyWith<$Res>
       __$$WeatherStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, Map<String, dynamic> filteredData});
+  $Res call(
+      {bool isLoading,
+      Map<String, dynamic> filteredData,
+      Map<String, String> recommendations});
 }
 
 /// @nodoc
@@ -92,6 +104,7 @@ class __$$WeatherStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? filteredData = null,
+    Object? recommendations = null,
   }) {
     return _then(_$WeatherStateImpl(
       isLoading: null == isLoading
@@ -102,6 +115,10 @@ class __$$WeatherStateImplCopyWithImpl<$Res>
           ? _value._filteredData
           : filteredData // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      recommendations: null == recommendations
+          ? _value._recommendations
+          : recommendations // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
     ));
   }
 }
@@ -111,8 +128,10 @@ class __$$WeatherStateImplCopyWithImpl<$Res>
 class _$WeatherStateImpl implements _WeatherState {
   const _$WeatherStateImpl(
       {this.isLoading = true,
-      final Map<String, dynamic> filteredData = const {}})
-      : _filteredData = filteredData;
+      final Map<String, dynamic> filteredData = const {},
+      final Map<String, String> recommendations = const {}})
+      : _filteredData = filteredData,
+        _recommendations = recommendations;
 
   @override
   @JsonKey()
@@ -126,9 +145,18 @@ class _$WeatherStateImpl implements _WeatherState {
     return EqualUnmodifiableMapView(_filteredData);
   }
 
+  final Map<String, String> _recommendations;
+  @override
+  @JsonKey()
+  Map<String, String> get recommendations {
+    if (_recommendations is EqualUnmodifiableMapView) return _recommendations;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_recommendations);
+  }
+
   @override
   String toString() {
-    return 'WeatherState(isLoading: $isLoading, filteredData: $filteredData)';
+    return 'WeatherState(isLoading: $isLoading, filteredData: $filteredData, recommendations: $recommendations)';
   }
 
   @override
@@ -139,12 +167,17 @@ class _$WeatherStateImpl implements _WeatherState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality()
-                .equals(other._filteredData, _filteredData));
+                .equals(other._filteredData, _filteredData) &&
+            const DeepCollectionEquality()
+                .equals(other._recommendations, _recommendations));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading,
-      const DeepCollectionEquality().hash(_filteredData));
+  int get hashCode => Object.hash(
+      runtimeType,
+      isLoading,
+      const DeepCollectionEquality().hash(_filteredData),
+      const DeepCollectionEquality().hash(_recommendations));
 
   /// Create a copy of WeatherState
   /// with the given fields replaced by the non-null parameter values.
@@ -158,12 +191,15 @@ class _$WeatherStateImpl implements _WeatherState {
 abstract class _WeatherState implements WeatherState {
   const factory _WeatherState(
       {final bool isLoading,
-      final Map<String, dynamic> filteredData}) = _$WeatherStateImpl;
+      final Map<String, dynamic> filteredData,
+      final Map<String, String> recommendations}) = _$WeatherStateImpl;
 
   @override
   bool get isLoading;
   @override
   Map<String, dynamic> get filteredData;
+  @override
+  Map<String, String> get recommendations;
 
   /// Create a copy of WeatherState
   /// with the given fields replaced by the non-null parameter values.
