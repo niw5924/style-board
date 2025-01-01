@@ -10,11 +10,11 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
   String? selectedPurpose;
   bool isLiked = false;
 
-  final categories = ['상의', '하의', '아우터', '기타'];
+  final categories = ['상의', '하의', '아우터', '신발'];
   final seasons = ['봄', '여름', '가을', '겨울'];
-  final colors = ['빨강', '파랑', '초록', '노랑', '검정', '흰색', '회색', '보라', '분홍'];
-  final styles = ['캐주얼', '포멀', '스포티', '트렌디'];
-  final purposes = ['일상', '운동', '여행', '파티'];
+  final colors = ['빨강', '파랑', '초록', '노랑', '검정', '흰색', '회색', '보라', '베이지', '갈색'];
+  final styles = ['캐주얼', '포멀', '스포티', '트렌디', '빈티지', '모던'];
+  final purposes = ['일상', '운동', '여행', '파티', '출근', '데이트'];
 
   return showDialog<Map<String, dynamic>>(
     context: context,
