@@ -45,7 +45,7 @@ Future<Map<String, dynamic>?> closetCategoryTagPopup(
                             photoFile,
                             width: double.infinity,
                             height: 200,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                           ),
                         ),
                         Positioned(

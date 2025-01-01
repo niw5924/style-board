@@ -138,7 +138,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                     File(state.photoPaths[index]),
                                     width: double.infinity,
                                     height: 160,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                                 Positioned(
