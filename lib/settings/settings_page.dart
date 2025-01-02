@@ -6,6 +6,8 @@ import 'package:style_board/settings/profile/body_info_popup.dart';
 import 'package:style_board/settings/profile/profile_page.dart';
 import 'package:style_board/weather/weather_page.dart';
 
+import 'friends/friend_management_page.dart';
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -29,7 +31,7 @@ class SettingsPage extends StatelessWidget {
               },
               child: CircleAvatar(
                 radius: 50,
-                backgroundColor: Theme.of(context).colorScheme.onSurface,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 backgroundImage: authProvider.user?.photoURL != null
                     ? NetworkImage(authProvider.user!.photoURL!)
                     : null,
@@ -69,6 +71,21 @@ class SettingsPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const WeatherPage()),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          _buildOptionCard(
+            context,
+            icon: Icons.person_add_alt_1_outlined,
+            title: '친구 추가 및 관리',
+            subtitle: '친구를 추가하고 옷장을 공유하세요.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FriendManagementPage(),
+                ),
               );
             },
           ),
