@@ -1,3 +1,4 @@
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -72,18 +73,70 @@ class _WeatherPageState extends State<WeatherPage> {
                   ),
                   const SizedBox(height: 16),
                   if (state.recommendations.isNotEmpty)
-                    ...state.recommendations.entries.map((entry) {
-                      return Row(
-                        children: [
-                          Text("${entry.key}: ",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(entry.value),
-                        ],
-                      );
-                    })
+                    Column(
+                      children: state.recommendations.entries.map((entry) {
+                        return FlipCard(
+                          direction: FlipDirection.HORIZONTAL,
+                          front: Card(
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    _getIconForCategory(entry.key),
+                                    size: 32,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text(
+                                      entry.key,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          back: Card(
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    entry.value,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    )
                   else
-                    const Text("추천 코디 정보를 가져올 수 없습니다."),
+                    const Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Text(
+                          "추천 코디 정보를 가져올 수 없습니다.",
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             );
@@ -126,7 +179,6 @@ class _WeatherPageState extends State<WeatherPage> {
       case '1':
         return {'icon': Icons.grain, 'description': '비'};
       case '2':
-        return {'icon': Icons.ac_unit, 'description': '비/눈'};
       case '3':
         return {'icon': Icons.ac_unit, 'description': '눈'};
       case '4':
@@ -160,6 +212,21 @@ class _WeatherPageState extends State<WeatherPage> {
         }
       default:
         return null;
+    }
+  }
+
+  IconData _getIconForCategory(String category) {
+    switch (category) {
+      case "아우터":
+        return Icons.checkroom;
+      case "상의":
+        return Icons.emoji_people;
+      case "하의":
+        return Icons.work_outline;
+      case "신발":
+        return Icons.hiking;
+      default:
+        return Icons.help_outline;
     }
   }
 }

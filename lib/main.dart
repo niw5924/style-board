@@ -46,7 +46,7 @@ class StyleBoard extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.teal,
+          seedColor: const Color(0xFFEAF3FA),
           surface: const Color(0xFFF7F7F7),
           onSurface: const Color(0xFF333333),
           primary: const Color(0xFF0077CC),
