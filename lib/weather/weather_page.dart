@@ -82,7 +82,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
                                     _getIconForCategory(entry.key),
@@ -90,14 +90,12 @@ class _WeatherPageState extends State<WeatherPage> {
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Text(
-                                      entry.key,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    entry.key,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
@@ -113,7 +111,6 @@ class _WeatherPageState extends State<WeatherPage> {
                                 children: [
                                   Text(
                                     entry.value,
-                                    textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
