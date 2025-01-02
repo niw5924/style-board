@@ -114,6 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               '$topPurpose (${state.purposeTags[topPurpose] ?? 0})',
                         },
                       ),
+                      const SizedBox(height: 4),
                       TextButton(
                         onPressed: () {
                           showDialog(

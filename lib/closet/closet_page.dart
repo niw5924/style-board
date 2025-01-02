@@ -121,10 +121,7 @@ class _ClosetPageState extends State<ClosetPage> {
                       final tags = state.photoTags[index];
 
                       return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        elevation: 2,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -207,7 +204,7 @@ class _ClosetPageState extends State<ClosetPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.onSurface,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
