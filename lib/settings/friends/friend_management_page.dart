@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:style_board/settings/friends/friend_add_popup.dart';
 
 class FriendManagementPage extends StatelessWidget {
   const FriendManagementPage({super.key});
@@ -73,7 +74,10 @@ class FriendManagementPage extends StatelessWidget {
   Widget _buildAddFriendButton(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        // 친구 추가 기능 이후 구현
+        showDialog(
+          context: context,
+          builder: (context) => const FriendAddPopup(),
+        );
       },
       icon: Icon(Icons.person_add_alt_1,
           color: Theme.of(context).colorScheme.surface),

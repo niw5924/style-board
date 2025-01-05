@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/settings/friends/friend_management_page.dart';
 import 'package:style_board/settings/profile/body_info_popup.dart';
 import 'package:style_board/settings/profile/profile_page.dart';
 import 'package:style_board/weather/weather_page.dart';
-
-import 'friends/friend_management_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -14,7 +13,13 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final userName = authProvider.user?.displayName ?? '사용자 이름';
+    final userName = authProvider.user?.displayName; // 사용자 이름 가져오기
+    final userTag = authProvider.userTag; // 사용자 태그 가져오기
+
+    // 이름과 태그 결합 (이름이 null일 경우 태그만 표시되지 않도록 처리)
+    final displayNameWithTag = userName != null && userTag != null
+        ? '$userName#$userTag'
+        : userName ?? '사용자 이름';
 
     return Container(
       width: double.infinity,
@@ -41,7 +46,7 @@ class SettingsPage extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: Text(
-              userName,
+              displayNameWithTag, // 이름과 태그를 표시
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
