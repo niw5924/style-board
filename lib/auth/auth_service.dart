@@ -1,6 +1,7 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:style_board/auth/firebase_custom_token_service.dart';
 
 class AuthService {
@@ -14,6 +15,7 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final firebase_auth.FirebaseAuth _firebaseAuth =
       firebase_auth.FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String? _currentLoginMethod; // 로그인 방식 ('google' 또는 'kakao')
 
   // Google 로그인 및 Firebase 연결
@@ -32,6 +34,11 @@ class AuthService {
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);
       final user = userCredential.user;
+
+      if (user != null) {
+        // Firestore에 유저 정보 저장
+        await _saveUserToFirestore(user);
+      }
 
       print('Firebase Google 로그인 성공');
       _currentLoginMethod = 'google'; // 로그인 방식 저장
@@ -72,8 +79,14 @@ class AuthService {
           await _firebaseAuth.signInWithCustomToken(customToken);
       final user = userCredential.user;
 
-      await user?.updateDisplayName(kakaoName);
-      await user?.updatePhotoURL(profileImageUrl);
+      if (user != null) {
+        // Firebase DisplayName과 PhotoURL 업데이트
+        await user.updateDisplayName(kakaoName);
+        await user.updatePhotoURL(profileImageUrl);
+
+        // Firestore에 유저 정보 저장
+        await _saveUserToFirestore(user);
+      }
 
       print('Firebase Kakao 로그인 성공');
       _currentLoginMethod = 'kakao'; // 로그인 방식 저장
@@ -82,6 +95,26 @@ class AuthService {
       print('Kakao 로그인 실패: $e');
     }
     return null;
+  }
+
+  // Firestore에 유저 정보 저장
+  Future<void> _saveUserToFirestore(firebase_auth.User user) async {
+    try {
+      final userDoc = _firestore.collection('users').doc(user.uid);
+
+      // Firestore 문서에 userInfo 필드로 유저 정보 저장
+      await userDoc.set({
+        'userInfo': {
+          'name': user.displayName ?? 'Unknown', // 이름 저장
+          'email': user.email, // 이메일 저장
+          'photoURL': user.photoURL, // 프로필 사진 URL 저장
+          'lastLoginAt': FieldValue.serverTimestamp(), // 마지막 로그인 시간
+        },
+      }, SetOptions(merge: true)); // 기존 필드 병합
+      print('Firestore에 유저 정보 저장 성공');
+    } catch (e) {
+      print('Firestore에 유저 정보 저장 실패: $e');
+    }
   }
 
   // 로그아웃
