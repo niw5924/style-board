@@ -2,6 +2,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import 'package:style_board/auth/firebase_custom_token_service.dart';
 
 class AuthService {
@@ -16,6 +17,7 @@ class AuthService {
   final firebase_auth.FirebaseAuth _firebaseAuth =
       firebase_auth.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final Uuid _uuid = const Uuid(); // UUID 생성기
   String? _currentLoginMethod; // 로그인 방식 ('google' 또는 'kakao')
 
   // Google 로그인 및 Firebase 연결
@@ -102,10 +104,19 @@ class AuthService {
     try {
       final userDoc = _firestore.collection('users').doc(user.uid);
 
+      // Firestore에서 기존 데이터 확인
+      final snapshot = await userDoc.get();
+      String? existingTag = snapshot.data()?['userInfo']?['tag'];
+
+      // 태그가 없다면 생성
+      String userTag =
+          existingTag ?? await _generateUniqueTag(user.displayName);
+
       // Firestore 문서에 userInfo 필드로 유저 정보 저장
       await userDoc.set({
         'userInfo': {
-          'name': user.displayName ?? 'Unknown', // 이름 저장
+          'name': user.displayName, // 이름 저장 (null 허용)
+          'tag': userTag, // 4자리 고유 태그
           'email': user.email, // 이메일 저장
           'photoURL': user.photoURL, // 프로필 사진 URL 저장
           'lastLoginAt': FieldValue.serverTimestamp(), // 마지막 로그인 시간
@@ -115,6 +126,28 @@ class AuthService {
     } catch (e) {
       print('Firestore에 유저 정보 저장 실패: $e');
     }
+  }
+
+  // Firestore에서 고유한 태그 생성
+  Future<String> _generateUniqueTag(String? name) async {
+    String tag;
+
+    while (true) {
+      // UUID의 앞 4자리 생성
+      tag = _uuid.v4().substring(0, 4);
+
+      // Firestore에서 동일한 이름 + 태그 존재 여부 확인
+      final query = await _firestore
+          .collection('users')
+          .where('userInfo.name', isEqualTo: name)
+          .where('userInfo.tag', isEqualTo: tag)
+          .get();
+
+      // 동일한 태그가 없으면 루프 종료
+      if (query.docs.isEmpty) break;
+    }
+
+    return tag;
   }
 
   // 로그아웃
