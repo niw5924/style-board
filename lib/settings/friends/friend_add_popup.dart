@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:style_board/settings/friends/friend_service.dart';
 
 class FriendAddPopup extends StatefulWidget {
   const FriendAddPopup({super.key});
@@ -12,6 +13,23 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
   final TextEditingController tagController = TextEditingController();
   bool showError = false;
   String errorMessage = '';
+
+  void _showError(String message) {
+    setState(() {
+      showError = true;
+      errorMessage = message;
+    });
+
+    // 2초 후 에러 메시지 숨기기
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          showError = false;
+          errorMessage = '';
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,37 +105,27 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
                 ),
                 const SizedBox(width: 12),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     final name = nameController.text.trim();
                     final tag = tagController.text.trim();
 
-                    // 유효성 검사
                     if (name.isEmpty || tag.isEmpty) {
-                      setState(() {
-                        showError = true;
-                        errorMessage = '이름과 태그를 모두 입력해주세요.';
-                      });
-                    } else if (tag.length != 4) {
-                      setState(() {
-                        showError = true;
-                        errorMessage = '태그는 4자리 문자열로 입력해주세요.';
-                      });
-                    } else {
-                      setState(() {
-                        showError = false;
-                        errorMessage = '';
-                      });
-                      // TODO: 친구 추가 로직 구현 예정
-                      Navigator.pop(context);
+                      _showError('이름과 태그를 모두 입력해주세요.');
+                      return;
                     }
 
-                    if (showError) {
-                      Future.delayed(const Duration(seconds: 2), () {
-                        setState(() {
-                          showError = false;
-                          errorMessage = '';
-                        });
-                      });
+                    if (tag.length != 4) {
+                      _showError('태그는 4자리 문자열로 입력해주세요.');
+                      return;
+                    }
+
+                    final result = await FriendService.sendFriendRequest(
+                        context, name, tag);
+
+                    if (result != null) {
+                      _showError(result);
+                    } else {
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text('추가'),

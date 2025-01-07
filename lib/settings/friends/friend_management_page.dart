@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/settings/friends/friend_add_popup.dart';
+import 'package:style_board/settings/friends/friend_service.dart';
 
 class FriendManagementPage extends StatelessWidget {
   const FriendManagementPage({super.key});
@@ -35,38 +39,108 @@ class FriendManagementPage extends StatelessWidget {
 
   // 내 친구 목록 탭
   Widget _buildMyFriendsTab(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Column(
-            children: List.generate(
-              10, // 예제용 데이터 (친구 수)
-              (index) => Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: _buildFriendCard(context, '친구 ${index + 1}'),
-              ),
-            ),
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userId = authProvider.user!.uid;
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('friends')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('친구 목록이 없습니다.'),
+              const SizedBox(height: 12),
+              _buildAddFriendButton(context),
+            ],
+          );
+        }
+
+        final friends = snapshot.data!.docs;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              ...friends.map((doc) {
+                final data = doc.data() as Map<String, dynamic>;
+                final friendName = data['name'];
+                final friendTag = data['tag'];
+                final friendPhotoURL = data['photoURL'];
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: _buildFriendCard(
+                    context,
+                    friendName,
+                    friendTag,
+                    friendPhotoURL,
+                  ),
+                );
+              }),
+              _buildAddFriendButton(context),
+            ],
           ),
-          _buildAddFriendButton(context),
-        ],
-      ),
+        );
+      },
     );
   }
 
   // 친구 요청 목록 탭
   Widget _buildFriendRequestsTab(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: List.generate(
-          10, // 예제용 데이터 (친구 요청 수)
-          (index) => Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: _buildFriendRequestCard(context, '요청자 ${index + 1}'),
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userId = authProvider.user!.uid;
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('friendRequestsReceived')
+          .orderBy('timestamp', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('받은 친구 요청이 없습니다.'));
+        }
+
+        final friendRequests = snapshot.data!.docs;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: friendRequests.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              final requesterName = data['name'];
+              final requesterTag = data['tag'];
+              final requesterPhotoURL = data['photoURL'];
+              final requesterId = doc.id;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: _buildFriendRequestCard(
+                  context,
+                  requesterName,
+                  requesterTag,
+                  requesterPhotoURL,
+                  requesterId,
+                ),
+              );
+            }).toList(),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -86,7 +160,8 @@ class FriendManagementPage extends StatelessWidget {
   }
 
   // 친구 카드 UI
-  Widget _buildFriendCard(BuildContext context, String friendName) {
+  Widget _buildFriendCard(BuildContext context, String friendName,
+      String friendTag, String? friendPhotoURL) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -96,34 +171,18 @@ class FriendManagementPage extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              child: Icon(Icons.person,
-                  size: 30, color: Theme.of(context).colorScheme.surface),
+              backgroundImage:
+                  friendPhotoURL != null ? NetworkImage(friendPhotoURL) : null,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                friendName,
+                '$friendName#$friendTag',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                // 옷장 보기 기능 이후 구현
-              },
-              icon: const Icon(Icons.visibility),
-              color: Theme.of(context).colorScheme.onSurface,
-              tooltip: '옷장 보기',
-            ),
-            IconButton(
-              onPressed: () {
-                // 친구 삭제 기능 이후 구현
-              },
-              icon: const Icon(Icons.delete_outline),
-              color: Theme.of(context).colorScheme.error,
-              tooltip: '삭제',
             ),
           ],
         ),
@@ -132,7 +191,13 @@ class FriendManagementPage extends StatelessWidget {
   }
 
   // 친구 요청 카드 UI
-  Widget _buildFriendRequestCard(BuildContext context, String requesterName) {
+  Widget _buildFriendRequestCard(
+    BuildContext context,
+    String requesterName,
+    String requesterTag,
+    String? requesterPhotoURL,
+    String requesterId,
+  ) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -142,13 +207,14 @@ class FriendManagementPage extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              child: Icon(Icons.person,
-                  size: 30, color: Theme.of(context).colorScheme.surface),
+              backgroundImage: requesterPhotoURL != null
+                  ? NetworkImage(requesterPhotoURL)
+                  : null,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                requesterName,
+                '$requesterName#$requesterTag',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -156,16 +222,16 @@ class FriendManagementPage extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {
-                // 친구 요청 수락 기능 이후 구현
+              onPressed: () async {
+                await FriendService.acceptFriendRequest(context, requesterId);
               },
               icon: const Icon(Icons.check_circle_outline),
               color: Theme.of(context).colorScheme.primary,
               tooltip: '수락',
             ),
             IconButton(
-              onPressed: () {
-                // 친구 요청 거절 기능 이후 구현
+              onPressed: () async {
+                await FriendService.rejectFriendRequest(context, requesterId);
               },
               icon: const Icon(Icons.cancel_outlined),
               color: Theme.of(context).colorScheme.error,
