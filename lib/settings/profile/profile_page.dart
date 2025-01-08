@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'closet_reset_dialog.dart';
+import 'closet_reset_popup.dart';
 import 'profile_page_cubit.dart';
 import 'profile_page_state.dart';
 
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (context) => ClosetResetDialog(
+                            builder: (context) => ClosetResetPopup(
                               onConfirm: () {
                                 context.read<ProfilePageCubit>().resetCloset();
                               },

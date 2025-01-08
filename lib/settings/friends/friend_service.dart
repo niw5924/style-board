@@ -5,9 +5,11 @@ import 'package:style_board/auth/auth_provider.dart';
 
 class FriendService {
   static Future<String?> sendFriendRequest(
-      BuildContext context, String name, String tag) async {
+    BuildContext context,
+    String name,
+    String tag,
+  ) async {
     try {
-      // 현재 유저 정보 가져오기 (AuthProvider 사용)
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final currentUser = authProvider.user!;
       final currentUserTag = authProvider.userTag!;
@@ -67,7 +69,9 @@ class FriendService {
 
   // 친구 요청 수락
   static Future<void> acceptFriendRequest(
-      BuildContext context, String requesterId) async {
+    BuildContext context,
+    String requesterId,
+  ) async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final currentUser = authProvider.user!;
@@ -133,7 +137,9 @@ class FriendService {
 
   // 친구 요청 거절
   static Future<void> rejectFriendRequest(
-      BuildContext context, String requesterId) async {
+    BuildContext context,
+    String requesterId,
+  ) async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final currentUser = authProvider.user!;
@@ -160,7 +166,9 @@ class FriendService {
 
   // 친구 삭제
   static Future<void> deleteFriend(
-      BuildContext context, String friendId) async {
+    BuildContext context,
+    String friendId,
+  ) async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final currentUser = authProvider.user!;

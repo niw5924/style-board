@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ClosetResetDialog extends StatelessWidget {
+class ClosetResetPopup extends StatelessWidget {
   final VoidCallback onConfirm;
 
-  const ClosetResetDialog({super.key, required this.onConfirm});
+  const ClosetResetPopup({super.key, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {

@@ -32,7 +32,7 @@ class FriendDeletePopup extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Text(
-              '정말로 이 친구를 삭제하시겠습니까?\n되돌릴 수 없습니다.',
+              '정말로 친구를 삭제하시겠습니까?\n되돌릴 수 없습니다.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16),
             ),
