@@ -40,6 +40,18 @@ class FriendService {
       final receiverDoc = receiverQuery.docs.first;
       final receiverId = receiverDoc.id;
 
+      // 이미 친구로 등록된 상태인지 확인
+      final isAlreadyFriend = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(senderId)
+          .collection('friends')
+          .doc(receiverId)
+          .get();
+
+      if (isAlreadyFriend.exists) {
+        return '이미 친구로 등록된 사용자입니다.';
+      }
+
       // 발신자의 요청 목록에 추가
       await FirebaseFirestore.instance
           .collection('users')

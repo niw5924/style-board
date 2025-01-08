@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/profile/friends/friend_management_page.dart';
 import 'package:style_board/profile/body_info_popup.dart';
+import 'package:style_board/profile/profile_detail/profile_detail_page.dart';
 import 'package:style_board/profile/weather/weather_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -109,7 +110,7 @@ class ProfilePage extends StatelessWidget {
       builder: (context) {
         return const FractionallySizedBox(
           heightFactor: 0.9,
-          child: ProfilePage(),
+          child: ProfileDetailPage(),
         );
       },
     );

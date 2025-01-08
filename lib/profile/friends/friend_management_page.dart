@@ -58,7 +58,12 @@ class FriendManagementPage extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('친구 목록이 없습니다.'),
+              const Text(
+                '친구 목록이 없습니다.',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
               const SizedBox(height: 12),
               _buildAddFriendButton(context),
             ],
@@ -115,7 +120,14 @@ class FriendManagementPage extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text('받은 친구 요청이 없습니다.'));
+          return const Center(
+            child: Text(
+              '받은 친구 요청이 없습니다.',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          );
         }
 
         final friendRequests = snapshot.data!.docs;
