@@ -30,6 +30,7 @@ class FriendService {
       // 태그를 통해 수신자 검색
       final receiverQuery = await FirebaseFirestore.instance
           .collection('users')
+          .where('userInfo.name', isEqualTo: name)
           .where('userInfo.tag', isEqualTo: tag)
           .get();
 
@@ -50,6 +51,18 @@ class FriendService {
 
       if (isAlreadyFriend.exists) {
         return '이미 친구로 등록된 사용자입니다.';
+      }
+
+      // 이미 친구 요청을 보냈는지 확인
+      final isAlreadyRequested = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(senderId)
+          .collection('friendRequestsSent')
+          .doc(receiverId)
+          .get();
+
+      if (isAlreadyRequested.exists) {
+        return '이미 친구 요청을 보냈습니다.';
       }
 
       // 발신자의 요청 목록에 추가
