@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/profile/friends/friend_add_popup.dart';
+import 'package:style_board/profile/friends/friend_closet/friend_closet_page.dart';
+import 'package:style_board/profile/friends/friend_closet/friend_closet_page_cubit.dart';
 import 'package:style_board/profile/friends/friend_delete_popup.dart';
 import 'package:style_board/profile/friends/friend_service.dart';
 
@@ -206,7 +209,18 @@ class FriendManagementPage extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                // 옷장 보기 기능 이후 구현
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (_) => FriendClosetPageCubit(),
+                      child: FriendClosetPage(
+                        friendId: friendId,
+                        friendName: friendName,
+                        friendTag: friendTag,
+                      ),
+                    ),
+                  ),
+                );
               },
               icon: const Icon(Icons.visibility),
               color: Theme.of(context).colorScheme.onSurface,
