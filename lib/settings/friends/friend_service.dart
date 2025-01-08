@@ -157,4 +157,32 @@ class FriendService {
       print('친구 요청 거절 실패: $e');
     }
   }
+
+  // 친구 삭제
+  static Future<void> deleteFriend(
+      BuildContext context, String friendId) async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final currentUser = authProvider.user!;
+      final currentUserId = currentUser.uid;
+
+      // 현재 유저의 friends 컬렉션에서 친구 삭제
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserId)
+          .collection('friends')
+          .doc(friendId)
+          .delete();
+
+      // 친구의 friends 컬렉션에서도 현재 유저 삭제
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(friendId)
+          .collection('friends')
+          .doc(currentUserId)
+          .delete();
+    } catch (e) {
+      print('친구 삭제 실패: $e');
+    }
+  }
 }

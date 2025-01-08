@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/settings/friends/friend_add_popup.dart';
+import 'package:style_board/settings/friends/friend_delete_popup.dart';
 import 'package:style_board/settings/friends/friend_service.dart';
 
 class FriendManagementPage extends StatelessWidget {
@@ -71,6 +72,7 @@ class FriendManagementPage extends StatelessWidget {
           child: Column(
             children: [
               ...friends.map((doc) {
+                final friendId = doc.id;
                 final data = doc.data() as Map<String, dynamic>;
                 final friendName = data['name'];
                 final friendTag = data['tag'];
@@ -80,6 +82,7 @@ class FriendManagementPage extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: _buildFriendCard(
                     context,
+                    friendId,
                     friendName,
                     friendTag,
                     friendPhotoURL,
@@ -121,20 +124,20 @@ class FriendManagementPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: friendRequests.map((doc) {
+              final requesterId = doc.id;
               final data = doc.data() as Map<String, dynamic>;
               final requesterName = data['name'];
               final requesterTag = data['tag'];
               final requesterPhotoURL = data['photoURL'];
-              final requesterId = doc.id;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: _buildFriendRequestCard(
                   context,
+                  requesterId,
                   requesterName,
                   requesterTag,
                   requesterPhotoURL,
-                  requesterId,
                 ),
               );
             }).toList(),
@@ -160,8 +163,13 @@ class FriendManagementPage extends StatelessWidget {
   }
 
   // 친구 카드 UI
-  Widget _buildFriendCard(BuildContext context, String friendName,
-      String friendTag, String? friendPhotoURL) {
+  Widget _buildFriendCard(
+    BuildContext context,
+    String friendId,
+    String friendName,
+    String friendTag,
+    String? friendPhotoURL,
+  ) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -184,6 +192,29 @@ class FriendManagementPage extends StatelessWidget {
                 ),
               ),
             ),
+            IconButton(
+              onPressed: () {
+                // 옷장 보기 기능 이후 구현
+              },
+              icon: const Icon(Icons.visibility),
+              color: Theme.of(context).colorScheme.onSurface,
+              tooltip: '옷장 보기',
+            ),
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => FriendDeletePopup(
+                    onConfirm: () async {
+                      await FriendService.deleteFriend(context, friendId);
+                    },
+                  ),
+                );
+              },
+              icon: const Icon(Icons.delete_outline),
+              color: Theme.of(context).colorScheme.error,
+              tooltip: '삭제',
+            ),
           ],
         ),
       ),
@@ -193,10 +224,10 @@ class FriendManagementPage extends StatelessWidget {
   // 친구 요청 카드 UI
   Widget _buildFriendRequestCard(
     BuildContext context,
+    String requesterId,
     String requesterName,
     String requesterTag,
     String? requesterPhotoURL,
-    String requesterId,
   ) {
     return Card(
       elevation: 2,
