@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/settings/friends/friend_management_page.dart';
-import 'package:style_board/settings/profile/body_info_popup.dart';
-import 'package:style_board/settings/profile/profile_page.dart';
-import 'package:style_board/weather/weather_page.dart';
+import 'package:style_board/profile/friends/friend_management_page.dart';
+import 'package:style_board/profile/body_info_popup.dart';
+import 'package:style_board/profile/weather/weather_page.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {

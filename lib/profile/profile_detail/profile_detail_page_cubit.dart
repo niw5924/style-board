@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'profile_page_state.dart';
+import 'profile_detail_page_state.dart';
 import 'package:style_board/auth/auth_provider.dart';
 
-class ProfilePageCubit extends Cubit<ProfilePageState> {
+class ProfileDetailPageCubit extends Cubit<ProfileDetailPageState> {
   final AuthProvider authProvider;
 
-  ProfilePageCubit(this.authProvider) : super(const ProfilePageState());
+  ProfileDetailPageCubit(this.authProvider)
+      : super(const ProfileDetailPageState());
 
   Future<void> loadProfileData() async {
     emit(state.copyWith(isLoading: true));

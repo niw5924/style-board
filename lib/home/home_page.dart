@@ -4,7 +4,7 @@ import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/home/home_page_state.dart';
 import '../styling/styling_page.dart';
 import '../closet/closet_page.dart';
-import '../settings/settings_page.dart';
+import '../profile/profile_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
       case 1:
         return const ClosetPage();
       case 2:
-        return const SettingsPage();
+        return const ProfilePage();
       default:
         return const Center(child: Text('페이지를 찾을 수 없습니다.'));
     }
@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(Icons.accessibility), label: '코디'),
               BottomNavigationBarItem(icon: Icon(Icons.checkroom), label: '옷장'),
-              BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이'),
             ],
           ),
         );

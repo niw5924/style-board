@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'profile_page_state.dart';
+part of 'profile_detail_page_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$ProfilePageState {
+mixin _$ProfileDetailPageState {
   bool get isLoading => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
   int get height => throw _privateConstructorUsedError;
@@ -31,18 +31,18 @@ mixin _$ProfilePageState {
       throw _privateConstructorUsedError; // style 태그
   Map<String, int> get purposeTags => throw _privateConstructorUsedError;
 
-  /// Create a copy of ProfilePageState
+  /// Create a copy of ProfileDetailPageState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ProfilePageStateCopyWith<ProfilePageState> get copyWith =>
+  $ProfileDetailPageStateCopyWith<ProfileDetailPageState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ProfilePageStateCopyWith<$Res> {
-  factory $ProfilePageStateCopyWith(
-          ProfilePageState value, $Res Function(ProfilePageState) then) =
-      _$ProfilePageStateCopyWithImpl<$Res, ProfilePageState>;
+abstract class $ProfileDetailPageStateCopyWith<$Res> {
+  factory $ProfileDetailPageStateCopyWith(ProfileDetailPageState value,
+          $Res Function(ProfileDetailPageState) then) =
+      _$ProfileDetailPageStateCopyWithImpl<$Res, ProfileDetailPageState>;
   @useResult
   $Res call(
       {bool isLoading,
@@ -58,16 +58,17 @@ abstract class $ProfilePageStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ProfilePageStateCopyWithImpl<$Res, $Val extends ProfilePageState>
-    implements $ProfilePageStateCopyWith<$Res> {
-  _$ProfilePageStateCopyWithImpl(this._value, this._then);
+class _$ProfileDetailPageStateCopyWithImpl<$Res,
+        $Val extends ProfileDetailPageState>
+    implements $ProfileDetailPageStateCopyWith<$Res> {
+  _$ProfileDetailPageStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ProfilePageState
+  /// Create a copy of ProfileDetailPageState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -129,11 +130,12 @@ class _$ProfilePageStateCopyWithImpl<$Res, $Val extends ProfilePageState>
 }
 
 /// @nodoc
-abstract class _$$ProfilePageStateImplCopyWith<$Res>
-    implements $ProfilePageStateCopyWith<$Res> {
-  factory _$$ProfilePageStateImplCopyWith(_$ProfilePageStateImpl value,
-          $Res Function(_$ProfilePageStateImpl) then) =
-      __$$ProfilePageStateImplCopyWithImpl<$Res>;
+abstract class _$$ProfileDetailPageStateImplCopyWith<$Res>
+    implements $ProfileDetailPageStateCopyWith<$Res> {
+  factory _$$ProfileDetailPageStateImplCopyWith(
+          _$ProfileDetailPageStateImpl value,
+          $Res Function(_$ProfileDetailPageStateImpl) then) =
+      __$$ProfileDetailPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -150,14 +152,16 @@ abstract class _$$ProfilePageStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ProfilePageStateImplCopyWithImpl<$Res>
-    extends _$ProfilePageStateCopyWithImpl<$Res, _$ProfilePageStateImpl>
-    implements _$$ProfilePageStateImplCopyWith<$Res> {
-  __$$ProfilePageStateImplCopyWithImpl(_$ProfilePageStateImpl _value,
-      $Res Function(_$ProfilePageStateImpl) _then)
+class __$$ProfileDetailPageStateImplCopyWithImpl<$Res>
+    extends _$ProfileDetailPageStateCopyWithImpl<$Res,
+        _$ProfileDetailPageStateImpl>
+    implements _$$ProfileDetailPageStateImplCopyWith<$Res> {
+  __$$ProfileDetailPageStateImplCopyWithImpl(
+      _$ProfileDetailPageStateImpl _value,
+      $Res Function(_$ProfileDetailPageStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProfilePageState
+  /// Create a copy of ProfileDetailPageState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -173,7 +177,7 @@ class __$$ProfilePageStateImplCopyWithImpl<$Res>
     Object? styleTags = null,
     Object? purposeTags = null,
   }) {
-    return _then(_$ProfilePageStateImpl(
+    return _then(_$ProfileDetailPageStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -220,8 +224,8 @@ class __$$ProfilePageStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProfilePageStateImpl implements _ProfilePageState {
-  const _$ProfilePageStateImpl(
+class _$ProfileDetailPageStateImpl implements _ProfileDetailPageState {
+  const _$ProfileDetailPageStateImpl(
       {this.isLoading = true,
       this.gender = '',
       this.height = 0,
@@ -310,14 +314,14 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
 
   @override
   String toString() {
-    return 'ProfilePageState(isLoading: $isLoading, gender: $gender, height: $height, weight: $weight, clothingCount: $clothingCount, category: $category, seasonTags: $seasonTags, colorTags: $colorTags, styleTags: $styleTags, purposeTags: $purposeTags)';
+    return 'ProfileDetailPageState(isLoading: $isLoading, gender: $gender, height: $height, weight: $weight, clothingCount: $clothingCount, category: $category, seasonTags: $seasonTags, colorTags: $colorTags, styleTags: $styleTags, purposeTags: $purposeTags)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProfilePageStateImpl &&
+            other is _$ProfileDetailPageStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.gender, gender) || other.gender == gender) &&
@@ -350,18 +354,18 @@ class _$ProfilePageStateImpl implements _ProfilePageState {
       const DeepCollectionEquality().hash(_styleTags),
       const DeepCollectionEquality().hash(_purposeTags));
 
-  /// Create a copy of ProfilePageState
+  /// Create a copy of ProfileDetailPageState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProfilePageStateImplCopyWith<_$ProfilePageStateImpl> get copyWith =>
-      __$$ProfilePageStateImplCopyWithImpl<_$ProfilePageStateImpl>(
-          this, _$identity);
+  _$$ProfileDetailPageStateImplCopyWith<_$ProfileDetailPageStateImpl>
+      get copyWith => __$$ProfileDetailPageStateImplCopyWithImpl<
+          _$ProfileDetailPageStateImpl>(this, _$identity);
 }
 
-abstract class _ProfilePageState implements ProfilePageState {
-  const factory _ProfilePageState(
+abstract class _ProfileDetailPageState implements ProfileDetailPageState {
+  const factory _ProfileDetailPageState(
       {final bool isLoading,
       final String gender,
       final int height,
@@ -371,7 +375,7 @@ abstract class _ProfilePageState implements ProfilePageState {
       final Map<String, int> seasonTags,
       final Map<String, int> colorTags,
       final Map<String, int> styleTags,
-      final Map<String, int> purposeTags}) = _$ProfilePageStateImpl;
+      final Map<String, int> purposeTags}) = _$ProfileDetailPageStateImpl;
 
   @override
   bool get isLoading;
@@ -394,10 +398,10 @@ abstract class _ProfilePageState implements ProfilePageState {
   @override
   Map<String, int> get purposeTags;
 
-  /// Create a copy of ProfilePageState
+  /// Create a copy of ProfileDetailPageState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ProfilePageStateImplCopyWith<_$ProfilePageStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ProfileDetailPageStateImplCopyWith<_$ProfileDetailPageStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

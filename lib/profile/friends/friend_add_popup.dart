@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:style_board/settings/friends/friend_service.dart';
+import 'package:style_board/profile/friends/friend_service.dart';
 
 class FriendAddPopup extends StatefulWidget {
   const FriendAddPopup({super.key});

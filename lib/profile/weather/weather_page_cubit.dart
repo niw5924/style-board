@@ -1,12 +1,13 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:style_board/weather/weather_page_state.dart';
-import '../weather/weather_service.dart';
-import '../weather/location_service.dart';
-import '../weather/coordinate_converter.dart';
-import '../weather/time_calculator.dart';
-import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
+import 'package:style_board/profile/weather/coordinate_converter.dart';
+import 'package:style_board/profile/weather/location_service.dart';
+import 'package:style_board/profile/weather/time_calculator.dart';
+import 'package:style_board/profile/weather/weather_page_state.dart';
+import 'package:style_board/profile/weather/weather_service.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
   final WeatherService _weatherService = WeatherService();

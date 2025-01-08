@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'closet_reset_popup.dart';
-import 'profile_page_cubit.dart';
-import 'profile_page_state.dart';
+import 'profile_detail_page_cubit.dart';
+import 'profile_detail_page_state.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class ProfileDetailPage extends StatefulWidget {
+  const ProfileDetailPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileDetailPage> createState() => _ProfileDetailPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileDetailPageState extends State<ProfileDetailPage> {
   @override
   void initState() {
     super.initState();
-    context.read<ProfilePageCubit>().loadProfileData();
+    context.read<ProfileDetailPageCubit>().loadProfileData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfilePageCubit, ProfilePageState>(
+    return BlocBuilder<ProfileDetailPageCubit, ProfileDetailPageState>(
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Text(
                 context
-                        .read<ProfilePageCubit>()
+                        .read<ProfileDetailPageCubit>()
                         .authProvider
                         .user
                         ?.displayName ??
@@ -121,7 +121,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             context: context,
                             builder: (context) => ClosetResetPopup(
                               onConfirm: () {
-                                context.read<ProfilePageCubit>().resetCloset();
+                                context
+                                    .read<ProfileDetailPageCubit>()
+                                    .resetCloset();
                               },
                             ),
                           );
@@ -138,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {
                           Navigator.pop(context);
                           context
-                              .read<ProfilePageCubit>()
+                              .read<ProfileDetailPageCubit>()
                               .authProvider
                               .logout();
                         },

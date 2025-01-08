@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/settings/friends/friend_add_popup.dart';
-import 'package:style_board/settings/friends/friend_delete_popup.dart';
-import 'package:style_board/settings/friends/friend_service.dart';
+import 'package:style_board/profile/friends/friend_add_popup.dart';
+import 'package:style_board/profile/friends/friend_delete_popup.dart';
+import 'package:style_board/profile/friends/friend_service.dart';
 
 class FriendManagementPage extends StatelessWidget {
   const FriendManagementPage({super.key});

@@ -1,10 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'profile_page_state.freezed.dart';
+part 'profile_detail_page_state.freezed.dart';
 
 @freezed
-class ProfilePageState with _$ProfilePageState {
-  const factory ProfilePageState({
+class ProfileDetailPageState with _$ProfileDetailPageState {
+  const factory ProfileDetailPageState({
     @Default(true) bool isLoading,
     @Default('') String gender,
     @Default(0) int height,
@@ -15,5 +15,5 @@ class ProfilePageState with _$ProfilePageState {
     @Default({}) Map<String, int> colorTags, // color 태그
     @Default({}) Map<String, int> styleTags, // style 태그
     @Default({}) Map<String, int> purposeTags, // purpose 태그
-  }) = _ProfilePageState;
+  }) = _ProfileDetailPageState;
 }

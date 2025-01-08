@@ -9,8 +9,8 @@ import 'package:style_board/home/home_page.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/auth/login_page.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
-import 'package:style_board/settings/profile/profile_page_cubit.dart';
-import 'package:style_board/weather/weather_page_cubit.dart';
+import 'package:style_board/profile/profile_detail/profile_detail_page_cubit.dart';
+import 'package:style_board/profile/weather/weather_page_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,8 @@ void main() async {
         ),
         BlocProvider(create: (_) => WeatherCubit()),
         BlocProvider(
-          create: (context) => ProfilePageCubit(context.read<AuthProvider>()),
+          create: (context) =>
+              ProfileDetailPageCubit(context.read<AuthProvider>()),
         ),
       ],
       child: const StyleBoard(),
