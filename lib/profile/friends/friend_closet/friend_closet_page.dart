@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'friend_closet_page_cubit.dart';
@@ -65,22 +64,36 @@ class _FriendClosetPageState extends State<FriendClosetPage> {
               itemBuilder: (context, index) {
                 final category = state.friendPhotoCategories[index];
                 final tags = state.friendPhotoTags[index];
+                final isLiked = state.friendPhotoLikes[index];
 
                 return Card(
                   elevation: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        child: Image.file(
-                          File(state.friendPhotoPaths[index]),
-                          width: double.infinity,
-                          height: 160,
-                          fit: BoxFit.fill,
-                        ),
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12),
+                            ),
+                            child: Image.file(
+                              File(state.friendPhotoPaths[index]),
+                              width: double.infinity,
+                              height: 160,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 4,
+                            right: 4,
+                            child: Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_border,
+                              color: isLiked ? Colors.red : Colors.black,
+                              size: 24,
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -94,6 +107,7 @@ class _FriendClosetPageState extends State<FriendClosetPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            const SizedBox(height: 8),
                             Wrap(
                               spacing: 8,
                               runSpacing: 4,
