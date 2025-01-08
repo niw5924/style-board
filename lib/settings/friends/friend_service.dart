@@ -12,7 +12,13 @@ class FriendService {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final currentUser = authProvider.user!;
+      final currentUserName = currentUser.displayName!;
       final currentUserTag = authProvider.userTag!;
+
+      // 자신의 이름과 태그가 동일한 경우 요청 차단
+      if (name == currentUserName && tag == currentUserTag) {
+        return '자신에게 친구 요청을 보낼 수 없습니다.';
+      }
 
       final senderId = currentUser.uid;
       final senderData = {
