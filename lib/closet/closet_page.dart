@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/closet/closet_category_tag_popup.dart';
+import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/closet/closet_page_state.dart';
 
@@ -196,6 +197,12 @@ class _ClosetPageState extends State<ClosetPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showFilterBottomSheet(context);
+        },
+        child: const Icon(Icons.filter_list),
       ),
     );
   }
