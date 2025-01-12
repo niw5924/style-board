@@ -15,6 +15,14 @@ class ClosetPage extends StatefulWidget {
 }
 
 class _ClosetPageState extends State<ClosetPage> {
+  String? selectedCategory;
+  final Map<String, String?> selectedTags = {
+    '계절': null,
+    '색상': null,
+    '스타일': null,
+    '용도': null,
+  };
+
   @override
   void initState() {
     super.initState();
@@ -28,69 +36,105 @@ class _ClosetPageState extends State<ClosetPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    HapticFeedback.mediumImpact();
-                    final pickedFile =
-                        await context.read<ClosetPageCubit>().takePhoto();
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        HapticFeedback.mediumImpact();
+                        final pickedFile =
+                            await context.read<ClosetPageCubit>().takePhoto();
 
-                    if (pickedFile != null) {
-                      final categoryTagData = await closetCategoryTagPopup(
-                          context, File(pickedFile.path));
+                        if (pickedFile != null) {
+                          final categoryTagData = await closetCategoryTagPopup(
+                              context, File(pickedFile.path));
 
-                      if (categoryTagData != null) {
-                        final category = categoryTagData['category'] as String;
-                        final tags =
-                            categoryTagData['tags'] as Map<String, String?>;
-                        final isLiked = categoryTagData['isLiked'] as bool;
+                          if (categoryTagData != null) {
+                            final category =
+                                categoryTagData['category'] as String;
+                            final tags =
+                                categoryTagData['tags'] as Map<String, String?>;
+                            final isLiked = categoryTagData['isLiked'] as bool;
 
-                        await context
+                            await context
+                                .read<ClosetPageCubit>()
+                                .savePhotoWithDetails(
+                                  filePath: pickedFile.path,
+                                  category: category,
+                                  tags: tags,
+                                  isLiked: isLiked,
+                                );
+                          }
+                        }
+                      },
+                      child: const Text('사진 찍기'),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        HapticFeedback.mediumImpact();
+                        final pickedFile = await context
                             .read<ClosetPageCubit>()
-                            .savePhotoWithDetails(
-                              filePath: pickedFile.path,
-                              category: category,
-                              tags: tags,
-                              isLiked: isLiked,
-                            );
-                      }
-                    }
-                  },
-                  child: const Text('사진 찍기'),
+                            .pickPhotoFromGallery();
+
+                        if (pickedFile != null) {
+                          final categoryTagData = await closetCategoryTagPopup(
+                              context, File(pickedFile.path));
+
+                          if (categoryTagData != null) {
+                            final category =
+                                categoryTagData['category'] as String;
+                            final tags =
+                                categoryTagData['tags'] as Map<String, String?>;
+                            final isLiked = categoryTagData['isLiked'] as bool;
+
+                            await context
+                                .read<ClosetPageCubit>()
+                                .savePhotoWithDetails(
+                                  filePath: pickedFile.path,
+                                  category: category,
+                                  tags: tags,
+                                  isLiked: isLiked,
+                                );
+                          }
+                        }
+                      },
+                      child: const Text('갤러리에서 가져오기'),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    HapticFeedback.mediumImpact();
-                    final pickedFile = await context
-                        .read<ClosetPageCubit>()
-                        .pickPhotoFromGallery();
-
-                    if (pickedFile != null) {
-                      final categoryTagData = await closetCategoryTagPopup(
-                          context, File(pickedFile.path));
-
-                      if (categoryTagData != null) {
-                        final category = categoryTagData['category'] as String;
-                        final tags =
-                            categoryTagData['tags'] as Map<String, String?>;
-                        final isLiked = categoryTagData['isLiked'] as bool;
-
-                        await context
-                            .read<ClosetPageCubit>()
-                            .savePhotoWithDetails(
-                              filePath: pickedFile.path,
-                              category: category,
-                              tags: tags,
-                              isLiked: isLiked,
-                            );
-                      }
-                    }
-                  },
-                  child: const Text('갤러리에서 가져오기'),
-                ),
+                const SizedBox(height: 16),
+                if (selectedCategory != null ||
+                    selectedTags.values.any((tag) => tag != null))
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (selectedCategory != null)
+                        InputChip(
+                          label: Text(selectedCategory!),
+                          onDeleted: () {
+                            setState(() {
+                              selectedCategory = null;
+                            });
+                          },
+                        ),
+                      ...selectedTags.entries
+                          .where((entry) => entry.value != null)
+                          .map(
+                            (entry) => InputChip(
+                              label: Text(entry.value!),
+                              onDeleted: () {
+                                setState(() {
+                                  selectedTags[entry.key] = null;
+                                });
+                              },
+                            ),
+                          ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -199,8 +243,14 @@ class _ClosetPageState extends State<ClosetPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showFilterBottomSheet(context);
+        onPressed: () async {
+          final result = await showFilterBottomSheet(context);
+          if (result != null) {
+            setState(() {
+              selectedCategory = result['카테고리'] as String?;
+              selectedTags.addAll(result['태그'] as Map<String, String?>);
+            });
+          }
         },
         child: const Icon(Icons.filter_list),
       ),

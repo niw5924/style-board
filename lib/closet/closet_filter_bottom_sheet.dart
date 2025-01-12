@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-void showFilterBottomSheet(BuildContext context) {
+Future<Map<String, dynamic>?> showFilterBottomSheet(
+    BuildContext context) async {
   final categories = ['상의', '하의', '아우터', '신발'];
   final seasons = ['봄', '여름', '가을', '겨울'];
   final colors = ['빨강', '파랑', '초록', '노랑', '검정', '흰색', '회색', '보라', '베이지', '갈색'];
@@ -17,15 +18,15 @@ void showFilterBottomSheet(BuildContext context) {
   };
 
   String selectedSection = '카테고리';
+  String? selectedCategory;
   final selectedTags = <String, String?>{
-    '카테고리': null,
     '계절': null,
     '색상': null,
     '스타일': null,
     '용도': null,
   };
 
-  showModalBottomSheet(
+  return await showModalBottomSheet<Map<String, dynamic>>(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
@@ -57,6 +58,7 @@ void showFilterBottomSheet(BuildContext context) {
                     TextButton.icon(
                       onPressed: () {
                         setState(() {
+                          selectedCategory = null;
                           selectedTags.updateAll((key, value) => null);
                         });
                       },
@@ -85,7 +87,6 @@ void showFilterBottomSheet(BuildContext context) {
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 8),
-                              color: Colors.transparent,
                               child: Text(
                                 section,
                                 style: TextStyle(
@@ -117,13 +118,19 @@ void showFilterBottomSheet(BuildContext context) {
                               itemCount: currentOptions.length,
                               itemBuilder: (context, index) {
                                 final option = currentOptions[index];
-                                final isSelected =
-                                    selectedTags[selectedSection] == option;
+                                final isSelected = selectedSection == '카테고리'
+                                    ? selectedCategory == option
+                                    : selectedTags[selectedSection] == option;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      selectedTags[selectedSection] =
-                                          isSelected ? null : option;
+                                      if (selectedSection == '카테고리') {
+                                        selectedCategory =
+                                            isSelected ? null : option;
+                                      } else {
+                                        selectedTags[selectedSection] =
+                                            isSelected ? null : option;
+                                      }
                                     });
                                   },
                                   child: Container(
@@ -165,13 +172,19 @@ void showFilterBottomSheet(BuildContext context) {
                               spacing: 8,
                               runSpacing: 8,
                               children: currentOptions.map((option) {
-                                final isSelected =
-                                    selectedTags[selectedSection] == option;
+                                final isSelected = selectedSection == '카테고리'
+                                    ? selectedCategory == option
+                                    : selectedTags[selectedSection] == option;
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      selectedTags[selectedSection] =
-                                          isSelected ? null : option;
+                                      if (selectedSection == '카테고리') {
+                                        selectedCategory =
+                                            isSelected ? null : option;
+                                      } else {
+                                        selectedTags[selectedSection] =
+                                            isSelected ? null : option;
+                                      }
                                     });
                                   },
                                   child: Container(
@@ -215,7 +228,10 @@ void showFilterBottomSheet(BuildContext context) {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, {
+                      '카테고리': selectedCategory,
+                      '태그': Map<String, String?>.from(selectedTags),
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
