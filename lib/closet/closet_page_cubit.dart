@@ -134,4 +134,24 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
       print("Error updating like status: $e");
     }
   }
+
+  void updateCategory(String? category) {
+    emit(state.copyWith(filterCategory: category));
+  }
+
+  void updateSeason(String? season) {
+    emit(state.copyWith(filterSeason: season));
+  }
+
+  void updateColor(String? color) {
+    emit(state.copyWith(filterColor: color));
+  }
+
+  void updateStyle(String? style) {
+    emit(state.copyWith(filterStyle: style));
+  }
+
+  void updatePurpose(String? purpose) {
+    emit(state.copyWith(filterPurpose: purpose));
+  }
 }

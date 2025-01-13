@@ -15,14 +15,6 @@ class ClosetPage extends StatefulWidget {
 }
 
 class _ClosetPageState extends State<ClosetPage> {
-  String? selectedCategory;
-  final Map<String, String?> selectedTags = {
-    '계절': null,
-    '색상': null,
-    '스타일': null,
-    '용도': null,
-  };
-
   @override
   void initState() {
     super.initState();
@@ -106,35 +98,54 @@ class _ClosetPageState extends State<ClosetPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                if (selectedCategory != null ||
-                    selectedTags.values.any((tag) => tag != null))
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      if (selectedCategory != null)
+                BlocBuilder<ClosetPageCubit, ClosetPageState>(
+                  builder: (context, state) {
+                    final chips = [
+                      if (state.filterCategory != null)
                         InputChip(
-                          label: Text(selectedCategory!),
+                          label: Text(state.filterCategory!),
                           onDeleted: () {
-                            setState(() {
-                              selectedCategory = null;
-                            });
+                            context
+                                .read<ClosetPageCubit>()
+                                .updateCategory(null);
                           },
                         ),
-                      ...selectedTags.entries
-                          .where((entry) => entry.value != null)
-                          .map(
-                            (entry) => InputChip(
-                              label: Text(entry.value!),
-                              onDeleted: () {
-                                setState(() {
-                                  selectedTags[entry.key] = null;
-                                });
-                              },
-                            ),
-                          ),
-                    ],
-                  ),
+                      if (state.filterSeason != null)
+                        InputChip(
+                          label: Text(state.filterSeason!),
+                          onDeleted: () {
+                            context.read<ClosetPageCubit>().updateSeason(null);
+                          },
+                        ),
+                      if (state.filterColor != null)
+                        InputChip(
+                          label: Text(state.filterColor!),
+                          onDeleted: () {
+                            context.read<ClosetPageCubit>().updateColor(null);
+                          },
+                        ),
+                      if (state.filterStyle != null)
+                        InputChip(
+                          label: Text(state.filterStyle!),
+                          onDeleted: () {
+                            context.read<ClosetPageCubit>().updateStyle(null);
+                          },
+                        ),
+                      if (state.filterPurpose != null)
+                        InputChip(
+                          label: Text(state.filterPurpose!),
+                          onDeleted: () {
+                            context.read<ClosetPageCubit>().updatePurpose(null);
+                          },
+                        ),
+                    ];
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: chips,
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -158,7 +169,7 @@ class _ClosetPageState extends State<ClosetPage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      childAspectRatio: 2 / 3,
+                      childAspectRatio: 0.6,
                     ),
                     itemCount: state.photoPaths.length,
                     itemBuilder: (context, index) {
@@ -179,7 +190,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                   child: Image.file(
                                     File(state.photoPaths[index]),
                                     width: double.infinity,
-                                    height: 160,
+                                    height: 180,
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -244,12 +255,14 @@ class _ClosetPageState extends State<ClosetPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await showFilterBottomSheet(context);
+          final result = await closetFilterBottomSheet(context);
           if (result != null) {
-            setState(() {
-              selectedCategory = result['카테고리'] as String?;
-              selectedTags.addAll(result['태그'] as Map<String, String?>);
-            });
+            context.read<ClosetPageCubit>()
+              ..updateCategory(result['filterCategory'] as String?)
+              ..updateSeason(result['filterSeason'] as String?)
+              ..updateColor(result['filterColor'] as String?)
+              ..updateStyle(result['filterStyle'] as String?)
+              ..updatePurpose(result['filterPurpose'] as String?);
           }
         },
         child: const Icon(Icons.filter_list),

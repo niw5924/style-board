@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<Map<String, dynamic>?> showFilterBottomSheet(
+Future<Map<String, dynamic>?> closetFilterBottomSheet(
     BuildContext context) async {
   final categories = ['상의', '하의', '아우터', '신발'];
   final seasons = ['봄', '여름', '가을', '겨울'];
@@ -8,23 +8,13 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
   final styles = ['캐주얼', '포멀', '스포티', '트렌디', '빈티지', '모던'];
   final purposes = ['일상', '운동', '여행', '파티', '출근', '데이트'];
 
-  final sections = ['카테고리', '계절', '색상', '스타일', '용도'];
-  final sectionData = {
-    '카테고리': categories,
-    '계절': seasons,
-    '색상': colors,
-    '스타일': styles,
-    '용도': purposes,
-  };
-
   String selectedSection = '카테고리';
-  String? selectedCategory;
-  final selectedTags = <String, String?>{
-    '계절': null,
-    '색상': null,
-    '스타일': null,
-    '용도': null,
-  };
+
+  String? filterCategory;
+  String? filterSeason;
+  String? filterColor;
+  String? filterStyle;
+  String? filterPurpose;
 
   return await showModalBottomSheet<Map<String, dynamic>>(
     context: context,
@@ -35,7 +25,34 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setState) {
-          final currentOptions = sectionData[selectedSection]!;
+          List<String> currentOptions;
+          String? selectedOption;
+
+          switch (selectedSection) {
+            case '카테고리':
+              currentOptions = categories;
+              selectedOption = filterCategory;
+              break;
+            case '계절':
+              currentOptions = seasons;
+              selectedOption = filterSeason;
+              break;
+            case '색상':
+              currentOptions = colors;
+              selectedOption = filterColor;
+              break;
+            case '스타일':
+              currentOptions = styles;
+              selectedOption = filterStyle;
+              break;
+            case '용도':
+              currentOptions = purposes;
+              selectedOption = filterPurpose;
+              break;
+            default:
+              currentOptions = [];
+              selectedOption = null;
+          }
 
           return Padding(
             padding: EdgeInsets.only(
@@ -58,8 +75,11 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                     TextButton.icon(
                       onPressed: () {
                         setState(() {
-                          selectedCategory = null;
-                          selectedTags.updateAll((key, value) => null);
+                          filterCategory = null;
+                          filterSeason = null;
+                          filterColor = null;
+                          filterStyle = null;
+                          filterPurpose = null;
                         });
                       },
                       icon: const Icon(Icons.refresh, size: 18),
@@ -74,10 +94,12 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                       width: 100,
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: sections.length,
+                        itemCount: 5,
                         itemBuilder: (context, index) {
-                          final section = sections[index];
-                          final isSelected = section == selectedSection;
+                          final section =
+                              ['카테고리', '계절', '색상', '스타일', '용도'][index];
+                          final isSelected = selectedSection == section;
+
                           return GestureDetector(
                             onTap: () {
                               setState(() {
@@ -118,18 +140,32 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                               itemCount: currentOptions.length,
                               itemBuilder: (context, index) {
                                 final option = currentOptions[index];
-                                final isSelected = selectedSection == '카테고리'
-                                    ? selectedCategory == option
-                                    : selectedTags[selectedSection] == option;
+                                final isSelected = selectedOption == option;
+
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      if (selectedSection == '카테고리') {
-                                        selectedCategory =
-                                            isSelected ? null : option;
-                                      } else {
-                                        selectedTags[selectedSection] =
-                                            isSelected ? null : option;
+                                      switch (selectedSection) {
+                                        case '카테고리':
+                                          filterCategory =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '계절':
+                                          filterSeason =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '색상':
+                                          filterColor =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '스타일':
+                                          filterStyle =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '용도':
+                                          filterPurpose =
+                                              isSelected ? null : option;
+                                          break;
                                       }
                                     });
                                   },
@@ -137,8 +173,6 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12, horizontal: 16),
                                     decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
                                         color: isSelected
@@ -172,18 +206,32 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                               spacing: 8,
                               runSpacing: 8,
                               children: currentOptions.map((option) {
-                                final isSelected = selectedSection == '카테고리'
-                                    ? selectedCategory == option
-                                    : selectedTags[selectedSection] == option;
+                                final isSelected = selectedOption == option;
+
                                 return GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      if (selectedSection == '카테고리') {
-                                        selectedCategory =
-                                            isSelected ? null : option;
-                                      } else {
-                                        selectedTags[selectedSection] =
-                                            isSelected ? null : option;
+                                      switch (selectedSection) {
+                                        case '카테고리':
+                                          filterCategory =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '계절':
+                                          filterSeason =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '색상':
+                                          filterColor =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '스타일':
+                                          filterStyle =
+                                              isSelected ? null : option;
+                                          break;
+                                        case '용도':
+                                          filterPurpose =
+                                              isSelected ? null : option;
+                                          break;
                                       }
                                     });
                                   },
@@ -191,8 +239,6 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12, horizontal: 16),
                                     decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
                                         color: isSelected
@@ -229,8 +275,11 @@ Future<Map<String, dynamic>?> showFilterBottomSheet(
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, {
-                      '카테고리': selectedCategory,
-                      '태그': Map<String, String?>.from(selectedTags),
+                      'filterCategory': filterCategory,
+                      'filterSeason': filterSeason,
+                      'filterColor': filterColor,
+                      'filterStyle': filterStyle,
+                      'filterPurpose': filterPurpose,
                     });
                   },
                   style: ElevatedButton.styleFrom(
