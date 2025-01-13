@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 
 Future<Map<String, dynamic>?> closetFilterBottomSheet(
-    BuildContext context) async {
-  final categories = ['상의', '하의', '아우터', '신발'];
-  final seasons = ['봄', '여름', '가을', '겨울'];
-  final colors = ['빨강', '파랑', '초록', '노랑', '검정', '흰색', '회색', '보라', '베이지', '갈색'];
-  final styles = ['캐주얼', '포멀', '스포티', '트렌디', '빈티지', '모던'];
-  final purposes = ['일상', '운동', '여행', '파티', '출근', '데이트'];
+  BuildContext context, {
+  required String section,
+  String? filterCategory,
+  String? filterSeason,
+  String? filterColor,
+  String? filterStyle,
+  String? filterPurpose,
+}) async {
+  final Map<String, List<String>> options = {
+    '카테고리': ['상의', '하의', '아우터', '신발'],
+    '계절': ['봄', '여름', '가을', '겨울'],
+    '색상': ['빨강', '파랑', '초록', '노랑', '검정', '흰색', '회색', '보라', '베이지', '갈색'],
+    '스타일': ['캐주얼', '포멀', '스포티', '트렌디', '빈티지', '모던'],
+    '용도': ['일상', '운동', '여행', '파티', '출근', '데이트'],
+  };
 
-  String selectedSection = '카테고리';
-
-  String? filterCategory;
-  String? filterSeason;
-  String? filterColor;
-  String? filterStyle;
-  String? filterPurpose;
+  String selectedSection = section;
+  String? selectedCategory = filterCategory;
+  String? selectedSeason = filterSeason;
+  String? selectedColor = filterColor;
+  String? selectedStyle = filterStyle;
+  String? selectedPurpose = filterPurpose;
 
   return await showModalBottomSheet<Map<String, dynamic>>(
     context: context,
@@ -25,33 +33,25 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setState) {
-          List<String> currentOptions;
+          final currentOptions = options[selectedSection]!;
           String? selectedOption;
 
           switch (selectedSection) {
             case '카테고리':
-              currentOptions = categories;
-              selectedOption = filterCategory;
+              selectedOption = selectedCategory;
               break;
             case '계절':
-              currentOptions = seasons;
-              selectedOption = filterSeason;
+              selectedOption = selectedSeason;
               break;
             case '색상':
-              currentOptions = colors;
-              selectedOption = filterColor;
+              selectedOption = selectedColor;
               break;
             case '스타일':
-              currentOptions = styles;
-              selectedOption = filterStyle;
+              selectedOption = selectedStyle;
               break;
             case '용도':
-              currentOptions = purposes;
-              selectedOption = filterPurpose;
+              selectedOption = selectedPurpose;
               break;
-            default:
-              currentOptions = [];
-              selectedOption = null;
           }
 
           return Padding(
@@ -75,11 +75,11 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
                     TextButton.icon(
                       onPressed: () {
                         setState(() {
-                          filterCategory = null;
-                          filterSeason = null;
-                          filterColor = null;
-                          filterStyle = null;
-                          filterPurpose = null;
+                          selectedCategory = null;
+                          selectedSeason = null;
+                          selectedColor = null;
+                          selectedStyle = null;
+                          selectedPurpose = null;
                         });
                       },
                       icon: const Icon(Icons.refresh, size: 18),
@@ -94,23 +94,22 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
                       width: 100,
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: 5,
+                        itemCount: options.keys.length,
                         itemBuilder: (context, index) {
-                          final section =
-                              ['카테고리', '계절', '색상', '스타일', '용도'][index];
-                          final isSelected = selectedSection == section;
+                          final sectionKey = options.keys.elementAt(index);
+                          final isSelected = selectedSection == sectionKey;
 
                           return GestureDetector(
                             onTap: () {
                               setState(() {
-                                selectedSection = section;
+                                selectedSection = sectionKey;
                               });
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 8),
                               child: Text(
-                                section,
+                                sectionKey,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: isSelected
@@ -147,23 +146,23 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
                                     setState(() {
                                       switch (selectedSection) {
                                         case '카테고리':
-                                          filterCategory =
+                                          selectedCategory =
                                               isSelected ? null : option;
                                           break;
                                         case '계절':
-                                          filterSeason =
+                                          selectedSeason =
                                               isSelected ? null : option;
                                           break;
                                         case '색상':
-                                          filterColor =
+                                          selectedColor =
                                               isSelected ? null : option;
                                           break;
                                         case '스타일':
-                                          filterStyle =
+                                          selectedStyle =
                                               isSelected ? null : option;
                                           break;
                                         case '용도':
-                                          filterPurpose =
+                                          selectedPurpose =
                                               isSelected ? null : option;
                                           break;
                                       }
@@ -213,23 +212,23 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
                                     setState(() {
                                       switch (selectedSection) {
                                         case '카테고리':
-                                          filterCategory =
+                                          selectedCategory =
                                               isSelected ? null : option;
                                           break;
                                         case '계절':
-                                          filterSeason =
+                                          selectedSeason =
                                               isSelected ? null : option;
                                           break;
                                         case '색상':
-                                          filterColor =
+                                          selectedColor =
                                               isSelected ? null : option;
                                           break;
                                         case '스타일':
-                                          filterStyle =
+                                          selectedStyle =
                                               isSelected ? null : option;
                                           break;
                                         case '용도':
-                                          filterPurpose =
+                                          selectedPurpose =
                                               isSelected ? null : option;
                                           break;
                                       }
@@ -275,11 +274,11 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, {
-                      'filterCategory': filterCategory,
-                      'filterSeason': filterSeason,
-                      'filterColor': filterColor,
-                      'filterStyle': filterStyle,
-                      'filterPurpose': filterPurpose,
+                      'filterCategory': selectedCategory,
+                      'filterSeason': selectedSeason,
+                      'filterColor': selectedColor,
+                      'filterStyle': selectedStyle,
+                      'filterPurpose': selectedPurpose,
                     });
                   },
                   style: ElevatedButton.styleFrom(

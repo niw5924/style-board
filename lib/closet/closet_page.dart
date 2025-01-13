@@ -21,6 +21,30 @@ class _ClosetPageState extends State<ClosetPage> {
     context.read<ClosetPageCubit>().loadUserPhotos();
   }
 
+  Future<void> _openFilterSheet(String section) async {
+    final cubit = context.read<ClosetPageCubit>();
+    final state = cubit.state;
+
+    final result = await closetFilterBottomSheet(
+      context,
+      section: section,
+      filterCategory: state.filterCategory,
+      filterSeason: state.filterSeason,
+      filterColor: state.filterColor,
+      filterStyle: state.filterStyle,
+      filterPurpose: state.filterPurpose,
+    );
+
+    if (result != null) {
+      cubit
+        ..updateCategory(result['filterCategory'] as String?)
+        ..updateSeason(result['filterSeason'] as String?)
+        ..updateColor(result['filterColor'] as String?)
+        ..updateStyle(result['filterStyle'] as String?)
+        ..updatePurpose(result['filterPurpose'] as String?);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,49 +124,51 @@ class _ClosetPageState extends State<ClosetPage> {
                 const SizedBox(height: 16),
                 BlocBuilder<ClosetPageCubit, ClosetPageState>(
                   builder: (context, state) {
-                    final chips = [
-                      if (state.filterCategory != null)
-                        InputChip(
-                          label: Text(state.filterCategory!),
-                          onDeleted: () {
-                            context
-                                .read<ClosetPageCubit>()
-                                .updateCategory(null);
-                          },
-                        ),
-                      if (state.filterSeason != null)
-                        InputChip(
-                          label: Text(state.filterSeason!),
-                          onDeleted: () {
-                            context.read<ClosetPageCubit>().updateSeason(null);
-                          },
-                        ),
-                      if (state.filterColor != null)
-                        InputChip(
-                          label: Text(state.filterColor!),
-                          onDeleted: () {
-                            context.read<ClosetPageCubit>().updateColor(null);
-                          },
-                        ),
-                      if (state.filterStyle != null)
-                        InputChip(
-                          label: Text(state.filterStyle!),
-                          onDeleted: () {
-                            context.read<ClosetPageCubit>().updateStyle(null);
-                          },
-                        ),
-                      if (state.filterPurpose != null)
-                        InputChip(
-                          label: Text(state.filterPurpose!),
-                          onDeleted: () {
-                            context.read<ClosetPageCubit>().updatePurpose(null);
-                          },
-                        ),
-                    ];
                     return Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: chips,
+                      children: [
+                        if (state.filterCategory != null)
+                          InputChip(
+                            label: Text(state.filterCategory!),
+                            onDeleted: () => context
+                                .read<ClosetPageCubit>()
+                                .updateCategory(null),
+                            onPressed: () => _openFilterSheet('카테고리'),
+                          ),
+                        if (state.filterSeason != null)
+                          InputChip(
+                            label: Text(state.filterSeason!),
+                            onDeleted: () => context
+                                .read<ClosetPageCubit>()
+                                .updateSeason(null),
+                            onPressed: () => _openFilterSheet('계절'),
+                          ),
+                        if (state.filterColor != null)
+                          InputChip(
+                            label: Text(state.filterColor!),
+                            onDeleted: () => context
+                                .read<ClosetPageCubit>()
+                                .updateColor(null),
+                            onPressed: () => _openFilterSheet('색상'),
+                          ),
+                        if (state.filterStyle != null)
+                          InputChip(
+                            label: Text(state.filterStyle!),
+                            onDeleted: () => context
+                                .read<ClosetPageCubit>()
+                                .updateStyle(null),
+                            onPressed: () => _openFilterSheet('스타일'),
+                          ),
+                        if (state.filterPurpose != null)
+                          InputChip(
+                            label: Text(state.filterPurpose!),
+                            onDeleted: () => context
+                                .read<ClosetPageCubit>()
+                                .updatePurpose(null),
+                            onPressed: () => _openFilterSheet('용도'),
+                          ),
+                      ],
                     );
                   },
                 ),
@@ -270,17 +296,7 @@ class _ClosetPageState extends State<ClosetPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await closetFilterBottomSheet(context);
-          if (result != null) {
-            context.read<ClosetPageCubit>()
-              ..updateCategory(result['filterCategory'] as String?)
-              ..updateSeason(result['filterSeason'] as String?)
-              ..updateColor(result['filterColor'] as String?)
-              ..updateStyle(result['filterStyle'] as String?)
-              ..updatePurpose(result['filterPurpose'] as String?);
-          }
-        },
+        onPressed: () => _openFilterSheet('카테고리'),
         child: const Icon(Icons.filter_list),
       ),
     );
