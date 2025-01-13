@@ -135,6 +135,38 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     }
   }
 
+  // 필터 조건에 맞는 사진 인덱스를 반환하는 메서드 추가
+  List<int> getFilteredPhotoIndices() {
+    final indices = <int>[];
+
+    for (int i = 0; i < state.photoPaths.length; i++) {
+      final matchesCategory = state.filterCategory == null ||
+          state.photoCategories[i] == state.filterCategory;
+
+      final matchesSeason = state.filterSeason == null ||
+          state.photoTags[i]['season'] == state.filterSeason;
+
+      final matchesColor = state.filterColor == null ||
+          state.photoTags[i]['color'] == state.filterColor;
+
+      final matchesStyle = state.filterStyle == null ||
+          state.photoTags[i]['style'] == state.filterStyle;
+
+      final matchesPurpose = state.filterPurpose == null ||
+          state.photoTags[i]['purpose'] == state.filterPurpose;
+
+      if (matchesCategory &&
+          matchesSeason &&
+          matchesColor &&
+          matchesStyle &&
+          matchesPurpose) {
+        indices.add(i);
+      }
+    }
+
+    return indices;
+  }
+
   void updateCategory(String? category) {
     emit(state.copyWith(filterCategory: category));
   }

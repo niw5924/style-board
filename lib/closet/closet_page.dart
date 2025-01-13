@@ -154,100 +154,116 @@ class _ClosetPageState extends State<ClosetPage> {
               builder: (context, state) {
                 if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (state.photoPaths.isEmpty) {
+                }
+
+                // 사진 자체가 없는 경우
+                if (state.photoPaths.isEmpty) {
                   return const Center(
                     child: Text(
                       "저장된 사진이 없습니다.",
                       style: TextStyle(fontSize: 16),
                     ),
                   );
-                } else {
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 0.6,
-                    ),
-                    itemCount: state.photoPaths.length,
-                    itemBuilder: (context, index) {
-                      final category = state.photoCategories[index];
-                      final tags = state.photoTags[index];
+                }
 
-                      return Card(
-                        elevation: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(12),
+                // 필터링 결과가 없는 경우
+                final filteredIndices =
+                    context.read<ClosetPageCubit>().getFilteredPhotoIndices();
+                if (filteredIndices.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "필터링된 사진이 없습니다.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
+                }
+
+                // 필터링 결과가 있는 경우
+                return GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.6,
+                  ),
+                  itemCount: filteredIndices.length,
+                  itemBuilder: (context, index) {
+                    final photoIndex = filteredIndices[index];
+                    final category = state.photoCategories[photoIndex];
+                    final tags = state.photoTags[photoIndex];
+
+                    return Card(
+                      elevation: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12),
+                                ),
+                                child: Image.file(
+                                  File(state.photoPaths[photoIndex]),
+                                  width: double.infinity,
+                                  height: 180,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 2,
+                                right: 2,
+                                child: IconButton(
+                                  icon: Icon(
+                                    state.photoLikes[photoIndex]
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: state.photoLikes[photoIndex]
+                                        ? Colors.red
+                                        : Colors.black,
+                                    size: 24,
                                   ),
-                                  child: Image.file(
-                                    File(state.photoPaths[index]),
-                                    width: double.infinity,
-                                    height: 180,
-                                    fit: BoxFit.fill,
+                                  onPressed: () {
+                                    context
+                                        .read<ClosetPageCubit>()
+                                        .togglePhotoLike(photoIndex);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  category,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: 2,
-                                  right: 2,
-                                  child: IconButton(
-                                    icon: Icon(
-                                      state.photoLikes[index]
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: state.photoLikes[index]
-                                          ? Colors.red
-                                          : Colors.black,
-                                      size: 24,
-                                    ),
-                                    onPressed: () {
-                                      context
-                                          .read<ClosetPageCubit>()
-                                          .togglePhotoLike(index);
-                                    },
-                                  ),
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 4,
+                                  children: [
+                                    _buildTag(tags['season'] ?? ''),
+                                    _buildTag(tags['color'] ?? ''),
+                                    _buildTag(tags['style'] ?? ''),
+                                    _buildTag(tags['purpose'] ?? ''),
+                                  ],
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    category,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Wrap(
-                                    spacing: 8,
-                                    runSpacing: 4,
-                                    children: [
-                                      _buildTag(tags['season'] ?? ''),
-                                      _buildTag(tags['color'] ?? ''),
-                                      _buildTag(tags['style'] ?? ''),
-                                      _buildTag(tags['purpose'] ?? ''),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
