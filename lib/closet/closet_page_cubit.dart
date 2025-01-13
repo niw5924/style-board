@@ -13,7 +13,15 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   String get _userId => authProvider.user!.uid;
 
   Future<void> loadUserPhotos() async {
-    emit(state.copyWith(isLoading: true));
+    // 필터 상태 초기화
+    emit(state.copyWith(
+      filterCategory: null,
+      filterSeason: null,
+      filterColor: null,
+      filterStyle: null,
+      filterPurpose: null,
+      isLoading: true,
+    ));
 
     try {
       final snapshot = await FirebaseFirestore.instance
