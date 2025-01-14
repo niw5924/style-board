@@ -11,6 +11,7 @@ import 'package:style_board/auth/login_page.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/profile/profile_detail/profile_detail_page_cubit.dart';
 import 'package:style_board/profile/weather/weather_page_cubit.dart';
+import 'package:style_board/styling/styling_page_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,9 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         BlocProvider(create: (_) => HomePageCubit()),
+        BlocProvider(
+          create: (context) => StylingPageCubit(context.read<AuthProvider>()),
+        ),
         BlocProvider(
           create: (context) => ClosetPageCubit(context.read<AuthProvider>()),
         ),
