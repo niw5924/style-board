@@ -157,7 +157,7 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
                         errorMessage = '';
                       });
                       await saveBodyInfoToFirestore(userId);
-                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     }
 
                     if (showError) {

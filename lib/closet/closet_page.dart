@@ -82,6 +82,11 @@ class _ClosetPageState extends State<ClosetPage> {
                                   tags: tags,
                                   isLiked: isLiked,
                                 );
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('옷장에 새로운 아이템이 추가되었습니다!')),
+                            );
                           }
                         }
                       },
@@ -114,6 +119,11 @@ class _ClosetPageState extends State<ClosetPage> {
                                   tags: tags,
                                   isLiked: isLiked,
                                 );
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('옷장에 새로운 아이템이 추가되었습니다!')),
+                            );
                           }
                         }
                       },
