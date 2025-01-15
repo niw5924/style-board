@@ -46,11 +46,7 @@ class StylingPageCubit extends Cubit<StylingPageState> {
         .every((category) => state.selectedPhotos.containsKey(category));
   }
 
-  Future<void> addToMyPick() async {
-    if (!areAllCategoriesSelected()) {
-      throw Exception('모든 카테고리가 선택되지 않았습니다.');
-    }
-
+  Future<void> addToMyPickWithName(String pickName) async {
     final selectedPhotos = state.selectedPhotos;
 
     final myPicksRef = FirebaseFirestore.instance
@@ -60,6 +56,7 @@ class StylingPageCubit extends Cubit<StylingPageState> {
 
     try {
       await myPicksRef.add({
+        'name': pickName,
         ...selectedPhotos,
         'createdAt': DateTime.now(),
       });

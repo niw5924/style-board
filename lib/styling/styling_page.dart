@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 import 'package:style_board/styling/styling_page_state.dart';
+import 'package:style_board/styling/add_my_pick_popup.dart';
 
 class StylingPage extends StatelessWidget {
   const StylingPage({super.key});
@@ -73,15 +74,30 @@ class StylingPage extends StatelessWidget {
   void _addToMyPick(BuildContext context) async {
     final cubit = context.read<StylingPageCubit>();
 
-    try {
-      await cubit.addToMyPick();
+    if (!cubit.areAllCategoriesSelected()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('현재 코디가 나의 Pick에 추가되었습니다!')),
+        const SnackBar(content: Text('모든 카테고리를 선택해주세요!')),
       );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      return;
+    }
+
+    // 모든 카테고리가 선택된 경우 팝업 띄우기
+    final pickName = await showDialog<String>(
+      context: context,
+      builder: (_) => const AddMyPickPopup(),
+    );
+
+    if (pickName != null) {
+      try {
+        await cubit.addToMyPickWithName(pickName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('현재 코디가 나의 Pick에 추가되었습니다!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     }
   }
 }
