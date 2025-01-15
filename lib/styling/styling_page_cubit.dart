@@ -39,4 +39,32 @@ class StylingPageCubit extends Cubit<StylingPageState> {
   void resetAllPhotos() {
     emit(state.copyWith(selectedPhotos: {}));
   }
+
+  bool areAllCategoriesSelected() {
+    const requiredCategories = ['상의', '하의', '아우터', '신발'];
+    return requiredCategories
+        .every((category) => state.selectedPhotos.containsKey(category));
+  }
+
+  Future<void> addToMyPick() async {
+    if (!areAllCategoriesSelected()) {
+      throw Exception('모든 카테고리가 선택되지 않았습니다.');
+    }
+
+    final selectedPhotos = state.selectedPhotos;
+
+    final myPicksRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_userId)
+        .collection('myPicks');
+
+    try {
+      await myPicksRef.add({
+        ...selectedPhotos,
+        'createdAt': DateTime.now(),
+      });
+    } catch (e) {
+      throw Exception('나의 Pick 저장 중 오류가 발생했습니다: $e');
+    }
+  }
 }

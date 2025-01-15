@@ -32,13 +32,35 @@ class StylingPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _resetRepresentativePhotos(context),
-        child: const Icon(Icons.refresh),
-      ),
+      floatingActionButton: _buildFloatingButtons(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
+  // 플로팅 버튼 두 개 배치
+  Widget _buildFloatingButtons(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          heroTag: 'resetButton',
+          onPressed: () => _resetRepresentativePhotos(context),
+          tooltip: '대표 사진 초기화',
+          child: const Icon(Icons.refresh),
+        ),
+        const SizedBox(height: 16),
+        FloatingActionButton(
+          heroTag: 'addPickButton',
+          onPressed: () => _addToMyPick(context),
+          tooltip: '나의 Pick 추가',
+          child: const Icon(Icons.bookmark),
+        ),
+      ],
+    );
+  }
+
+  // 대표 사진 초기화 메소드
   void _resetRepresentativePhotos(BuildContext context) {
     final cubit = context.read<StylingPageCubit>();
     cubit.resetAllPhotos();
@@ -46,21 +68,34 @@ class StylingPage extends StatelessWidget {
       const SnackBar(content: Text('대표 사진이 초기화되었습니다.')),
     );
   }
+
+  // 나의 Pick 추가 메소드
+  void _addToMyPick(BuildContext context) async {
+    final cubit = context.read<StylingPageCubit>();
+
+    try {
+      await cubit.addToMyPick();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('현재 코디가 나의 Pick에 추가되었습니다!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
+  }
 }
 
 class _CategoryTile extends StatelessWidget {
   final String category;
 
-  const _CategoryTile({
-    required this.category,
-  });
+  const _CategoryTile({required this.category});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StylingPageCubit, StylingPageState>(
       builder: (context, state) {
         final representativePhoto = state.selectedPhotos[category];
-
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -108,7 +143,6 @@ class _CategoryTile extends StatelessWidget {
   void _showPhotoPicker(BuildContext context, String category) {
     final cubit = context.read<StylingPageCubit>();
     cubit.loadPhotosByCategory(category);
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
