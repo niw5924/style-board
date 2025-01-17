@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/profile/friends/friend_management_page.dart';
 import 'package:style_board/profile/body_info_popup.dart';
+import 'package:style_board/profile/my_picks/my_picks_page.dart';
 import 'package:style_board/profile/profile_detail/profile_detail_page.dart';
 import 'package:style_board/profile/weather/weather_page.dart';
 
@@ -72,6 +73,21 @@ class ProfilePage extends StatelessWidget {
                     ),
                   );
                 }
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildOptionCard(
+              context,
+              icon: Icons.favorite_outline,
+              title: '나의 Pick',
+              subtitle: '내가 찜한 스타일들을 한눈에!',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyPicksPage(),
+                  ),
+                );
               },
             ),
             const SizedBox(height: 12),
