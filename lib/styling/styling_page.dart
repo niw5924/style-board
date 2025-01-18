@@ -1,44 +1,90 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:style_board/styling/styling_page_cubit.dart';
-import 'package:style_board/styling/styling_page_state.dart';
+import 'package:style_board/styling/2d/styling_2d_page.dart';
+import 'package:style_board/styling/3d/styling_3d_page.dart';
 import 'package:style_board/styling/add_my_pick_popup.dart';
+import 'package:style_board/styling/styling_page_cubit.dart';
 
-class StylingPage extends StatelessWidget {
+class StylingPage extends StatefulWidget {
   const StylingPage({super.key});
+
+  @override
+  _StylingPageState createState() => _StylingPageState();
+}
+
+class _StylingPageState extends State<StylingPage> {
+  int _selectedMode = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _CategoryTile(category: '상의'),
-                  SizedBox(height: 20),
-                  _CategoryTile(category: '하의'),
-                  SizedBox(height: 20),
-                  _CategoryTile(category: '신발'),
-                ],
-              ),
-              SizedBox(width: 40),
-              _CategoryTile(category: '아우터'),
-            ],
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          _buildModeSelector(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: _selectedMode == 0
+                ? const Styling2DPage()
+                : const Styling3DPage(),
           ),
-        ),
+        ],
       ),
-      floatingActionButton: _buildFloatingButtons(context),
+      floatingActionButton:
+          _selectedMode == 0 ? _buildFloatingButtons(context) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  // 플로팅 버튼 두 개 배치
+  Widget _buildModeSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildToggleButton(
+          label: '2D',
+          isSelected: _selectedMode == 0,
+          onTap: () => setState(() => _selectedMode = 0),
+        ),
+        const SizedBox(width: 8),
+        _buildToggleButton(
+          label: '3D',
+          isSelected: _selectedMode == 1,
+          onTap: () => setState(() => _selectedMode = 1),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildToggleButton({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
+              : Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected
+                ? Theme.of(context).colorScheme.surface
+                : Theme.of(context).colorScheme.onSurface,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildFloatingButtons(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -99,130 +145,5 @@ class StylingPage extends StatelessWidget {
         );
       }
     }
-  }
-}
-
-class _CategoryTile extends StatelessWidget {
-  final String category;
-
-  const _CategoryTile({required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<StylingPageCubit, StylingPageState>(
-      builder: (context, state) {
-        final representativePhoto = state.selectedPhotos[category];
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              category,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            GestureDetector(
-              onTap: () => _showPhotoPicker(context, category),
-              child: Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: representativePhoto != null
-                    ? _buildImage(representativePhoto)
-                    : Icon(
-                        Icons.add_a_photo,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 40,
-                      ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildImage(String path) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: path.startsWith('http://') || path.startsWith('https://')
-          ? Image.network(path, fit: BoxFit.fill)
-          : Image.file(File(path), fit: BoxFit.fill),
-    );
-  }
-
-  void _showPhotoPicker(BuildContext context, String category) {
-    final cubit = context.read<StylingPageCubit>();
-    cubit.loadPhotosByCategory(category);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) {
-        return BlocBuilder<StylingPageCubit, StylingPageState>(
-          builder: (context, state) {
-            return FractionallySizedBox(
-              heightFactor: 0.6,
-              child: Column(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 5,
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  Text(
-                    category,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  if (state.isLoading)
-                    const Expanded(
-                        child: Center(child: CircularProgressIndicator()))
-                  else if (state.categoryPhotos.isNotEmpty)
-                    Expanded(
-                      child: GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                        ),
-                        itemCount: state.categoryPhotos.length,
-                        itemBuilder: (context, index) {
-                          final photo = state.categoryPhotos[index];
-                          return GestureDetector(
-                            onTap: () {
-                              cubit.selectPhoto(category, photo);
-                              Navigator.pop(context);
-                            },
-                            child: _buildImage(photo),
-                          );
-                        },
-                      ),
-                    )
-                  else
-                    const Expanded(child: Center(child: Text('저장된 사진이 없습니다.')))
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 }
