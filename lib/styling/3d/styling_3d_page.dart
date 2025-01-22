@@ -45,7 +45,7 @@ class _Styling3DPageState extends State<Styling3DPage> {
 
           // Unity로 스케일 값 전송
           sendToUnity(
-            "character", // Unity의 GameObject 이름
+            "Character", // Unity의 GameObject 이름
             "SetScale", // Unity에서 호출할 메서드 이름
             "$xzScale,$yScale,$xzScale", // X, Y, Z 축 스케일 전달
           );
