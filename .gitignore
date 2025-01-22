@@ -37,6 +37,12 @@ migrate_working_dir/
 # Firebase 관련 파일 제외
 android/app/google-services.json
 
+# Unity Android 빌드 결과물
+android/unityLibrary/
+
+# Unity 프로젝트 전체 제외
+unity/
+
 # Symbolication related
 app.*.symbols
 

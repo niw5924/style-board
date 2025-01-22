@@ -18,26 +18,26 @@ static const Il2CppMethodExecutionContextInfo g_methodExecutionContextInfos[23] 
 	{ 3798, 0,  0 },
 	{ 10779, 1,  17 },
 	{ 12058, 2,  18 },
-	{ 10174, 3,  18 },
+	{ 10175, 3,  18 },
 	{ 3787, 0,  34 },
-	{ 7703, 4,  35 },
-	{ 8734, 5,  37 },
-	{ 6978, 6,  38 },
-	{ 8734, 7,  39 },
+	{ 7704, 4,  35 },
+	{ 8735, 5,  37 },
+	{ 6979, 6,  38 },
+	{ 8735, 7,  39 },
 	{ 4900, 8,  40 },
-	{ 6900, 9,  40 },
-	{ 6900, 10,  40 },
-	{ 6900, 11,  40 },
-	{ 6900, 12,  40 },
-	{ 9916, 13,  48 },
+	{ 6901, 9,  40 },
+	{ 6901, 10,  40 },
+	{ 6901, 11,  40 },
+	{ 6901, 12,  40 },
+	{ 9917, 13,  48 },
 	{ 10779, 1,  50 },
 	{ 12058, 2,  51 },
-	{ 10174, 3,  51 },
+	{ 10175, 3,  51 },
 	{ 10779, 1,  52 },
 	{ 12058, 2,  53 },
-	{ 10174, 3,  53 },
+	{ 10175, 3,  53 },
 	{ 10779, 1,  54 },
-	{ 10174, 3,  55 },
+	{ 10175, 3,  55 },
 };
 #else
 static const Il2CppMethodExecutionContextInfo g_methodExecutionContextInfos[1] = { { 0, 0, 0 } };
@@ -741,7 +741,7 @@ Il2CppSequencePoint g_sequencePointsUnityEngine_PhysicsModule[1] = { { 0, 0, 0, 
 #endif
 #if IL2CPP_MONO_DEBUGGER
 static const Il2CppCatchPoint g_catchPoints[] = {
-{ 37025, 7703, 55, 1, 0 },
+{ 37025, 7704, 55, 1, 0 },
 };
 #else
 static const Il2CppCatchPoint g_catchPoints[1] = { { 0, 0, 0, 0, } };

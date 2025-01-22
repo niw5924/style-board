@@ -18,7 +18,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 22
         targetSdkVersion 34
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
@@ -68,7 +68,7 @@ def BuildIl2Cpp(String workingDir, String configuration, String architecture, St
     commandLineArgs.add("--data-folder=" + workingDir + "/src/main/Il2CppOutputProject/Source/il2cppOutput/data")
     commandLineArgs.add("--generatedcppdir=" + workingDir + "/src/main/Il2CppOutputProject/Source/il2cppOutput")
     commandLineArgs.add("--cachedirectory=" + workingDir + "/build/il2cpp_"+ abi + "_" + configuration + "/il2cpp_cache")
-    commandLineArgs.add("--tool-chain-path=" + android.ndkDirectory)
+    commandLineArgs.add("--tool-chain-path=" + getSdkDir() + "/ndk/25.1.8937393")
     staticLibraries.eachWithIndex {fileName, i->
         commandLineArgs.add("--additional-libraries=" + workingDir + "/src/main/jniStaticLibs/" + abi + "/" + fileName)
     }
