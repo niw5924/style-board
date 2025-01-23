@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
-import 'package:style_board/styling/styling_page_cubit.dart';
-import 'package:style_board/styling/styling_page_state.dart';
+import 'package:style_board/styling/category_tile.dart';
 
 class Styling3DPage extends StatefulWidget {
   const Styling3DPage({super.key});
@@ -69,39 +67,88 @@ class _Styling3DPageState extends State<Styling3DPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<StylingPageCubit, StylingPageState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            Expanded(
-              child: EmbedUnity(
-                onMessageFromUnity: (String message) {
-                  print('Unity로부터 메시지 수신: $message');
-                },
+  void _showCategorySelectionSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return FractionallySizedBox(
+          heightFactor: 0.6,
+          child: Column(
+            children: [
+              Container(
+                width: 50,
+                height: 5,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: _applyBodyInfoToUnity,
-                    child: const Text('신체정보 적용'),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: () => {},
-                    child: const Text('옷 가져오기'),
-                  ),
-                ],
+              const Text(
+                '어떤 옷을 입혀볼까요?',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    final categories = ['상의', '하의', '아우터', '신발'];
+                    final category = categories[index];
+
+                    return CategoryTile(category: category);
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: EmbedUnity(
+            onMessageFromUnity: (String message) {
+              print('Unity로부터 메시지 수신: $message');
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: _applyBodyInfoToUnity,
+                child: const Text('신체정보 적용'),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: _showCategorySelectionSheet,
+                child: const Text('옷장 열기'),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

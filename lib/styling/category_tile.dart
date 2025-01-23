@@ -29,8 +29,8 @@ class CategoryTile extends StatelessWidget {
             GestureDetector(
               onTap: () => _showPhotoPicker(context, category),
               child: Container(
-                width: 160,
-                height: 160,
+                width: 140,
+                height: 140,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(12),
