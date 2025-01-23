@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
+import 'package:style_board/styling/styling_page_cubit.dart';
+import 'package:style_board/styling/styling_page_state.dart';
 
 class Styling3DPage extends StatefulWidget {
   const Styling3DPage({super.key});
@@ -14,7 +17,6 @@ class Styling3DPage extends StatefulWidget {
 class _Styling3DPageState extends State<Styling3DPage> {
   Map<String, dynamic>? _bodyInfo;
 
-  // Firebase에서 신체 정보를 가져와 Unity에 적용하는 함수
   Future<void> _applyBodyInfoToUnity() async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -50,11 +52,9 @@ class _Styling3DPageState extends State<Styling3DPage> {
             "$xzScale,$yScale,$xzScale", // X, Y, Z 축 스케일 전달
           );
 
-          // 스낵바 메시지 표시
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('신체정보가 성공적으로 적용되었습니다!')),
           );
-
           print('Unity로 스케일 전송: XZ=$xzScale, Y=$yScale');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -66,37 +66,42 @@ class _Styling3DPageState extends State<Styling3DPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('오류 발생: $e')),
       );
-      print('Error applying body info: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          // Unity 위젯
-          Expanded(
-            child: EmbedUnity(
-              onMessageFromUnity: (String message) {
-                print('Unity로부터 메시지 수신: $message');
-              },
+    return BlocBuilder<StylingPageCubit, StylingPageState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Expanded(
+              child: EmbedUnity(
+                onMessageFromUnity: (String message) {
+                  print('Unity로부터 메시지 수신: $message');
+                },
+              ),
             ),
-          ),
-          // 버튼 및 상태 메시지
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                ElevatedButton(
-                  onPressed: _applyBodyInfoToUnity,
-                  child: const Text('신체정보 적용'),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _applyBodyInfoToUnity,
+                    child: const Text('신체정보 적용'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    child: const Text('옷 가져오기'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }
