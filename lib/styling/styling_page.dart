@@ -20,9 +20,7 @@ class _StylingPageState extends State<StylingPage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 16),
           _buildModeSelector(),
-          const SizedBox(height: 16),
           Expanded(
             child: _selectedMode == 0
                 ? const Styling2DPage()
@@ -30,28 +28,30 @@ class _StylingPageState extends State<StylingPage> {
           ),
         ],
       ),
-      floatingActionButton:
-          _selectedMode == 0 ? _buildFloatingButtons(context) : null,
+      floatingActionButton: _buildFloatingButtons(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
   Widget _buildModeSelector() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildToggleButton(
-          label: '2D',
-          isSelected: _selectedMode == 0,
-          onTap: () => setState(() => _selectedMode = 0),
-        ),
-        const SizedBox(width: 8),
-        _buildToggleButton(
-          label: '3D',
-          isSelected: _selectedMode == 1,
-          onTap: () => setState(() => _selectedMode = 1),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildToggleButton(
+            label: '2D',
+            isSelected: _selectedMode == 0,
+            onTap: () => setState(() => _selectedMode = 0),
+          ),
+          const SizedBox(width: 8),
+          _buildToggleButton(
+            label: '3D',
+            isSelected: _selectedMode == 1,
+            onTap: () => setState(() => _selectedMode = 1),
+          ),
+        ],
+      ),
     );
   }
 
