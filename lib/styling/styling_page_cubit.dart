@@ -10,6 +10,10 @@ class StylingPageCubit extends Cubit<StylingPageState> {
 
   String get _userId => authProvider.user!.uid;
 
+  void updateSelectedTab(int tabIndex) {
+    emit(state.copyWith(selectedTab: tabIndex));
+  }
+
   Future<void> loadPhotosByCategory(String category) async {
     emit(state.copyWith(isLoading: true, selectedCategory: category));
 

@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$StylingPageState {
   bool get isLoading => throw _privateConstructorUsedError;
+  int get selectedTab => throw _privateConstructorUsedError; // 선택된 탭
   String? get selectedCategory =>
       throw _privateConstructorUsedError; // 선택된 카테고리 이름
   List<String> get categoryPhotos =>
@@ -38,6 +39,7 @@ abstract class $StylingPageStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool isLoading,
+      int selectedTab,
       String? selectedCategory,
       List<String> categoryPhotos,
       Map<String, String> selectedPhotos});
@@ -59,6 +61,7 @@ class _$StylingPageStateCopyWithImpl<$Res, $Val extends StylingPageState>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? selectedTab = null,
     Object? selectedCategory = freezed,
     Object? categoryPhotos = null,
     Object? selectedPhotos = null,
@@ -68,6 +71,10 @@ class _$StylingPageStateCopyWithImpl<$Res, $Val extends StylingPageState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
+              as int,
       selectedCategory: freezed == selectedCategory
           ? _value.selectedCategory
           : selectedCategory // ignore: cast_nullable_to_non_nullable
@@ -94,6 +101,7 @@ abstract class _$$StylingPageStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool isLoading,
+      int selectedTab,
       String? selectedCategory,
       List<String> categoryPhotos,
       Map<String, String> selectedPhotos});
@@ -113,6 +121,7 @@ class __$$StylingPageStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? selectedTab = null,
     Object? selectedCategory = freezed,
     Object? categoryPhotos = null,
     Object? selectedPhotos = null,
@@ -122,6 +131,10 @@ class __$$StylingPageStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
+              as int,
       selectedCategory: freezed == selectedCategory
           ? _value.selectedCategory
           : selectedCategory // ignore: cast_nullable_to_non_nullable
@@ -143,6 +156,7 @@ class __$$StylingPageStateImplCopyWithImpl<$Res>
 class _$StylingPageStateImpl implements _StylingPageState {
   const _$StylingPageStateImpl(
       {this.isLoading = true,
+      this.selectedTab = 0,
       this.selectedCategory = null,
       final List<String> categoryPhotos = const [],
       final Map<String, String> selectedPhotos = const {}})
@@ -152,6 +166,10 @@ class _$StylingPageStateImpl implements _StylingPageState {
   @override
   @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final int selectedTab;
+// 선택된 탭
   @override
   @JsonKey()
   final String? selectedCategory;
@@ -179,7 +197,7 @@ class _$StylingPageStateImpl implements _StylingPageState {
 
   @override
   String toString() {
-    return 'StylingPageState(isLoading: $isLoading, selectedCategory: $selectedCategory, categoryPhotos: $categoryPhotos, selectedPhotos: $selectedPhotos)';
+    return 'StylingPageState(isLoading: $isLoading, selectedTab: $selectedTab, selectedCategory: $selectedCategory, categoryPhotos: $categoryPhotos, selectedPhotos: $selectedPhotos)';
   }
 
   @override
@@ -189,6 +207,8 @@ class _$StylingPageStateImpl implements _StylingPageState {
             other is _$StylingPageStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.selectedTab, selectedTab) ||
+                other.selectedTab == selectedTab) &&
             (identical(other.selectedCategory, selectedCategory) ||
                 other.selectedCategory == selectedCategory) &&
             const DeepCollectionEquality()
@@ -201,6 +221,7 @@ class _$StylingPageStateImpl implements _StylingPageState {
   int get hashCode => Object.hash(
       runtimeType,
       isLoading,
+      selectedTab,
       selectedCategory,
       const DeepCollectionEquality().hash(_categoryPhotos),
       const DeepCollectionEquality().hash(_selectedPhotos));
@@ -218,12 +239,15 @@ class _$StylingPageStateImpl implements _StylingPageState {
 abstract class _StylingPageState implements StylingPageState {
   const factory _StylingPageState(
       {final bool isLoading,
+      final int selectedTab,
       final String? selectedCategory,
       final List<String> categoryPhotos,
       final Map<String, String> selectedPhotos}) = _$StylingPageStateImpl;
 
   @override
   bool get isLoading;
+  @override
+  int get selectedTab; // 선택된 탭
   @override
   String? get selectedCategory; // 선택된 카테고리 이름
   @override
