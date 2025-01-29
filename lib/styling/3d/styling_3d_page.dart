@@ -4,6 +4,7 @@ import 'package:style_board/auth/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:style_board/styling/category_tile.dart';
+import 'package:style_board/styling/styling_page_cubit.dart';
 
 class Styling3DPage extends StatefulWidget {
   const Styling3DPage({super.key});
@@ -144,6 +145,13 @@ class _Styling3DPageState extends State<Styling3DPage> {
               ElevatedButton(
                 onPressed: _showCategorySelectionSheet,
                 child: const Text('옷장 열기'),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<StylingPageCubit>().applyBackgroundRemoval();
+                },
+                child: const Text('적용'),
               ),
             ],
           ),
