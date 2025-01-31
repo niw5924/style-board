@@ -12,6 +12,9 @@
 
 
 
+extern void CharacterController_SetClothing_m5A098531919CDB8FCD60A24077C5057056333AD9 (void);
+extern void CharacterController_ApplyClothingTexture_mBBA664C42B9372BE2AE9721C56F1F0954EBF0B68 (void);
+extern void CharacterController__ctor_m7803E87E16EAC42354D013EC14681149D80373A7 (void);
 extern void CharacterScaler_Start_m8429537B0FB7B6153531714000CAD5D397176A04 (void);
 extern void CharacterScaler_SetScale_m417AC5098916C70FAF3A77B70C64A53940EACAF8 (void);
 extern void CharacterScaler__ctor_mBFAC243D99B6777E43F19281736A333F81156207 (void);
@@ -66,7 +69,7 @@ extern void MessageHandlerDelegate__ctor_m287CBD25D77011FC5A52D1090F6CC31353AB63
 extern void MessageHandlerDelegate_Invoke_mD1EC9E1841D5014C40A26D4C4BA076482FFC8A4B (void);
 extern void MessageHandlerDelegate_BeginInvoke_m0CC5C5B29E11DD03F1726B49E4B1E516479AC58D (void);
 extern void MessageHandlerDelegate_EndInvoke_mAD2746E001DB9A3D18A1D806610542321FE0CF16 (void);
-static Il2CppMethodPointer s_methodPointers[67] = 
+static Il2CppMethodPointer s_methodPointers[70] = 
 {
 	NULL,
 	NULL,
@@ -76,6 +79,9 @@ static Il2CppMethodPointer s_methodPointers[67] =
 	NULL,
 	NULL,
 	NULL,
+	CharacterController_SetClothing_m5A098531919CDB8FCD60A24077C5057056333AD9,
+	CharacterController_ApplyClothingTexture_mBBA664C42B9372BE2AE9721C56F1F0954EBF0B68,
+	CharacterController__ctor_m7803E87E16EAC42354D013EC14681149D80373A7,
 	CharacterScaler_Start_m8429537B0FB7B6153531714000CAD5D397176A04,
 	CharacterScaler_SetScale_m417AC5098916C70FAF3A77B70C64A53940EACAF8,
 	CharacterScaler__ctor_mBFAC243D99B6777E43F19281736A333F81156207,
@@ -136,7 +142,7 @@ static Il2CppMethodPointer s_methodPointers[67] =
 	MessageHandlerDelegate_BeginInvoke_m0CC5C5B29E11DD03F1726B49E4B1E516479AC58D,
 	MessageHandlerDelegate_EndInvoke_mAD2746E001DB9A3D18A1D806610542321FE0CF16,
 };
-static const int32_t s_InvokerIndices[67] = 
+static const int32_t s_InvokerIndices[70] = 
 {
 	0,
 	0,
@@ -146,6 +152,9 @@ static const int32_t s_InvokerIndices[67] =
 	0,
 	0,
 	0,
+	1607,
+	1112,
+	1818,
 	1818,
 	1607,
 	1818,
@@ -209,8 +218,8 @@ static const int32_t s_InvokerIndices[67] =
 static const Il2CppTokenRangePair s_rgctxIndices[3] = 
 {
 	{ 0x02000002, { 0, 29 } },
-	{ 0x0200000A, { 29, 11 } },
-	{ 0x06000029, { 40, 2 } },
+	{ 0x0200000B, { 29, 11 } },
+	{ 0x0600002C, { 40, 2 } },
 };
 extern const uint32_t g_rgctx_U3CU3Ef__AnonymousType0_4_t93FD0713D40011506D6B5581D9D5064D1A1A31B8;
 extern const uint32_t g_rgctx_U3CidU3Ej__TPar_tB4283D6614B0A1B9713411CF590AE6445EC76C76;
@@ -304,7 +313,7 @@ IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	67,
+	70,
 	s_methodPointers,
 	0,
 	NULL,

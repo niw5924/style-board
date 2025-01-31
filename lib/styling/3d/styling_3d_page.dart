@@ -4,6 +4,7 @@ import 'package:style_board/auth/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:style_board/styling/category_tile.dart';
+import 'package:style_board/styling/styling_page_cubit.dart';
 
 class Styling3DPage extends StatefulWidget {
   const Styling3DPage({super.key});
@@ -67,6 +68,23 @@ class _Styling3DPageState extends State<Styling3DPage> {
     }
   }
 
+  void _applySelectedPhotosToUnity() {
+    final selectedPhotos = context.read<StylingPageCubit>().state.selectedPhotos;
+
+    // JSON 또는 쉼표 구분된 문자열로 변환 (Unity에서 처리 가능하게)
+    final photosData = selectedPhotos.entries
+        .map((entry) => "${entry.key}:${entry.value}")
+        .join("|"); // 예: "상의:path1|하의:path2|아우터:path3|신발:path4"
+
+    // Unity로 데이터 전송
+    sendToUnity("Character", "SetClothing", photosData);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('옷 정보가 유니티에 적용되었습니다!')),
+    );
+    print('Unity로 옷 정보 전송: $photosData');
+  }
+
   void _showCategorySelectionSheet() {
     showModalBottomSheet(
       context: context,
@@ -116,7 +134,7 @@ class _Styling3DPageState extends State<Styling3DPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _applySelectedPhotosToUnity,
                   child: const Text('적용'),
                 ),
               ),
