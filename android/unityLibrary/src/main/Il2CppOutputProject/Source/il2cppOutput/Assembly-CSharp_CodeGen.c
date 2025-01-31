@@ -12,9 +12,6 @@
 
 
 
-extern void CharacterController_SetClothing_m5A098531919CDB8FCD60A24077C5057056333AD9 (void);
-extern void CharacterController_ApplyClothingTexture_mBBA664C42B9372BE2AE9721C56F1F0954EBF0B68 (void);
-extern void CharacterController__ctor_m7803E87E16EAC42354D013EC14681149D80373A7 (void);
 extern void CharacterScaler_Start_m8429537B0FB7B6153531714000CAD5D397176A04 (void);
 extern void CharacterScaler_SetScale_m417AC5098916C70FAF3A77B70C64A53940EACAF8 (void);
 extern void CharacterScaler__ctor_mBFAC243D99B6777E43F19281736A333F81156207 (void);
@@ -34,6 +31,16 @@ extern void SceneLoader_SwitchNative_m68C165016C6A7B1F29960507F65455523EA3A5F8 (
 extern void SceneLoader_UnloadNative_mA699427D00E7DD75BD5EFA4B0D54AFE5A0AFEACA (void);
 extern void SceneLoader_QuitNative_mFE5B0B163F9D560A10ADB3574AFE755BAF6BFA43 (void);
 extern void SceneLoader__ctor_m2248766DF38AF07562AD31501C7275B8DF1B7D29 (void);
+extern void ReceiveClothingData_SetClothing_m9D420775FE7231AFD32B6CE2C482B851492B3BB6 (void);
+extern void ReceiveClothingData_UploadImages_m99EF066A3131A47F1885E9601F014A6BA6A26A7B (void);
+extern void ReceiveClothingData__ctor_m43AE9EFE6869E1F9C39C6EB114C5E50E41335695 (void);
+extern void U3CUploadImagesU3Ed__2__ctor_m94D4EE7A5F5DCF05FFB11836505381B63641549C (void);
+extern void U3CUploadImagesU3Ed__2_System_IDisposable_Dispose_m9EC41EABF39BC929DBBCA707E4134CEFC565AE91 (void);
+extern void U3CUploadImagesU3Ed__2_MoveNext_m08DF772124799DC760E5E24F83594B748D6060F3 (void);
+extern void U3CUploadImagesU3Ed__2_U3CU3Em__Finally1_m2B42D117B5E2F1CBFE256EFBB50FC45692A0ABB7 (void);
+extern void U3CUploadImagesU3Ed__2_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m3DEA7F182C7EA5994D3BDBC204D12D6E1E3D63B1 (void);
+extern void U3CUploadImagesU3Ed__2_System_Collections_IEnumerator_Reset_m27C283323462284F1ADCDFFB37CB77344D806CA4 (void);
+extern void U3CUploadImagesU3Ed__2_System_Collections_IEnumerator_get_Current_m0F8CEDBB12393C8B8B2E390318C77A8F395AA70F (void);
 extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033 (void);
 extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1 (void);
 extern void NativeAPI_OnSceneLoaded_m200A791C356A252E1D5F2BB13BC2CED455A02259 (void);
@@ -69,7 +76,7 @@ extern void MessageHandlerDelegate__ctor_m287CBD25D77011FC5A52D1090F6CC31353AB63
 extern void MessageHandlerDelegate_Invoke_mD1EC9E1841D5014C40A26D4C4BA076482FFC8A4B (void);
 extern void MessageHandlerDelegate_BeginInvoke_m0CC5C5B29E11DD03F1726B49E4B1E516479AC58D (void);
 extern void MessageHandlerDelegate_EndInvoke_mAD2746E001DB9A3D18A1D806610542321FE0CF16 (void);
-static Il2CppMethodPointer s_methodPointers[70] = 
+static Il2CppMethodPointer s_methodPointers[77] = 
 {
 	NULL,
 	NULL,
@@ -79,9 +86,6 @@ static Il2CppMethodPointer s_methodPointers[70] =
 	NULL,
 	NULL,
 	NULL,
-	CharacterController_SetClothing_m5A098531919CDB8FCD60A24077C5057056333AD9,
-	CharacterController_ApplyClothingTexture_mBBA664C42B9372BE2AE9721C56F1F0954EBF0B68,
-	CharacterController__ctor_m7803E87E16EAC42354D013EC14681149D80373A7,
 	CharacterScaler_Start_m8429537B0FB7B6153531714000CAD5D397176A04,
 	CharacterScaler_SetScale_m417AC5098916C70FAF3A77B70C64A53940EACAF8,
 	CharacterScaler__ctor_mBFAC243D99B6777E43F19281736A333F81156207,
@@ -101,6 +105,16 @@ static Il2CppMethodPointer s_methodPointers[70] =
 	SceneLoader_UnloadNative_mA699427D00E7DD75BD5EFA4B0D54AFE5A0AFEACA,
 	SceneLoader_QuitNative_mFE5B0B163F9D560A10ADB3574AFE755BAF6BFA43,
 	SceneLoader__ctor_m2248766DF38AF07562AD31501C7275B8DF1B7D29,
+	ReceiveClothingData_SetClothing_m9D420775FE7231AFD32B6CE2C482B851492B3BB6,
+	ReceiveClothingData_UploadImages_m99EF066A3131A47F1885E9601F014A6BA6A26A7B,
+	ReceiveClothingData__ctor_m43AE9EFE6869E1F9C39C6EB114C5E50E41335695,
+	U3CUploadImagesU3Ed__2__ctor_m94D4EE7A5F5DCF05FFB11836505381B63641549C,
+	U3CUploadImagesU3Ed__2_System_IDisposable_Dispose_m9EC41EABF39BC929DBBCA707E4134CEFC565AE91,
+	U3CUploadImagesU3Ed__2_MoveNext_m08DF772124799DC760E5E24F83594B748D6060F3,
+	U3CUploadImagesU3Ed__2_U3CU3Em__Finally1_m2B42D117B5E2F1CBFE256EFBB50FC45692A0ABB7,
+	U3CUploadImagesU3Ed__2_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_m3DEA7F182C7EA5994D3BDBC204D12D6E1E3D63B1,
+	U3CUploadImagesU3Ed__2_System_Collections_IEnumerator_Reset_m27C283323462284F1ADCDFFB37CB77344D806CA4,
+	U3CUploadImagesU3Ed__2_System_Collections_IEnumerator_get_Current_m0F8CEDBB12393C8B8B2E390318C77A8F395AA70F,
 	UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033,
 	UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1,
 	NativeAPI_OnSceneLoaded_m200A791C356A252E1D5F2BB13BC2CED455A02259,
@@ -142,7 +156,7 @@ static Il2CppMethodPointer s_methodPointers[70] =
 	MessageHandlerDelegate_BeginInvoke_m0CC5C5B29E11DD03F1726B49E4B1E516479AC58D,
 	MessageHandlerDelegate_EndInvoke_mAD2746E001DB9A3D18A1D806610542321FE0CF16,
 };
-static const int32_t s_InvokerIndices[70] = 
+static const int32_t s_InvokerIndices[77] = 
 {
 	0,
 	0,
@@ -152,74 +166,81 @@ static const int32_t s_InvokerIndices[70] =
 	0,
 	0,
 	0,
-	1607,
-	1112,
-	1818,
-	1818,
-	1607,
-	1818,
-	1818,
-	1818,
-	1607,
-	1818,
-	1818,
-	1818,
-	1607,
-	1818,
-	1818,
-	1818,
-	1599,
-	1818,
-	1818,
-	1818,
-	1818,
-	1818,
-	3679,
-	1818,
-	3167,
-	3584,
-	3674,
-	3674,
-	3674,
-	1818,
+	1820,
+	1608,
+	1820,
+	1820,
+	1820,
+	1608,
+	1820,
+	1820,
+	1820,
+	1608,
+	1820,
+	1820,
+	1820,
+	1600,
+	1820,
+	1820,
+	1820,
+	1820,
+	1820,
+	1608,
+	1455,
+	1820,
+	1600,
+	1820,
+	1724,
+	1820,
+	1763,
+	1820,
+	1763,
+	3689,
+	1820,
+	3177,
+	3594,
+	3684,
+	3684,
+	3684,
+	1820,
 	0,
 	0,
 	0,
 	0,
-	3431,
+	3441,
 	0,
 	460,
-	1607,
-	1818,
-	3640,
-	1607,
-	1607,
-	1607,
-	1607,
-	1818,
-	1133,
-	1818,
-	1818,
-	1818,
-	1607,
-	1607,
-	1607,
-	1607,
-	1818,
-	1110,
-	1607,
+	1608,
+	1820,
+	3650,
+	1608,
+	1608,
+	1608,
+	1608,
+	1820,
+	1134,
+	1820,
+	1820,
+	1820,
+	1608,
+	1608,
+	1608,
+	1608,
+	1820,
+	1111,
+	1608,
 	647,
-	1607,
-	1110,
-	1607,
+	1608,
+	1111,
+	1608,
 	647,
-	1607,
+	1608,
 };
 static const Il2CppTokenRangePair s_rgctxIndices[3] = 
 {
 	{ 0x02000002, { 0, 29 } },
-	{ 0x0200000B, { 29, 11 } },
-	{ 0x0600002C, { 40, 2 } },
+	{ 0x0200000C, { 29, 11 } },
+	{ 0x06000033, { 40, 2 } },
 };
 extern const uint32_t g_rgctx_U3CU3Ef__AnonymousType0_4_t93FD0713D40011506D6B5581D9D5064D1A1A31B8;
 extern const uint32_t g_rgctx_U3CidU3Ej__TPar_tB4283D6614B0A1B9713411CF590AE6445EC76C76;
@@ -313,7 +334,7 @@ IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	70,
+	77,
 	s_methodPointers,
 	0,
 	NULL,

@@ -6300,7 +6300,7 @@ IL_001e:
 		Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095* L_2 = ((XmlEncodedRawTextWriter_t555452A93F2FEFE35034BD8B5D65E979E729E1D4*)__this)->___encoding;
 		NullCheck(L_2);
 		String_t* L_3;
-		L_3 = VirtualFuncInvoker0< String_t* >::Invoke(9, L_2);
+		L_3 = VirtualFuncInvoker0< String_t* >::Invoke(10, L_2);
 		XmlEncodedRawTextWriter_RawText_mC84BDBEA6E407E60868A66C643A352ECB575610C(__this, L_3, NULL);
 		XmlEncodedRawTextWriter_RawText_mC84BDBEA6E407E60868A66C643A352ECB575610C(__this, _stringLiteral6C2E3DACDCD262BC3809A6E68DFA4CEFE02982EB, NULL);
 		return;
@@ -8729,7 +8729,7 @@ IL_001e:
 		Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095* L_2 = ((XmlUtf8RawTextWriter_t509951DC424E22E80C9848992ACC324E94E264FB*)__this)->___encoding;
 		NullCheck(L_2);
 		String_t* L_3;
-		L_3 = VirtualFuncInvoker0< String_t* >::Invoke(9, L_2);
+		L_3 = VirtualFuncInvoker0< String_t* >::Invoke(10, L_2);
 		XmlUtf8RawTextWriter_RawText_m197BC9FFA1D58F16EEF25C7C133B803E40B7EF80(__this, L_3, NULL);
 		XmlUtf8RawTextWriter_RawText_m197BC9FFA1D58F16EEF25C7C133B803E40B7EF80(__this, _stringLiteral6C2E3DACDCD262BC3809A6E68DFA4CEFE02982EB, NULL);
 		return;
@@ -14832,7 +14832,7 @@ IL_002d:
 		L_14 = XmlWriterSettings_get_Encoding_mC4E1AB9D49553D659321B2BEEA46AE5D343BCBEE_inline(L_13, NULL);
 		NullCheck(L_14);
 		RuntimeObject* L_15;
-		L_15 = VirtualFuncInvoker0< RuntimeObject* >::Invoke(10, L_14);
+		L_15 = VirtualFuncInvoker0< RuntimeObject* >::Invoke(11, L_14);
 		__this->___encoding = ((Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095*)CastclassClass((RuntimeObject*)L_15, Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095_il2cpp_TypeInfo_var));
 		Il2CppCodeGenWriteBarrier((void**)(&__this->___encoding), (void*)((Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095*)CastclassClass((RuntimeObject*)L_15, Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095_il2cpp_TypeInfo_var)));
 		Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095* L_16 = __this->___encoding;
@@ -14842,7 +14842,7 @@ IL_002d:
 		Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095* L_18 = __this->___encoding;
 		NullCheck(L_18);
 		Encoder_tAF9067231A76315584BDF4CD27990E2F485A78FA* L_19;
-		L_19 = VirtualFuncInvoker0< Encoder_tAF9067231A76315584BDF4CD27990E2F485A78FA* >::Invoke(31, L_18);
+		L_19 = VirtualFuncInvoker0< Encoder_tAF9067231A76315584BDF4CD27990E2F485A78FA* >::Invoke(32, L_18);
 		__this->___encoder = L_19;
 		Il2CppCodeGenWriteBarrier((void**)(&__this->___encoder), (void*)L_19);
 		Stream_tF844051B786E8F7F4244DBD218D74E8617B9A2DE* L_20 = ___0_stream;
@@ -14978,7 +14978,7 @@ IL_002d:
 		Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095* L_5 = __this->___encoding;
 		NullCheck(L_5);
 		String_t* L_6;
-		L_6 = VirtualFuncInvoker0< String_t* >::Invoke(9, L_5);
+		L_6 = VirtualFuncInvoker0< String_t* >::Invoke(10, L_5);
 		XmlEncodedRawTextWriter_RawText_mC84BDBEA6E407E60868A66C643A352ECB575610C(__this, L_6, NULL);
 	}
 

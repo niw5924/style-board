@@ -838,6 +838,7 @@ IL2CPP_EXTERN_C const RuntimeMethod* CalendarData_nativeGetTwoDigitYearMax_m6696
 IL2CPP_EXTERN_C const RuntimeMethod* CodePageDataItem_CreateString_m8B91A0CFA64B37A6F2EBC6C5E912ABF5850061FB_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* CodePageDataItem__cctor_mA0B9201BDB06D97BC68F5AA5B4E06F37E60EA958_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* CodePageDataItem__ctor_mDC8441B19F9810D77250F4B9AABFBB2912C4C5E7_RuntimeMethod_var;
+IL2CPP_EXTERN_C const RuntimeMethod* CodePageDataItem_get_HeaderName_m5E6C30987B3628916EEEE9F25F159C091E969C49_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* CodePageDataItem_get_WebName_m2C669475C1C98EACF9D14F2D28963036EA874D82_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* CultureData_AbbrevEraNames_m5C0D0CA89B2C6B433B5763FF15719ED16BBF0D29_RuntimeMethod_var;
 IL2CPP_EXTERN_C const RuntimeMethod* CultureData_AbbreviatedDayNames_mBEBAA73074E11818C93B2A4964A1AD160AA1228B_RuntimeMethod_var;
@@ -1302,6 +1303,7 @@ struct CodePageDataItem_t52460FA30AE37F4F26ACB81055E58002262F19F2  : public Runt
 	int32_t ___m_dataIndex;
 	int32_t ___m_uiFamilyCodePage;
 	String_t* ___m_webName;
+	String_t* ___m_headerName;
 	uint32_t ___m_flags;
 };
 struct CriticalFinalizerObject_t1DCAB623CAEA6529A96F5F3EDE3C7048A6E313C9  : public RuntimeObject
@@ -18247,6 +18249,44 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR String_t* CodePageDataItem_get_WebName_m2C669
 IL_0029:
 	{
 		String_t* L_5 = __this->___m_webName;
+		return L_5;
+	}
+}
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR String_t* CodePageDataItem_get_HeaderName_m5E6C30987B3628916EEEE9F25F159C091E969C49 (CodePageDataItem_t52460FA30AE37F4F26ACB81055E58002262F19F2* __this, const RuntimeMethod* method) 
+{
+	static bool s_Il2CppMethodInitialized;
+	if (!s_Il2CppMethodInitialized)
+	{
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&CodePageDataItem_get_HeaderName_m5E6C30987B3628916EEEE9F25F159C091E969C49_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&CodePageDataItem_t52460FA30AE37F4F26ACB81055E58002262F19F2_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&EncodingTable_t7E8487AA3AF93A542BCB5CD07480C5ED1BCBFBF9_il2cpp_TypeInfo_var);
+		s_Il2CppMethodInitialized = true;
+	}
+	DECLARE_METHOD_EXEC_CTX(methodExecutionContext, CodePageDataItem_get_HeaderName_m5E6C30987B3628916EEEE9F25F159C091E969C49_RuntimeMethod_var, NULL, NULL, NULL);
+	CHECK_PAUSE_POINT;
+	{
+		String_t* L_0 = __this->___m_headerName;
+		if (L_0)
+		{
+			goto IL_0029;
+		}
+	}
+	{
+		il2cpp_codegen_runtime_class_init_inline(EncodingTable_t7E8487AA3AF93A542BCB5CD07480C5ED1BCBFBF9_il2cpp_TypeInfo_var);
+		InternalCodePageDataItemU5BU5D_t33622E365514085FB25BF5886B358FC250BFD1B4* L_1 = ((EncodingTable_t7E8487AA3AF93A542BCB5CD07480C5ED1BCBFBF9_StaticFields*)il2cpp_codegen_static_fields_for(EncodingTable_t7E8487AA3AF93A542BCB5CD07480C5ED1BCBFBF9_il2cpp_TypeInfo_var))->___codePageDataPtr;
+		int32_t L_2 = __this->___m_dataIndex;
+		NullCheck(L_1);
+		String_t* L_3 = ((L_1)->GetAddressAt(static_cast<il2cpp_array_size_t>(L_2)))->___Names;
+		il2cpp_codegen_runtime_class_init_inline(CodePageDataItem_t52460FA30AE37F4F26ACB81055E58002262F19F2_il2cpp_TypeInfo_var);
+		String_t* L_4;
+		L_4 = CodePageDataItem_CreateString_m8B91A0CFA64B37A6F2EBC6C5E912ABF5850061FB(L_3, 1, NULL);
+		__this->___m_headerName = L_4;
+		Il2CppCodeGenWriteBarrier((void**)(&__this->___m_headerName), (void*)L_4);
+	}
+
+IL_0029:
+	{
+		String_t* L_5 = __this->___m_headerName;
 		return L_5;
 	}
 }

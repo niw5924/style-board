@@ -6850,7 +6850,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void XmlUtf8RawTextWriter_WriteXmlDeclaration
 		Encoding_t65CDEF28CF20A7B8C92E85A4E808920C2465F095* L_3 = __this->___encoding;
 		NullCheck(L_3);
 		String_t* L_4;
-		L_4 = VirtualFuncInvoker0< String_t* >::Invoke(9, L_3);
+		L_4 = VirtualFuncInvoker0< String_t* >::Invoke(10, L_3);
 		XmlUtf8RawTextWriter_RawText_m197BC9FFA1D58F16EEF25C7C133B803E40B7EF80(__this, L_4, NULL);
 	}
 
@@ -22343,7 +22343,7 @@ IL_000e:
 		L_2 = XmlWriterSettings_get_Encoding_mC4E1AB9D49553D659321B2BEEA46AE5D343BCBEE_inline(__this, NULL);
 		NullCheck(L_2);
 		String_t* L_3;
-		L_3 = VirtualFuncInvoker0< String_t* >::Invoke(9, L_2);
+		L_3 = VirtualFuncInvoker0< String_t* >::Invoke(10, L_2);
 		bool L_4;
 		L_4 = String_op_Equality_m030E1B219352228970A076136E455C4E568C02C1(L_3, _stringLiteralB7FD6B173F8DDB3354F28BB648CED69286F416C9, NULL);
 		if (!L_4)
