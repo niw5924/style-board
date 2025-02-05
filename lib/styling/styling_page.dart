@@ -37,7 +37,7 @@ class StylingPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildToggleButton(
+          _buildModeSelectionButton(
             context: context,
             label: '2D',
             isSelected:
@@ -45,7 +45,7 @@ class StylingPage extends StatelessWidget {
             onTap: () => context.read<StylingPageCubit>().updateSelectedTab(0),
           ),
           const SizedBox(width: 8),
-          _buildToggleButton(
+          _buildModeSelectionButton(
             context: context,
             label: '3D',
             isSelected:
@@ -57,7 +57,7 @@ class StylingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildToggleButton({
+  Widget _buildModeSelectionButton({
     required BuildContext context,
     required String label,
     required bool isSelected,
@@ -91,7 +91,6 @@ class StylingPage extends StatelessWidget {
   Widget _buildFloatingButtons(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         FloatingActionButton(
           heroTag: 'resetButton',

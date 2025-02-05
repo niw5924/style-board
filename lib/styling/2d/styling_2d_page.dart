@@ -11,6 +11,7 @@ class Styling2DPage extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,

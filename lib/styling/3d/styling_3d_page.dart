@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:style_board/auth/auth_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:style_board/styling/category_tile.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 
@@ -14,77 +17,197 @@ class Styling3DPage extends StatefulWidget {
 }
 
 class _Styling3DPageState extends State<Styling3DPage> {
-  Map<String, dynamic>? _bodyInfo;
+  final Map<String, String?> _glbUrls = {
+    '상의': null,
+    '하의': null,
+    '아우터': null,
+    '신발': null,
+  };
+  final Map<String, bool> _isLoading = {
+    '상의': false,
+    '하의': false,
+    '아우터': false,
+    '신발': false,
+  };
 
-  Future<void> _applyBodyInfoToUnity() async {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  /// 로컬 이미지 파일을 Base64로 변환
+  Future<String> convertImageToBase64(String imagePath) async {
+    File imageFile = File(imagePath);
+    List<int> imageBytes = await imageFile.readAsBytes();
+    String base64String = base64Encode(imageBytes);
+
+    return "data:image/png;base64,$base64String";
+  }
+
+  /// 한글 카테고리를 영문 파일명으로 변환
+  String getSafeFilename(String category) {
+    final Map<String, String> categoryToEnglish = {
+      '상의': 'top',
+      '하의': 'bottom',
+      '아우터': 'outer',
+      '신발': 'shoes',
+    };
+
+    return categoryToEnglish[category]!;
+  }
+
+  /// GLB 파일을 각 카테고리별로 저장
+  Future<String?> downloadGLBFile(String url, String category) async {
     try {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final userId = authProvider.user!.uid;
-
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-
-      if (userDoc.exists) {
-        _bodyInfo = userDoc.data()?['bodyInfo'];
-
-        if (_bodyInfo != null) {
-          String gender = _bodyInfo!['gender'];
-          double height = _bodyInfo!['height'].toDouble();
-          double weight = _bodyInfo!['weight'].toDouble();
-
-          // 성별에 따른 기준 값 설정
-          double baseHeight = gender == '남성' ? 180 : 160;
-          double baseWeight = gender == '남성' ? 75 : 60;
-
-          // XZ 축 스케일: 몸무게
-          double xzScale = weight / baseWeight;
-
-          // Y 축 스케일: 키
-          double yScale = height / baseHeight;
-
-          // Unity로 스케일 값 전송
-          sendToUnity(
-            "Character", // Unity의 GameObject 이름
-            "SetScale", // Unity에서 호출할 메서드 이름
-            "$xzScale,$yScale,$xzScale", // X, Y, Z 축 스케일 전달
-          );
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('신체정보가 성공적으로 적용되었습니다!')),
-          );
-          print('Unity로 스케일 전송: XZ=$xzScale, Y=$yScale');
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('신체정보가 없습니다. 먼저 신체정보를 설정하세요.')),
-          );
-        }
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final directory = await getApplicationDocumentsDirectory();
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        final safeCategory = getSafeFilename(category);
+        final filePath = "${directory.path}/${safeCategory}_$timestamp.glb";
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+        print('GLB 파일 다운로드 완료: $filePath');
+        return filePath;
+      } else {
+        print('GLB 파일 다운로드 실패: ${response.statusCode}');
+        return null;
       }
     } catch (e) {
+      print('GLB 다운로드 중 오류 발생: $e');
+      return null;
+    }
+  }
+
+  /// GLB 파일을 다운로드할 때 해당 카테고리만 로딩 표시
+  Future<void> checkJobStatus(
+    String taskId,
+    int index,
+    List<String> imagePaths,
+    List<String> categories,
+  ) async {
+    final category = categories[index];
+    setState(() {
+      _isLoading[category] = true;
+    });
+
+    final apiKey = dotenv.env['MESHY_API_KEY'];
+    final url =
+        Uri.parse('https://api.meshy.ai/openapi/v1/image-to-3d/$taskId');
+
+    while (true) {
+      try {
+        final response = await http.get(
+          url,
+          headers: {'Authorization': 'Bearer $apiKey'},
+        );
+
+        final data = jsonDecode(response.body);
+        print(data);
+
+        if (data.containsKey('status')) {
+          if (data['status'] == 'SUCCEEDED' &&
+              data['model_urls'].containsKey('glb')) {
+            final localPath =
+                await downloadGLBFile(data['model_urls']['glb'], category);
+            if (localPath != null) {
+              setState(() {
+                _glbUrls[category] = localPath;
+                _isLoading[category] = false;
+              });
+            }
+            // 다음 이미지 변환 시작
+            await _convertImagesTo3DModels(imagePaths, index + 1, categories);
+            return;
+          } else if (data['status'] == 'FAILED') {
+            print('변환 실패: $data');
+            setState(() {
+              _isLoading[category] = false;
+            });
+            return;
+          }
+        }
+      } catch (e) {
+        print('변환 상태 확인 중 오류 발생: $e');
+      }
+
+      await Future.delayed(const Duration(seconds: 5));
+    }
+  }
+
+  /// 선택한 모든 옷을 차례대로 3D 변환 (카테고리 추가)
+  Future<void> _convertImagesTo3DModels(
+    List<String> imagePaths,
+    int index,
+    List<String> categories,
+  ) async {
+    if (index >= imagePaths.length) {
+      return; // 모든 변환 완료
+    }
+
+    final category = categories[index]; // 현재 변환할 카테고리
+    setState(() => _isLoading[category] = true); // 해당 카테고리 로딩 시작
+
+    final apiKey = dotenv.env['MESHY_API_KEY'];
+    final url = Uri.parse('https://api.meshy.ai/openapi/v1/image-to-3d');
+
+    try {
+      String base64Image = await convertImageToBase64(imagePaths[index]);
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'image_url': base64Image,
+          'enable_pbr': true,
+          'should_remesh': true,
+          'should_texture': true,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (data.containsKey('result')) {
+        String taskId = data['result'];
+        print('Meshy 변환 작업 생성됨 (Job ID: $taskId)');
+
+        // 변환 상태 확인
+        await checkJobStatus(taskId, index, imagePaths, categories);
+      } else {
+        print('응답 데이터에 Job ID 없음.');
+        setState(() => _isLoading[category] = false);
+      }
+    } catch (e) {
+      print('Meshy API 오류: $e');
+      setState(() => _isLoading[category] = false);
+    }
+  }
+
+  /// 적용 버튼 클릭 시 선택한 모든 사진 변환
+  void _start3DConversion() {
+    final selectedPhotos =
+        context.read<StylingPageCubit>().state.selectedPhotos;
+
+    if (selectedPhotos.isNotEmpty) {
+      Navigator.pop(context);
+
+      List<String> imagePaths = selectedPhotos.values.toList();
+      List<String> categories = selectedPhotos.keys.toList();
+
+      _convertImagesTo3DModels(imagePaths, 0, categories);
+    } else {
+      Navigator.pop(context);
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
+        const SnackBar(content: Text('옷을 선택해주세요!')),
       );
     }
   }
 
-  void _applySelectedPhotosToUnity() {
-    final selectedPhotos = context.read<StylingPageCubit>().state.selectedPhotos;
-
-    // JSON 또는 쉼표 구분된 문자열로 변환 (Unity에서 처리 가능하게)
-    final photosData = selectedPhotos.entries
-        .map((entry) => "${entry.key}:${entry.value}")
-        .join("|"); // 예: "상의:path1|하의:path2|아우터:path3|신발:path4"
-
-    // Unity로 데이터 전송
-    sendToUnity("Character", "SetClothing", photosData);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('옷 정보가 유니티에 적용되었습니다!')),
-    );
-    print('Unity로 옷 정보 전송: $photosData');
-  }
-
+  /// 옷 선택 UI (카테고리 선택 기능)
   void _showCategorySelectionSheet() {
     showModalBottomSheet(
       context: context,
@@ -107,7 +230,7 @@ class _Styling3DPageState extends State<Styling3DPage> {
                 ),
               ),
               const Text(
-                '어떤 옷을 입혀볼까요?',
+                '사진을 선택하면 3D로 변환해 드릴게요!',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -134,8 +257,8 @@ class _Styling3DPageState extends State<Styling3DPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: ElevatedButton(
-                  onPressed: _applySelectedPhotosToUnity,
-                  child: const Text('적용'),
+                  onPressed: _start3DConversion,
+                  child: const Text('변환'),
                 ),
               ),
             ],
@@ -147,31 +270,76 @@ class _Styling3DPageState extends State<Styling3DPage> {
 
   @override
   Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildModelView('상의', _glbUrls['상의']),
+                const SizedBox(height: 20),
+                _buildModelView('하의', _glbUrls['하의']),
+                const SizedBox(height: 20),
+                _buildModelView('신발', _glbUrls['신발']),
+              ],
+            ),
+            const SizedBox(width: 40),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildModelView('아우터', _glbUrls['아우터']),
+                const SizedBox(height: 100),
+                ElevatedButton(
+                  onPressed: _showCategorySelectionSheet,
+                  child: const Text('옷장 열기'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 3D 모델 뷰어 위젯 생성
+  Widget _buildModelView(String category, String? glbUrl) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child: EmbedUnity(
-            onMessageFromUnity: (String message) {
-              print('Unity로부터 메시지 수신: $message');
-            },
+        Text(
+          category,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _applyBodyInfoToUnity,
-                child: const Text('신체정보 적용'),
-              ),
-              const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: _showCategorySelectionSheet,
-                child: const Text('옷장 열기'),
-              ),
-            ],
+        const SizedBox(height: 8),
+        Container(
+          width: 140,
+          height: 140,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(12),
           ),
+          child: _isLoading[category] == true
+              ? const Center(child: CircularProgressIndicator())
+              : glbUrl != null
+                  ? ModelViewer(
+                      src: 'file://$glbUrl',
+                      alt: 'A 3D model of $category',
+                      ar: false,
+                      autoRotate: false,
+                      disableZoom: false,
+                    )
+                  : Icon(
+                      Icons.threed_rotation,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 40,
+                    ),
         ),
       ],
     );
