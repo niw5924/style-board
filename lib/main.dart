@@ -11,6 +11,7 @@ import 'package:style_board/auth/login_page.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/profile/profile_detail/profile_detail_page_cubit.dart';
 import 'package:style_board/profile/weather/weather_page_cubit.dart';
+import 'package:style_board/styling/3d/styling_3d_page_cubit.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ void main() async {
         BlocProvider(
           create: (context) => StylingPageCubit(context.read<AuthProvider>()),
         ),
+        BlocProvider(create: (_) => Styling3DPageCubit()),
         BlocProvider(
           create: (context) => ClosetPageCubit(context.read<AuthProvider>()),
         ),
