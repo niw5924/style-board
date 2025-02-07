@@ -150,4 +150,12 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
       emit(state.copyWith(isLoading: {...state.isLoading, category: false}));
     }
   }
+
+  /// 특정 카테고리의 3D 모델 삭제
+  void remove3DModel(String category) {
+    final updatedGlbUrls = Map<String, String?>.from(state.glbUrls)
+      ..remove(category);
+
+    emit(state.copyWith(glbUrls: updatedGlbUrls));
+  }
 }

@@ -59,28 +59,59 @@ class Styling3DPage extends StatelessWidget {
         const SizedBox(height: 8),
         BlocBuilder<Styling3DPageCubit, Styling3DPageState>(
           builder: (context, state) {
-            return Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: state.isLoading[category] == true
-                  ? const Center(child: CircularProgressIndicator())
-                  : state.glbUrls[category] != null
-                      ? ModelViewer(
-                          src: 'file://${state.glbUrls[category]}',
-                          alt: 'A 3D model of $category',
-                          ar: false,
-                          autoRotate: false,
-                          disableZoom: false,
-                        )
-                      : Icon(
-                          Icons.threed_rotation,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 40,
+            final glbUrl = state.glbUrls[category];
+            final isLoading = state.isLoading[category] == true;
+
+            return Stack(
+              children: [
+                Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : glbUrl != null
+                          ? ModelViewer(
+                              src: 'file://$glbUrl',
+                              alt: 'A 3D model of $category',
+                              ar: false,
+                              autoRotate: false,
+                              disableZoom: false,
+                            )
+                          : Icon(
+                              Icons.threed_rotation,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 40,
+                            ),
+                ),
+                if (glbUrl != null)
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: GestureDetector(
+                      onTap: () {
+                        context
+                            .read<Styling3DPageCubit>()
+                            .remove3DModel(category);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          shape: BoxShape.circle,
                         ),
+                        child: Icon(
+                          Icons.close,
+                          color: Theme.of(context).colorScheme.surface,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             );
           },
         ),
