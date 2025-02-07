@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/profile/my_picks/my_pick_delete_popup.dart';
 
 class MyPicksPage extends StatelessWidget {
   const MyPicksPage({super.key});
@@ -40,6 +40,7 @@ class MyPicksPage extends StatelessWidget {
             itemCount: picks.length,
             itemBuilder: (context, index) {
               final pick = picks[index];
+              final pickId = pick.id;
               final pickName = pick['name'];
               final top = pick['상의'];
               final bottom = pick['하의'];
@@ -47,6 +48,7 @@ class MyPicksPage extends StatelessWidget {
               final shoes = pick['신발'];
 
               return _PickCard(
+                pickId: pickId,
                 pickName: pickName,
                 top: top,
                 bottom: bottom,
@@ -62,6 +64,7 @@ class MyPicksPage extends StatelessWidget {
 }
 
 class _PickCard extends StatefulWidget {
+  final String pickId;
   final String pickName;
   final String top;
   final String bottom;
@@ -69,6 +72,7 @@ class _PickCard extends StatefulWidget {
   final String shoes;
 
   const _PickCard({
+    required this.pickId,
     required this.pickName,
     required this.top,
     required this.bottom,
@@ -106,6 +110,11 @@ class _PickCardState extends State<_PickCard> {
         child: Column(
           children: [
             ListTile(
+              leading: Icon(
+                _isExpanded ? Icons.expand_less : Icons.expand_more,
+                size: 24,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               title: Text(
                 widget.pickName,
                 style: const TextStyle(
@@ -113,10 +122,10 @@ class _PickCardState extends State<_PickCard> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              trailing: Icon(
-                _isExpanded ? Icons.expand_less : Icons.expand_more,
-                size: 24,
-                color: Theme.of(context).colorScheme.primary,
+              trailing: IconButton(
+                icon: Icon(Icons.delete,
+                    color: Theme.of(context).colorScheme.error),
+                onPressed: () => _showDeletePopup(context),
               ),
             ),
             if (_isExpanded)
@@ -173,5 +182,38 @@ class _PickCardState extends State<_PickCard> {
         ),
       ),
     );
+  }
+
+  void _showDeletePopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return MyPickDeletePopup(
+          pickName: widget.pickName,
+          onConfirm: _deletePick,
+        );
+      },
+    );
+  }
+
+  Future<void> _deletePick() async {
+    final userId = Provider.of<AuthProvider>(context, listen: false).user!.uid;
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('myPicks')
+          .doc(widget.pickId)
+          .delete();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pick이 삭제되었습니다.')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('삭제 중 오류가 발생했습니다.')),
+      );
+    }
   }
 }
