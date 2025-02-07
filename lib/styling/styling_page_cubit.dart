@@ -40,6 +40,13 @@ class StylingPageCubit extends Cubit<StylingPageState> {
     emit(state.copyWith(selectedPhotos: updatedPhotos));
   }
 
+  void removePhoto(String category) {
+    final updatedPhotos = Map<String, String>.from(state.selectedPhotos)
+      ..remove(category);
+
+    emit(state.copyWith(selectedPhotos: updatedPhotos));
+  }
+
   void resetAllPhotos() {
     emit(state.copyWith(selectedPhotos: {}));
   }

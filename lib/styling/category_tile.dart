@@ -28,20 +28,48 @@ class CategoryTile extends StatelessWidget {
             const SizedBox(height: 8),
             GestureDetector(
               onTap: () => _showPhotoPicker(context, category),
-              child: Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: representativePhoto != null
-                    ? _buildImage(representativePhoto)
-                    : Icon(
-                        Icons.add_a_photo,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 40,
+              child: Stack(
+                children: [
+                  Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: representativePhoto != null
+                        ? _buildImage(representativePhoto)
+                        : Icon(
+                            Icons.add_a_photo,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 40,
+                          ),
+                  ),
+                  if (representativePhoto != null)
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () {
+                          context
+                              .read<StylingPageCubit>()
+                              .removePhoto(category);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.close,
+                            color: Theme.of(context).colorScheme.surface,
+                            size: 20,
+                          ),
+                        ),
                       ),
+                    ),
+                ],
               ),
             ),
           ],
