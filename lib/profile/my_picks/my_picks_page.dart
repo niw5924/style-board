@@ -30,7 +30,12 @@ class MyPicksPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('저장된 Pick이 없습니다.'));
+            return const Center(
+              child: Text(
+                '저장된 Pick이 없습니다.',
+                style: TextStyle(fontSize: 16),
+              ),
+            );
           }
 
           final picks = snapshot.data!.docs;

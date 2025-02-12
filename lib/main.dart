@@ -16,7 +16,7 @@ import 'package:style_board/styling/styling_page_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(); // .env 파일 로드
+  await dotenv.load();
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']!);
 
@@ -26,17 +26,11 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         BlocProvider(create: (_) => HomePageCubit()),
         BlocProvider(
-          create: (context) => StylingPageCubit(context.read<AuthProvider>()),
-        ),
-        BlocProvider(create: (_) => Styling3DPageCubit()),
-        BlocProvider(
-          create: (context) => ClosetPageCubit(context.read<AuthProvider>()),
-        ),
+            create: (context) => ClosetPageCubit(context.read<AuthProvider>())),
         BlocProvider(create: (_) => WeatherCubit()),
         BlocProvider(
-          create: (context) =>
-              ProfileDetailPageCubit(context.read<AuthProvider>()),
-        ),
+            create: (context) =>
+                ProfileDetailPageCubit(context.read<AuthProvider>())),
       ],
       child: const StyleBoard(),
     ),
@@ -48,56 +42,77 @@ class StyleBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Style Board',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFEAF3FA),
-          surface: const Color(0xFFF7F7F7),
-          onSurface: const Color(0xFF333333),
-          primary: const Color(0xFF0077CC),
-          secondary: const Color(0xFF555555),
-          error: const Color(0xFFE53935),
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFF7F7F7),
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          iconTheme: IconThemeData(color: Color(0xFF0077CC)),
-          titleTextStyle: TextStyle(
-            color: Color(0xFF333333),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-          shape: Border(
-            bottom: BorderSide(
-              color: Color(0xFFE3E3E3),
-              width: 0.5,
+    return Selector<AuthProvider, String?>(
+      selector: (_, authProvider) => authProvider.user?.uid,
+      builder: (context, userId, child) {
+        return MultiProvider(
+          providers: [
+            BlocProvider(
+              key: ValueKey('styling-$userId'),
+              create: (context) =>
+                  StylingPageCubit(context.read<AuthProvider>()),
+            ),
+            BlocProvider(
+              key: ValueKey('styling3D-$userId'),
+              create: (context) => Styling3DPageCubit(),
+            ),
+          ],
+          child: MaterialApp(
+            title: 'Style Board',
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFFEAF3FA),
+                surface: const Color(0xFFF7F7F7),
+                onSurface: const Color(0xFF333333),
+                primary: const Color(0xFF0077CC),
+                secondary: const Color(0xFF555555),
+                error: const Color(0xFFE53935),
+              ),
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Color(0xFFF7F7F7),
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                iconTheme: IconThemeData(color: Color(0xFF0077CC)),
+                titleTextStyle: TextStyle(
+                  color: Color(0xFF333333),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                shape: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE3E3E3),
+                    width: 0.5,
+                  ),
+                ),
+              ),
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                backgroundColor: Color(0xFFF7F7F7),
+                selectedItemColor: Color(0xFF0077CC),
+                unselectedItemColor: Color(0xFFA0A0A0),
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF0077CC),
+                  foregroundColor: const Color(0xFFF7F7F7),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+              ),
+            ),
+            home: Consumer<AuthProvider>(
+              builder: (context, authProvider, child) {
+                return authProvider.isLoggedIn
+                    ? const HomePage()
+                    : const LoginPage();
+              },
             ),
           ),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color(0xFFF7F7F7),
-          selectedItemColor: Color(0xFF0077CC),
-          unselectedItemColor: Color(0xFFA0A0A0),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF0077CC),
-            foregroundColor: const Color(0xFFF7F7F7),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-        ),
-      ),
-      home: Consumer<AuthProvider>(
-        builder: (context, authProvider, child) {
-          return authProvider.isLoggedIn ? const HomePage() : const LoginPage();
-        },
-      ),
+        );
+      },
     );
   }
 }
