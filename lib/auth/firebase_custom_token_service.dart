@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class FirebaseCustomTokenService {
-  // 백엔드 서버의 URL: 변경해야 함!
+  // Firebase Functions에서 배포된 실제 API URL 입력 (배포 후 확인 필요)
   static const String _serverUrl =
-      'http://192.168.35.85:3000/api/firebase-custom-token';
+      'https://getfirebasecustomtoken-6rqnvjtpda-uc.a.run.app'; // 여기에 Firebase Functions API URL을 입력
 
-  // Kakao Access Token을 백엔드로 보내 Firebase Custom Token을 받아오는 메서드
   static Future<String?> getFirebaseCustomToken(String kakaoAccessToken) async {
     try {
       final response = await http.post(
