@@ -43,6 +43,9 @@ android/unityLibrary/
 # Unity 프로젝트 전체 제외
 unity/
 
+# Firebase 서비스 계정 키
+functions/serviceAccountKey.json
+
 # Symbolication related
 app.*.symbols
 
