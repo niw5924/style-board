@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 
 Future<Map<String, dynamic>?> closetFilterBottomSheet(
   BuildContext context, {
@@ -90,183 +91,119 @@ Future<Map<String, dynamic>?> closetFilterBottomSheet(
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    SizedBox(
-                      width: 100,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: options.keys.length,
-                        itemBuilder: (context, index) {
-                          final sectionKey = options.keys.elementAt(index);
-                          final isSelected = selectedSection == sectionKey;
+                    Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 260,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: options.keys.length,
+                          itemBuilder: (context, index) {
+                            final sectionKey = options.keys.elementAt(index);
+                            final isSelected = selectedSection == sectionKey;
 
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedSection = sectionKey;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 8),
-                              child: Text(
-                                sectionKey,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  color: isSelected
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedSection = sectionKey;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 8),
+                                child: Text(
+                                  sectionKey,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    color: isSelected
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                     Expanded(
-                      child: currentOptions.length > 4
-                          ? GridView.builder(
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 8,
-                                childAspectRatio: 3,
-                              ),
-                              itemCount: currentOptions.length,
-                              itemBuilder: (context, index) {
-                                final option = currentOptions[index];
-                                final isSelected = selectedOption == option;
+                      flex: 3,
+                      child: SizedBox(
+                        height: 260,
+                        child: AutoHeightGridView(
+                          itemCount: currentOptions.length,
+                          crossAxisCount: currentOptions.length > 4 ? 2 : 1,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          padding: const EdgeInsets.all(8),
+                          builder: (context, index) {
+                            final option = currentOptions[index];
+                            final isSelected = selectedOption == option;
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      switch (selectedSection) {
-                                        case '카테고리':
-                                          selectedCategory =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '계절':
-                                          selectedSeason =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '색상':
-                                          selectedColor =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '스타일':
-                                          selectedStyle =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '용도':
-                                          selectedPurpose =
-                                              isSelected ? null : option;
-                                          break;
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12, horizontal: 16),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .primary
-                                            : Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        option,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: isSelected
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  switch (selectedSection) {
+                                    case '카테고리':
+                                      selectedCategory =
+                                          isSelected ? null : option;
+                                      break;
+                                    case '계절':
+                                      selectedSeason =
+                                          isSelected ? null : option;
+                                      break;
+                                    case '색상':
+                                      selectedColor =
+                                          isSelected ? null : option;
+                                      break;
+                                    case '스타일':
+                                      selectedStyle =
+                                          isSelected ? null : option;
+                                      break;
+                                    case '용도':
+                                      selectedPurpose =
+                                          isSelected ? null : option;
+                                      break;
+                                  }
+                                });
                               },
-                            )
-                          : Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: currentOptions.map((option) {
-                                final isSelected = selectedOption == option;
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      switch (selectedSection) {
-                                        case '카테고리':
-                                          selectedCategory =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '계절':
-                                          selectedSeason =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '색상':
-                                          selectedColor =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '스타일':
-                                          selectedStyle =
-                                              isSelected ? null : option;
-                                          break;
-                                        case '용도':
-                                          selectedPurpose =
-                                              isSelected ? null : option;
-                                          break;
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12, horizontal: 16),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .primary
-                                            : Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        option,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: isSelected
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                        ),
-                                      ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Colors.grey.shade300,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    option,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
                                     ),
                                   ),
-                                );
-                              }).toList(),
-                            ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),

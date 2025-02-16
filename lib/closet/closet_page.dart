@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +58,7 @@ class _ClosetPageState extends State<ClosetPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () async {
                         HapticFeedback.mediumImpact();
                         final pickedFile =
@@ -90,10 +91,12 @@ class _ClosetPageState extends State<ClosetPage> {
                           }
                         }
                       },
-                      child: const Text('사진 찍기'),
+                      icon: Icon(Icons.camera_alt,
+                          color: Theme.of(context).colorScheme.surface),
+                      label: const Text('사진 찍기'),
                     ),
                     const SizedBox(width: 16),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () async {
                         HapticFeedback.mediumImpact();
                         final pickedFile = await context
@@ -127,7 +130,9 @@ class _ClosetPageState extends State<ClosetPage> {
                           }
                         }
                       },
-                      child: const Text('갤러리에서 가져오기'),
+                      icon: Icon(Icons.photo,
+                          color: Theme.of(context).colorScheme.surface),
+                      label: const Text('갤러리'),
                     ),
                   ],
                 ),
@@ -215,16 +220,13 @@ class _ClosetPageState extends State<ClosetPage> {
                 }
 
                 // 필터링 결과가 있는 경우
-                return GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.6,
-                  ),
+                return AutoHeightGridView(
                   itemCount: filteredIndices.length,
-                  itemBuilder: (context, index) {
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  padding: const EdgeInsets.all(16),
+                  builder: (context, index) {
                     final photoIndex = filteredIndices[index];
                     final category = state.photoCategories[photoIndex];
                     final tags = state.photoTags[photoIndex];

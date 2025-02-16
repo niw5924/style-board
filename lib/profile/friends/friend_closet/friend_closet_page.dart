@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'friend_closet_page_cubit.dart';
@@ -52,16 +53,13 @@ class _FriendClosetPageState extends State<FriendClosetPage> {
               ),
             );
           } else {
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 2 / 3,
-              ),
+            return AutoHeightGridView(
               itemCount: state.friendPhotoPaths.length,
-              itemBuilder: (context, index) {
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              padding: const EdgeInsets.all(16),
+              builder: (context, index) {
                 final category = state.friendPhotoCategories[index];
                 final tags = state.friendPhotoTags[index];
                 final isLiked = state.friendPhotoLikes[index];
@@ -80,7 +78,7 @@ class _FriendClosetPageState extends State<FriendClosetPage> {
                             child: Image.file(
                               File(state.friendPhotoPaths[index]),
                               width: double.infinity,
-                              height: 160,
+                              height: 180,
                               fit: BoxFit.fill,
                             ),
                           ),
