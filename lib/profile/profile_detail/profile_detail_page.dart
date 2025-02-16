@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:style_board/auth/logout_popup.dart';
 import 'closet_reset_popup.dart';
 import 'profile_detail_page_cubit.dart';
 import 'profile_detail_page_state.dart';
@@ -138,11 +139,17 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
-                          context
-                              .read<ProfileDetailPageCubit>()
-                              .authProvider
-                              .logout();
+                          showDialog(
+                            context: context,
+                            builder: (context) => LogoutPopup(
+                              onConfirm: () {
+                                context
+                                    .read<ProfileDetailPageCubit>()
+                                    .authProvider
+                                    .logout();
+                              },
+                            ),
+                          );
                         },
                         child: const Text(
                           '로그아웃',

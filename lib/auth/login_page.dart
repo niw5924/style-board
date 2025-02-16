@@ -12,8 +12,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthService _authService = AuthService();
+  bool isLoading = false;
 
   Future<void> _handleLogin(String loginType) async {
+    setState(() {
+      isLoading = true;
+    });
+
     switch (loginType) {
       case "Google":
         final user = await _authService.signInWithGoogle();
@@ -30,64 +35,81 @@ class _LoginPageState extends State<LoginPage> {
       default:
         print("알 수 없는 로그인 타입: $loginType");
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Expanded(
-            child: Center(
-              child: Text(
-                '스타일보드',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return Stack(
+      children: [
+        Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    '스타일보드',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-            ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () => _handleLogin("Google"),
+                      child: _buildLoginButton(
+                        color: Colors.white,
+                        iconPath: 'assets/images/google_logo.png',
+                        text: 'Google 계정으로 로그인',
+                        textColor: Colors.black.withValues(alpha: 0.54),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () => _handleLogin("Kakao"),
+                      child: _buildLoginButton(
+                        color: const Color(0xFFFEE500),
+                        iconPath: 'assets/images/kakao_logo.png',
+                        text: '카카오 계정으로 로그인',
+                        textColor: Colors.black.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      '본 서비스 로그인 시 이용약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+        ),
+        if (isLoading)
+          Positioned.fill(
+            child: Stack(
               children: [
-                GestureDetector(
-                  onTap: () => _handleLogin("Google"),
-                  child: _buildLoginButton(
-                    color: Colors.white,
-                    iconPath: 'assets/images/google_logo.png',
-                    text: 'Google 계정으로 로그인',
-                    textColor: Colors.black.withValues(alpha: 0.54),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () => _handleLogin("Kakao"),
-                  child: _buildLoginButton(
-                    color: const Color(0xFFFEE500),
-                    iconPath: 'assets/images/kakao_logo.png',
-                    text: '카카오 계정으로 로그인',
-                    textColor: Colors.black.withValues(alpha: 0.85),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  '본 서비스 로그인 시 이용약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                  textAlign: TextAlign.center,
-                ),
+                Container(color: Colors.black.withValues(alpha: 0.4)),
+                const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -107,11 +129,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            iconPath,
-            width: 18,
-            height: 18,
-          ),
+          Image.asset(iconPath, width: 18, height: 18),
           const SizedBox(width: 12),
           Text(
             text,
