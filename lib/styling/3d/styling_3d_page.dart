@@ -52,7 +52,7 @@ class Styling3DPage extends StatelessWidget {
         Text(
           category,
           style: const TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
             fontSize: 16,
           ),
         ),
@@ -142,7 +142,8 @@ class Styling3DPage extends StatelessWidget {
                 ),
               ),
               const Text(
-                '사진을 선택하면 3D로 변환해 드릴게요!',
+                '3D 변환',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -168,7 +169,7 @@ class Styling3DPage extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 30),
                 child: ElevatedButton(
                   onPressed: () => _start3DConversion(context),
-                  child: const Text('변환'),
+                  child: const Text('변환하기'),
                 ),
               ),
             ],
