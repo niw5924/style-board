@@ -73,6 +73,13 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
         final data = jsonDecode(response.body);
         print(data);
 
+        if (data.containsKey('progress')) {
+          final int progress = data['progress'];
+          emit(state.copyWith(
+            progress: {...state.progress, category: progress},
+          ));
+        }
+
         if (data['status'] == 'SUCCEEDED' &&
             data['model_urls'].containsKey('glb')) {
           print('[$category] 변환 완료! GLB 다운로드 시작...');
@@ -82,7 +89,13 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
           if (localPath != null) {
             emit(state.copyWith(
               glbUrls: {...state.glbUrls, category: localPath},
+              // GLB 모델 저장
               isLoading: {...state.isLoading, category: false},
+              // 변환 완료 후 false 설정
+              progress: {
+                ...state.progress,
+                category: null
+              }, // 변환 완료 후 progress 제거
             ));
             print('[$category] GLB 다운로드 및 저장 완료.');
           }
@@ -95,7 +108,7 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
               state.copyWith(isLoading: {...state.isLoading, category: false}));
           return;
         } else {
-          print('[$category] 변환 진행 중...');
+          print('[$category] 변환 진행 중... ${data['progress']}% 완료');
         }
       } catch (e) {
         print('[$category] 변환 상태 확인 중 오류 발생: $e');

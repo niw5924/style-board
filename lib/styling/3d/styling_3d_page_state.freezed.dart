@@ -22,6 +22,9 @@ mixin _$Styling3DPageState {
   /// 각 카테고리별 로딩 상태
   Map<String, bool> get isLoading => throw _privateConstructorUsedError;
 
+  /// 각 카테고리별 변환 진행률 (0~100)
+  Map<String, int?> get progress => throw _privateConstructorUsedError;
+
   /// Create a copy of Styling3DPageState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -35,7 +38,10 @@ abstract class $Styling3DPageStateCopyWith<$Res> {
           Styling3DPageState value, $Res Function(Styling3DPageState) then) =
       _$Styling3DPageStateCopyWithImpl<$Res, Styling3DPageState>;
   @useResult
-  $Res call({Map<String, String?> glbUrls, Map<String, bool> isLoading});
+  $Res call(
+      {Map<String, String?> glbUrls,
+      Map<String, bool> isLoading,
+      Map<String, int?> progress});
 }
 
 /// @nodoc
@@ -55,6 +61,7 @@ class _$Styling3DPageStateCopyWithImpl<$Res, $Val extends Styling3DPageState>
   $Res call({
     Object? glbUrls = null,
     Object? isLoading = null,
+    Object? progress = null,
   }) {
     return _then(_value.copyWith(
       glbUrls: null == glbUrls
@@ -65,6 +72,10 @@ class _$Styling3DPageStateCopyWithImpl<$Res, $Val extends Styling3DPageState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as Map<String, bool>,
+      progress: null == progress
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as Map<String, int?>,
     ) as $Val);
   }
 }
@@ -77,7 +88,10 @@ abstract class _$$Styling3DPageStateImplCopyWith<$Res>
       __$$Styling3DPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, String?> glbUrls, Map<String, bool> isLoading});
+  $Res call(
+      {Map<String, String?> glbUrls,
+      Map<String, bool> isLoading,
+      Map<String, int?> progress});
 }
 
 /// @nodoc
@@ -95,6 +109,7 @@ class __$$Styling3DPageStateImplCopyWithImpl<$Res>
   $Res call({
     Object? glbUrls = null,
     Object? isLoading = null,
+    Object? progress = null,
   }) {
     return _then(_$Styling3DPageStateImpl(
       glbUrls: null == glbUrls
@@ -105,6 +120,10 @@ class __$$Styling3DPageStateImplCopyWithImpl<$Res>
           ? _value._isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as Map<String, bool>,
+      progress: null == progress
+          ? _value._progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as Map<String, int?>,
     ));
   }
 }
@@ -124,9 +143,16 @@ class _$Styling3DPageStateImpl implements _Styling3DPageState {
         '하의': false,
         '아우터': false,
         '신발': false
+      },
+      final Map<String, int?> progress = const {
+        '상의': null,
+        '하의': null,
+        '아우터': null,
+        '신발': null
       }})
       : _glbUrls = glbUrls,
-        _isLoading = isLoading;
+        _isLoading = isLoading,
+        _progress = progress;
 
   /// 각 카테고리별 GLB 파일 경로
   final Map<String, String?> _glbUrls;
@@ -152,9 +178,21 @@ class _$Styling3DPageStateImpl implements _Styling3DPageState {
     return EqualUnmodifiableMapView(_isLoading);
   }
 
+  /// 각 카테고리별 변환 진행률 (0~100)
+  final Map<String, int?> _progress;
+
+  /// 각 카테고리별 변환 진행률 (0~100)
+  @override
+  @JsonKey()
+  Map<String, int?> get progress {
+    if (_progress is EqualUnmodifiableMapView) return _progress;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_progress);
+  }
+
   @override
   String toString() {
-    return 'Styling3DPageState(glbUrls: $glbUrls, isLoading: $isLoading)';
+    return 'Styling3DPageState(glbUrls: $glbUrls, isLoading: $isLoading, progress: $progress)';
   }
 
   @override
@@ -164,14 +202,16 @@ class _$Styling3DPageStateImpl implements _Styling3DPageState {
             other is _$Styling3DPageStateImpl &&
             const DeepCollectionEquality().equals(other._glbUrls, _glbUrls) &&
             const DeepCollectionEquality()
-                .equals(other._isLoading, _isLoading));
+                .equals(other._isLoading, _isLoading) &&
+            const DeepCollectionEquality().equals(other._progress, _progress));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_glbUrls),
-      const DeepCollectionEquality().hash(_isLoading));
+      const DeepCollectionEquality().hash(_isLoading),
+      const DeepCollectionEquality().hash(_progress));
 
   /// Create a copy of Styling3DPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -186,7 +226,8 @@ class _$Styling3DPageStateImpl implements _Styling3DPageState {
 abstract class _Styling3DPageState implements Styling3DPageState {
   const factory _Styling3DPageState(
       {final Map<String, String?> glbUrls,
-      final Map<String, bool> isLoading}) = _$Styling3DPageStateImpl;
+      final Map<String, bool> isLoading,
+      final Map<String, int?> progress}) = _$Styling3DPageStateImpl;
 
   /// 각 카테고리별 GLB 파일 경로
   @override
@@ -195,6 +236,10 @@ abstract class _Styling3DPageState implements Styling3DPageState {
   /// 각 카테고리별 로딩 상태
   @override
   Map<String, bool> get isLoading;
+
+  /// 각 카테고리별 변환 진행률 (0~100)
+  @override
+  Map<String, int?> get progress;
 
   /// Create a copy of Styling3DPageState
   /// with the given fields replaced by the non-null parameter values.

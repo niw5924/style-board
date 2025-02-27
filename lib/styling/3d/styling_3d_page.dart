@@ -61,6 +61,7 @@ class Styling3DPage extends StatelessWidget {
           builder: (context, state) {
             final glbUrl = state.glbUrls[category];
             final isLoading = state.isLoading[category] == true;
+            final progress = state.progress[category];
 
             return Stack(
               children: [
@@ -71,8 +72,21 @@ class Styling3DPage extends StatelessWidget {
                     color: Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: isLoading
-                      ? const Center(child: CircularProgressIndicator())
+                  child: (isLoading && progress != null)
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CircularProgressIndicator(),
+                            const SizedBox(height: 16),
+                            Text(
+                              '$progress%',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        )
                       : glbUrl != null
                           ? ModelViewer(
                               src: 'file://$glbUrl',

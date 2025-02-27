@@ -22,5 +22,14 @@ class Styling3DPageState with _$Styling3DPageState {
       '신발': false,
     })
     Map<String, bool> isLoading,
+
+    /// 각 카테고리별 변환 진행률 (0~100)
+    @Default({
+      '상의': null,
+      '하의': null,
+      '아우터': null,
+      '신발': null,
+    })
+    Map<String, int?> progress,
   }) = _Styling3DPageState;
 }
