@@ -20,10 +20,13 @@ void main() async {
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']!);
 
+  final authProvider = AuthProvider();
+  await authProvider.checkLoginState(); // 로그인 상태 체크
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => authProvider),
         BlocProvider(create: (_) => HomePageCubit()),
         BlocProvider(
             create: (context) => ClosetPageCubit(context.read<AuthProvider>())),

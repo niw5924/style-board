@@ -13,6 +13,20 @@ class AuthProvider with ChangeNotifier {
 
   bool get isLoggedIn => _user != null;
 
+  // 앱 실행 시 로그인 상태 확인
+  Future<void> checkLoginState() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      print('이전 로그인 정보 확인됨: ${user.displayName} (UID: ${user.uid})');
+      final loginMethod = await AuthService().getLoginMethod(); // 로그인 방식 불러오기
+      print('이전 로그인 방식: $loginMethod');
+      await setUser(user); // 기존 유저 정보 불러오기
+    } else {
+      print('로그인 정보 없음');
+    }
+  }
+
   Future<void> setUser(User? user) async {
     _user = user;
 

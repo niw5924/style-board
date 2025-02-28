@@ -2,6 +2,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:style_board/auth/firebase_custom_token_service.dart';
 
@@ -18,7 +19,6 @@ class AuthService {
       firebase_auth.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Uuid _uuid = const Uuid(); // UUID 생성기
-  String? _currentLoginMethod; // 로그인 방식 ('google' 또는 'kakao')
 
   // Google 로그인 및 Firebase 연결
   Future<firebase_auth.User?> signInWithGoogle() async {
@@ -40,10 +40,10 @@ class AuthService {
       if (user != null) {
         // Firestore에 유저 정보 저장
         await _saveUserToFirestore(user);
+        await _saveLoginMethod('google'); // 기기에 구글 로그인 방식 저장
+        print('Firebase Google 로그인 성공');
       }
 
-      print('Firebase Google 로그인 성공');
-      _currentLoginMethod = 'google'; // 로그인 방식 저장
       return user;
     } catch (e) {
       print('Google 로그인 실패: $e');
@@ -88,15 +88,33 @@ class AuthService {
 
         // Firestore에 유저 정보 저장
         await _saveUserToFirestore(user);
+        await _saveLoginMethod('kakao'); // 기기에 카카오 로그인 방식 저장
+        print('Firebase Kakao 로그인 성공');
       }
 
-      print('Firebase Kakao 로그인 성공');
-      _currentLoginMethod = 'kakao'; // 로그인 방식 저장
       return user;
     } catch (e) {
       print('Kakao 로그인 실패: $e');
     }
     return null;
+  }
+
+  // 로그인 방식 저장 (구글 or 카카오)
+  Future<void> _saveLoginMethod(String method) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('login_method', method);
+  }
+
+  // 로그인 방식 불러오기
+  Future<String?> getLoginMethod() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('login_method');
+  }
+
+  // 로그인 방식 삭제 (로그아웃 시)
+  Future<void> _clearLoginMethod() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('login_method');
   }
 
   // Firestore에 유저 정보 저장
@@ -153,23 +171,25 @@ class AuthService {
   // 로그아웃
   Future<void> signOut() async {
     try {
-      switch (_currentLoginMethod) {
+      // 저장된 로그인 방식 불러오기
+      final loginMethod = await getLoginMethod();
+
+      switch (loginMethod) {
         case 'google':
-          await _firebaseAuth.signOut();
           await _googleSignIn.signOut();
+          await _firebaseAuth.signOut();
           print('Google 로그아웃 성공');
           break;
 
         case 'kakao':
-          await _firebaseAuth.signOut();
           await UserApi.instance.logout();
+          await _firebaseAuth.signOut();
           print('Kakao 로그아웃 성공');
           break;
-
-        default:
-          print('로그아웃 실패: 로그인된 사용자가 없습니다.');
       }
-      _currentLoginMethod = null; // 로그인 방식 초기화
+
+      await _clearLoginMethod(); // 저장된 로그인 방식 삭제
+      print('로그아웃 완료');
     } catch (e) {
       print('로그아웃 중 오류 발생: $e');
     }
