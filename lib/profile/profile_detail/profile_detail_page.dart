@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:style_board/auth/account_deletion_popup.dart';
+import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/auth/logout_popup.dart';
 import 'closet_reset_popup.dart';
 import 'profile_detail_page_cubit.dart';
@@ -156,6 +158,28 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AccountDeletionPopup(
+                              onConfirm: () async {
+                                await context
+                                    .read<AuthProvider>()
+                                    .deleteAccount();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '탈퇴하기',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.error,
                           ),
                         ),
                       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ClosetResetPopup extends StatelessWidget {
+class AccountDeletionPopup extends StatelessWidget {
   final VoidCallback onConfirm;
 
-  const ClosetResetPopup({super.key, required this.onConfirm});
+  const AccountDeletionPopup({super.key, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ClosetResetPopup extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             const Text(
-              '옷장 초기화',
+              '탈퇴하기',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -32,7 +32,7 @@ class ClosetResetPopup extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Text(
-              '정말로 옷장을 초기화하시겠습니까?\n저장된 모든 옷이 삭제됩니다.',
+              '정말로 회원 탈퇴를 진행하시겠습니까?\n모든 데이터가 영구 삭제됩니다.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16),
             ),

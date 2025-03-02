@@ -194,4 +194,34 @@ class AuthService {
       print('로그아웃 중 오류 발생: $e');
     }
   }
+
+  // 회원탈퇴
+  Future<void> deleteAccount() async {
+    try {
+      final user = _firebaseAuth.currentUser!;
+      final userId = user.uid;
+      final userRef = _firestore.collection('users').doc(userId);
+
+      // 하위 컬렉션 삭제
+      final collections = ['photos', 'friends', 'myPicks'];
+      for (var collection in collections) {
+        final snapshot = await userRef.collection(collection).get();
+        for (var doc in snapshot.docs) {
+          await doc.reference.delete();
+        }
+      }
+
+      // Firestore에서 사용자 문서 삭제
+      await userRef.delete();
+      print("Firestore 사용자 데이터 삭제 완료");
+
+      // Firebase Authentication 계정 삭제
+      await user.delete();
+      print("Firebase Authentication 계정 삭제 완료");
+
+      print("회원탈퇴 완료");
+    } catch (e) {
+      print('회원탈퇴 실패: $e');
+    }
+  }
 }

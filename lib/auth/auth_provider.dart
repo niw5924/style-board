@@ -55,7 +55,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   // 로그아웃
-  void logout() async {
+  Future<void> logout() async {
     try {
       // Firebase 인증 세션 및 계정 로그아웃
       await AuthService().signOut();
@@ -67,6 +67,16 @@ class AuthProvider with ChangeNotifier {
       print('로그아웃 성공 및 상태 초기화 완료');
     } catch (e) {
       print('로그아웃 실패: $e');
+    }
+  }
+
+  // 회원탈퇴
+  Future<void> deleteAccount() async {
+    try {
+      await AuthService().deleteAccount();
+      await logout(); // 로그아웃 실행
+    } catch (e) {
+      print('회원탈퇴 오류: $e');
     }
   }
 }
