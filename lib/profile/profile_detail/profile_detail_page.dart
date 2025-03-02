@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/auth/account_deletion_popup.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/auth/logout_popup.dart';
+import 'package:style_board/utils/overlay_loader.dart';
 import 'closet_reset_popup.dart';
 import 'profile_detail_page_cubit.dart';
 import 'profile_detail_page_state.dart';
@@ -144,11 +145,13 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                           showDialog(
                             context: context,
                             builder: (context) => LogoutPopup(
-                              onConfirm: () {
-                                context
+                              onConfirm: () async {
+                                OverlayLoader.show(context);
+                                await context
                                     .read<ProfileDetailPageCubit>()
                                     .authProvider
                                     .logout();
+                                OverlayLoader.hide();
                               },
                             ),
                           );
@@ -167,9 +170,11 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                             context: context,
                             builder: (context) => AccountDeletionPopup(
                               onConfirm: () async {
+                                OverlayLoader.show(context);
                                 await context
                                     .read<AuthProvider>()
                                     .deleteAccount();
+                                OverlayLoader.hide();
                               },
                             ),
                           );

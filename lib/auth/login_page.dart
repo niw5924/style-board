@@ -1,115 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:style_board/auth/auth_service.dart';
 import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/utils/overlay_loader.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final AuthService _authService = AuthService();
-  bool isLoading = false;
-
-  Future<void> _handleLogin(String loginType) async {
-    setState(() {
-      isLoading = true;
-    });
-
-    switch (loginType) {
-      case "Google":
-        final user = await _authService.signInWithGoogle();
-        if (user != null) {
-          Provider.of<AuthProvider>(context, listen: false).setUser(user);
-        }
-        break;
-      case "Kakao":
-        final user = await _authService.signInWithKakao();
-        if (user != null) {
-          Provider.of<AuthProvider>(context, listen: false).setUser(user);
-        }
-        break;
-      default:
-        print("알 수 없는 로그인 타입: $loginType");
-    }
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
-                child: Center(
-                  child: Text(
-                    '스타일보드',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Expanded(
+            child: Center(
+              child: Text(
+                '스타일보드',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _handleLogin("Google"),
-                      child: _buildLoginButton(
-                        color: Colors.white,
-                        iconPath: 'assets/images/google_logo.png',
-                        text: 'Google 계정으로 로그인',
-                        textColor: Colors.black.withValues(alpha: 0.54),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    GestureDetector(
-                      onTap: () => _handleLogin("Kakao"),
-                      child: _buildLoginButton(
-                        color: const Color(0xFFFEE500),
-                        iconPath: 'assets/images/kakao_logo.png',
-                        text: '카카오 계정으로 로그인',
-                        textColor: Colors.black.withValues(alpha: 0.85),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      '본 서비스 로그인 시 이용약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-        if (isLoading)
-          Positioned.fill(
-            child: Stack(
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(color: Colors.black.withValues(alpha: 0.4)),
-                const Center(child: CircularProgressIndicator()),
+                GestureDetector(
+                  onTap: () async {
+                    OverlayLoader.show(context);
+                    await authProvider.signInWithGoogle();
+                    OverlayLoader.hide();
+                  },
+                  child: _buildLoginButton(
+                    color: Colors.white,
+                    iconPath: 'assets/images/google_logo.png',
+                    text: 'Google 계정으로 로그인',
+                    textColor: Colors.black.withValues(alpha: 0.54),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () async {
+                    OverlayLoader.show(context);
+                    await authProvider.signInWithKakao();
+                    OverlayLoader.hide();
+                  },
+                  child: _buildLoginButton(
+                    color: const Color(0xFFFEE500),
+                    iconPath: 'assets/images/kakao_logo.png',
+                    text: '카카오 계정으로 로그인',
+                    textColor: Colors.black.withValues(alpha: 0.85),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  '본 서비스 로그인 시 이용약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 
