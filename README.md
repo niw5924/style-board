@@ -32,10 +32,10 @@
 ## 🛠 Skills  
 
 ✅ **Flutter, Dart**  
-✅ **MVU (Cubit, State)**  
+✅ **MVU (Cubit, State, Freezed)**  
 ✅ **Provider**  
 ✅ **Firebase Authentication, Firebase Functions, Firestore Database**  
-✅ **SharedPreferences**  
+✅ **SharedPreferences, Path Provider**  
 ✅ **ImagePicker**  
 ✅ **fl_chart**  
 ✅ **http**  
