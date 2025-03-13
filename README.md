@@ -1,16 +1,27 @@
-# style_board
+# 스타일보드 👗  
 
-A new Flutter project.
+**스타일보드**는 사용자가 보유한 옷을 촬영하여 가상 옷장에 저장하고, 다양한 스타일을 조합해볼 수 있는 **스타일 관리 애플리케이션**입니다.  
+직접 촬영한 의상을 활용하여 **2D 코디**를 시뮬레이션하거나, **3D 마네킹 모델을 활용한 스타일링**이 가능합니다.  
 
-## Getting Started
+🔗 **[Play 스토어](https://play.google.com/store/apps/details?id=com.niw.style_board)**  
 
-This project is a starting point for a Flutter application.
+## 💡 개발 배경  
 
-A few resources to get you started if this is your first Flutter project:
+옷을 사도 정작 어떤 옷이 있는지 잊어버리는 경우가 많고,  
+매일 새로운 스타일을 고민하는 시간이 아깝다고 느껴졌습니다.  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+이러한 불편함을 해결하기 위해 **보유한 옷을 정리하고, 쉽게 스타일을 조합할 수 있는 앱이 있다면 어떨까?** 라는 고민에서 시작되었습니다.  
+이를 바탕으로 **스타일보드**를 기획하고 개발하게 되었습니다.  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ⏳ 개발 기간  
+
+- **2024년 1월 ~ 현재 (출시 중)**  
+
+## 👚 주요 기능  
+
+✅ **가상 옷장** - 사용자가 직접 촬영한 옷을 저장하고 카테고리별로 정리 (**로그인 필요**)  
+✅ **2D 스타일링** - 보유한 옷을 조합하여 가상의 코디를 생성  
+✅ **3D 스타일링** - 마네킹 모델을 활용한 스타일링 기능 제공 (**Unity 연동**)  
+✅ **스타일 태그 설정** - 계절, 색상, 스타일별 태그를 추가하여 필터링 가능 (**로그인 필요**)  
+✅ **코디 기록 기능** - 날짜별로 스타일링을 저장하고 히스토리 조회 가능 (**로그인 필요**)  
+✅ **스타일 추천** - 사용자의 스타일링 패턴을 분석하여 맞춤 코디 추천  
