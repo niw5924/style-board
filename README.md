@@ -37,5 +37,4 @@
 ✅ **Firebase Authentication, Firebase Functions, Firestore Database**  
 ✅ **SharedPreferences, Path Provider**  
 ✅ **ImagePicker**  
-✅ **fl_chart**  
 ✅ **http**  
