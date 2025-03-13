@@ -36,5 +36,6 @@
 ✅ **Provider**  
 ✅ **Firebase Authentication, Firebase Functions, Firestore Database**  
 ✅ **SharedPreferences, Path Provider**  
-✅ **ImagePicker**  
 ✅ **http**  
+✅ **ImagePicker**  
+✅ **Geolocator**  
