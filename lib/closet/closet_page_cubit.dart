@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -78,19 +81,33 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   }
 
   Future<void> savePhotoWithDetails({
-    required String filePath,
+    required XFile imageFile,
     required String category,
     required Map<String, String?> tags,
     required bool isLiked,
   }) async {
     emit(state.copyWith(isLoading: true));
+
     try {
+      final originalName = imageFile.name;
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = '${originalName}_$timestamp';
+
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('user_photos')
+          .child(_userId)
+          .child(fileName);
+
+      await storageRef.putFile(File(imageFile.path));
+      final downloadUrl = await storageRef.getDownloadURL();
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(_userId)
           .collection('photos')
           .add({
-        'path': filePath,
+        'path': downloadUrl,
         'category': category,
         'tags': tags,
         'isLiked': isLiked,
@@ -98,7 +115,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
       });
 
       final updatedPhotoPaths = List<String>.from(state.photoPaths)
-        ..add(filePath);
+        ..add(downloadUrl);
       final updatedPhotoCategories = List<String>.from(state.photoCategories)
         ..add(category);
       final updatedPhotoTags = List<Map<String, String?>>.from(state.photoTags)

@@ -78,7 +78,7 @@ class _ClosetPageState extends State<ClosetPage> {
                             await context
                                 .read<ClosetPageCubit>()
                                 .savePhotoWithDetails(
-                                  filePath: pickedFile.path,
+                                  imageFile: pickedFile,
                                   category: category,
                                   tags: tags,
                                   isLiked: isLiked,
@@ -117,7 +117,7 @@ class _ClosetPageState extends State<ClosetPage> {
                             await context
                                 .read<ClosetPageCubit>()
                                 .savePhotoWithDetails(
-                                  filePath: pickedFile.path,
+                                  imageFile: pickedFile,
                                   category: category,
                                   tags: tags,
                                   isLiked: isLiked,
@@ -242,8 +242,8 @@ class _ClosetPageState extends State<ClosetPage> {
                                 borderRadius: const BorderRadius.vertical(
                                   top: Radius.circular(12),
                                 ),
-                                child: Image.file(
-                                  File(state.photoPaths[photoIndex]),
+                                child: Image.network(
+                                  state.photoPaths[photoIndex],
                                   width: double.infinity,
                                   height: 180,
                                   fit: BoxFit.fill,

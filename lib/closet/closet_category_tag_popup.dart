@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 Future<Map<String, dynamic>?> closetCategoryTagPopup(
-    BuildContext context, File? photoFile) {
+  BuildContext context,
+  File? photoFile,
+) {
   String? selectedCategory;
   String? selectedSeason;
   String? selectedColor;
