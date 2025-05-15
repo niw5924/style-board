@@ -34,7 +34,7 @@
 ✅ **Flutter, Dart**  
 ✅ **MVU (Cubit, State, Freezed)**  
 ✅ **Provider**  
-✅ **Firebase Authentication, Firebase Functions, Firestore Database**  
+✅ **Firebase Authentication, Firebase Functions, Firestore Database, Firebase Storage**  
 ✅ **SharedPreferences, Path Provider**  
 ✅ **http**  
 ✅ **ImagePicker**  
