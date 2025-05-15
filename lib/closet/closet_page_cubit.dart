@@ -58,10 +58,9 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
 
   Future<XFile?> takePhoto() async {
     try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.camera,
-      );
-      return pickedFile;
+      final pickedXFile =
+          await _imagePicker.pickImage(source: ImageSource.camera);
+      return pickedXFile;
     } catch (e) {
       print(e.toString());
       return null;
@@ -70,10 +69,9 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
 
   Future<XFile?> pickPhotoFromGallery() async {
     try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.gallery,
-      );
-      return pickedFile;
+      final pickedXFile =
+          await _imagePicker.pickImage(source: ImageSource.gallery);
+      return pickedXFile;
     } catch (e) {
       print(e.toString());
       return null;
@@ -81,7 +79,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   }
 
   Future<void> savePhotoWithDetails({
-    required XFile imageFile,
+    required XFile pickedXFile,
     required String category,
     required Map<String, String?> tags,
     required bool isLiked,
@@ -89,7 +87,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final originalName = imageFile.name;
+      final originalName = pickedXFile.name;
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final fileName = '${originalName}_$timestamp';
 
@@ -99,7 +97,8 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
           .child(_userId)
           .child(fileName);
 
-      await storageRef.putFile(File(imageFile.path));
+      final imageFile = File(pickedXFile.path);
+      await storageRef.putFile(imageFile);
       final downloadUrl = await storageRef.getDownloadURL();
 
       await FirebaseFirestore.instance

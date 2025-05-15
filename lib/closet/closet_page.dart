@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,24 +60,25 @@ class _ClosetPageState extends State<ClosetPage> {
                     ElevatedButton.icon(
                       onPressed: () async {
                         HapticFeedback.mediumImpact();
-                        final pickedFile =
+                        final pickedXFile =
                             await context.read<ClosetPageCubit>().takePhoto();
 
-                        if (pickedFile != null) {
-                          final categoryTagData = await closetCategoryTagPopup(
-                              context, File(pickedFile.path));
+                        if (pickedXFile != null) {
+                          final result = await showDialog<Map<String, dynamic>>(
+                            context: context,
+                            builder: (_) => ClosetCategoryTagPopup(
+                                pickedXFile: pickedXFile),
+                          );
 
-                          if (categoryTagData != null) {
-                            final category =
-                                categoryTagData['category'] as String;
-                            final tags =
-                                categoryTagData['tags'] as Map<String, String?>;
-                            final isLiked = categoryTagData['isLiked'] as bool;
+                          if (result != null) {
+                            final category = result['category'] as String;
+                            final tags = result['tags'] as Map<String, String?>;
+                            final isLiked = result['isLiked'] as bool;
 
                             await context
                                 .read<ClosetPageCubit>()
                                 .savePhotoWithDetails(
-                                  imageFile: pickedFile,
+                                  pickedXFile: pickedXFile,
                                   category: category,
                                   tags: tags,
                                   isLiked: isLiked,
@@ -99,25 +99,26 @@ class _ClosetPageState extends State<ClosetPage> {
                     ElevatedButton.icon(
                       onPressed: () async {
                         HapticFeedback.mediumImpact();
-                        final pickedFile = await context
+                        final pickedXFile = await context
                             .read<ClosetPageCubit>()
                             .pickPhotoFromGallery();
 
-                        if (pickedFile != null) {
-                          final categoryTagData = await closetCategoryTagPopup(
-                              context, File(pickedFile.path));
+                        if (pickedXFile != null) {
+                          final result = await showDialog<Map<String, dynamic>>(
+                            context: context,
+                            builder: (_) => ClosetCategoryTagPopup(
+                                pickedXFile: pickedXFile),
+                          );
 
-                          if (categoryTagData != null) {
-                            final category =
-                                categoryTagData['category'] as String;
-                            final tags =
-                                categoryTagData['tags'] as Map<String, String?>;
-                            final isLiked = categoryTagData['isLiked'] as bool;
+                          if (result != null) {
+                            final category = result['category'] as String;
+                            final tags = result['tags'] as Map<String, String?>;
+                            final isLiked = result['isLiked'] as bool;
 
                             await context
                                 .read<ClosetPageCubit>()
                                 .savePhotoWithDetails(
-                                  imageFile: pickedFile,
+                                  pickedXFile: pickedXFile,
                                   category: category,
                                   tags: tags,
                                   isLiked: isLiked,
