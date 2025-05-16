@@ -49,11 +49,11 @@ class _ClosetPageState extends State<ClosetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -140,191 +140,193 @@ class _ClosetPageState extends State<ClosetPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
                 BlocBuilder<ClosetPageCubit, ClosetPageState>(
                   builder: (context, state) {
-                    return Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        if (state.filterCategory != null)
-                          InputChip(
-                            label: Text(state.filterCategory!),
-                            onDeleted: () => context
-                                .read<ClosetPageCubit>()
-                                .updateCategory(null),
-                            onPressed: () => _openFilterSheet('카테고리'),
-                          ),
-                        if (state.filterSeason != null)
-                          InputChip(
-                            label: Text(state.filterSeason!),
-                            onDeleted: () => context
-                                .read<ClosetPageCubit>()
-                                .updateSeason(null),
-                            onPressed: () => _openFilterSheet('계절'),
-                          ),
-                        if (state.filterColor != null)
-                          InputChip(
-                            label: Text(state.filterColor!),
-                            onDeleted: () => context
-                                .read<ClosetPageCubit>()
-                                .updateColor(null),
-                            onPressed: () => _openFilterSheet('색상'),
-                          ),
-                        if (state.filterStyle != null)
-                          InputChip(
-                            label: Text(state.filterStyle!),
-                            onDeleted: () => context
-                                .read<ClosetPageCubit>()
-                                .updateStyle(null),
-                            onPressed: () => _openFilterSheet('스타일'),
-                          ),
-                        if (state.filterPurpose != null)
-                          InputChip(
-                            label: Text(state.filterPurpose!),
-                            onDeleted: () => context
-                                .read<ClosetPageCubit>()
-                                .updatePurpose(null),
-                            onPressed: () => _openFilterSheet('용도'),
-                          ),
-                      ],
+                    return Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: [
+                          if (state.filterCategory != null)
+                            InputChip(
+                              label: Text(state.filterCategory!),
+                              onDeleted: () => context
+                                  .read<ClosetPageCubit>()
+                                  .updateCategory(null),
+                              onPressed: () => _openFilterSheet('카테고리'),
+                            ),
+                          if (state.filterSeason != null)
+                            InputChip(
+                              label: Text(state.filterSeason!),
+                              onDeleted: () => context
+                                  .read<ClosetPageCubit>()
+                                  .updateSeason(null),
+                              onPressed: () => _openFilterSheet('계절'),
+                            ),
+                          if (state.filterColor != null)
+                            InputChip(
+                              label: Text(state.filterColor!),
+                              onDeleted: () => context
+                                  .read<ClosetPageCubit>()
+                                  .updateColor(null),
+                              onPressed: () => _openFilterSheet('색상'),
+                            ),
+                          if (state.filterStyle != null)
+                            InputChip(
+                              label: Text(state.filterStyle!),
+                              onDeleted: () => context
+                                  .read<ClosetPageCubit>()
+                                  .updateStyle(null),
+                              onPressed: () => _openFilterSheet('스타일'),
+                            ),
+                          if (state.filterPurpose != null)
+                            InputChip(
+                              label: Text(state.filterPurpose!),
+                              onDeleted: () => context
+                                  .read<ClosetPageCubit>()
+                                  .updatePurpose(null),
+                              onPressed: () => _openFilterSheet('용도'),
+                            ),
+                        ],
+                      ),
                     );
                   },
                 ),
               ],
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<ClosetPageCubit, ClosetPageState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            Expanded(
+              child: BlocBuilder<ClosetPageCubit, ClosetPageState>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                final filteredItems =
-                    context.read<ClosetPageCubit>().getFilteredClosetItems();
+                  final filteredItems =
+                      context.read<ClosetPageCubit>().getFilteredClosetItems();
 
-                if (filteredItems.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "필터링된 사진이 없습니다.",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  );
-                }
+                  if (filteredItems.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "필터링된 사진이 없습니다.",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
+                  }
 
-                return AutoHeightGridView(
-                  itemCount: filteredItems.length,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  padding: const EdgeInsets.all(16),
-                  builder: (context, index) {
-                    final item = filteredItems[index];
+                  return AutoHeightGridView(
+                    itemCount: filteredItems.length,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    padding: EdgeInsets.zero,
+                    builder: (context, index) {
+                      final item = filteredItems[index];
 
-                    return Card(
-                      elevation: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(12)),
-                                child: Image.network(
-                                  item.path,
-                                  width: double.infinity,
-                                  height: 180,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 2,
-                                right: 2,
-                                child: IconButton(
-                                  icon: Icon(
-                                    item.isLiked
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: item.isLiked
-                                        ? Colors.red
-                                        : Colors.black,
-                                    size: 24,
-                                  ),
-                                  onPressed: () {
-                                    context
-                                        .read<ClosetPageCubit>()
-                                        .togglePhotoLike(item);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      return Card(
+                        elevation: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Stack(
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      item.category,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    PopupMenuButton<String>(
-                                      icon: const Icon(Icons.more_vert),
-                                      onSelected: (value) {
-                                        if (value == 'delete') {
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) => DeletePhotoPopup(
-                                              onConfirm: () {
-                                                context
-                                                    .read<ClosetPageCubit>()
-                                                    .deletePhoto(item);
-                                              },
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      itemBuilder: (context) => [
-                                        const PopupMenuItem(
-                                          value: 'delete',
-                                          child: Text('삭제'),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(12)),
+                                  child: Image.network(
+                                    item.path,
+                                    width: double.infinity,
+                                    height: 180,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
-                                const SizedBox(height: 8),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 4,
-                                  children: [
-                                    _buildTag(item.tags['season']!),
-                                    _buildTag(item.tags['color']!),
-                                    _buildTag(item.tags['style']!),
-                                    _buildTag(item.tags['purpose']!),
-                                  ],
+                                Positioned(
+                                  bottom: 2,
+                                  right: 2,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      item.isLiked
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: item.isLiked
+                                          ? Colors.red
+                                          : Colors.black,
+                                      size: 24,
+                                    ),
+                                    onPressed: () {
+                                      context
+                                          .read<ClosetPageCubit>()
+                                          .togglePhotoLike(item);
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        item.category,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      PopupMenuButton<String>(
+                                        icon: const Icon(Icons.more_vert),
+                                        onSelected: (value) {
+                                          if (value == 'delete') {
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => DeletePhotoPopup(
+                                                onConfirm: () {
+                                                  context
+                                                      .read<ClosetPageCubit>()
+                                                      .deletePhoto(item);
+                                                },
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        itemBuilder: (context) => [
+                                          const PopupMenuItem(
+                                            value: 'delete',
+                                            child: Text('삭제'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 4,
+                                    children: [
+                                      _buildTag(item.tags['season']!),
+                                      _buildTag(item.tags['color']!),
+                                      _buildTag(item.tags['style']!),
+                                      _buildTag(item.tags['purpose']!),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openFilterSheet('카테고리'),
