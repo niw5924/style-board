@@ -255,7 +255,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                   onPressed: () {
                                     context
                                         .read<ClosetPageCubit>()
-                                        .togglePhotoLike(index);
+                                        .togglePhotoLike(item);
                                   },
                                 ),
                               ),
@@ -285,7 +285,9 @@ class _ClosetPageState extends State<ClosetPage> {
                                             context: context,
                                             builder: (_) => DeletePhotoPopup(
                                               onConfirm: () {
-                                                // TODO: 삭제 처리 로직
+                                                context
+                                                    .read<ClosetPageCubit>()
+                                                    .deletePhoto(item);
                                               },
                                             ),
                                           );

@@ -116,34 +116,59 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     }
   }
 
-  void togglePhotoLike(int index) async {
+  void togglePhotoLike(ClosetItem item) async {
+    final index = state.closetItems.indexWhere((e) => e.path == item.path);
+    if (index == -1) return;
+
     final updatedItems = List<ClosetItem>.from(state.closetItems);
-    final currentItem = updatedItems[index];
-    final updatedItem = ClosetItem(
-      path: currentItem.path,
-      category: currentItem.category,
-      tags: currentItem.tags,
-      isLiked: !currentItem.isLiked,
+    updatedItems[index] = ClosetItem(
+      path: item.path,
+      category: item.category,
+      tags: item.tags,
+      isLiked: !item.isLiked,
     );
-    updatedItems[index] = updatedItem;
 
     emit(state.copyWith(closetItems: updatedItems));
 
     try {
-      await FirebaseFirestore.instance
+      final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(_userId)
           .collection('photos')
-          .where('path', isEqualTo: currentItem.path)
-          .get()
-          .then((snapshot) {
-        if (snapshot.docs.isNotEmpty) {
-          snapshot.docs.first.reference
-              .update({'isLiked': updatedItem.isLiked});
-        }
-      });
+          .where('path', isEqualTo: item.path)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.update({
+          'isLiked': !item.isLiked,
+        });
+      }
     } catch (e) {
       print('좋아요 업데이트 중 오류 발생: $e');
+    }
+  }
+
+  Future<void> deletePhoto(ClosetItem item) async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_userId)
+          .collection('photos')
+          .where('path', isEqualTo: item.path)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
+      }
+
+      final updatedItems =
+          state.closetItems.where((e) => e.path != item.path).toList();
+
+      emit(state.copyWith(closetItems: updatedItems, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false));
     }
   }
 
