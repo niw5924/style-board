@@ -6,6 +6,7 @@ import 'package:style_board/closet/closet_category_tag_popup.dart';
 import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/closet/closet_page_state.dart';
+import 'package:style_board/closet/delete_photo_popup.dart';
 
 class ClosetPage extends StatefulWidget {
   const ClosetPage({super.key});
@@ -265,12 +266,39 @@ class _ClosetPageState extends State<ClosetPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  item.category,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      item.category,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    PopupMenuButton<String>(
+                                      icon: const Icon(Icons.more_vert),
+                                      onSelected: (value) {
+                                        if (value == 'delete') {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => DeletePhotoPopup(
+                                              onConfirm: () {
+                                                // TODO: 삭제 처리 로직
+                                              },
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      itemBuilder: (context) => [
+                                        const PopupMenuItem(
+                                          value: 'delete',
+                                          child: Text('삭제'),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 8),
                                 Wrap(
