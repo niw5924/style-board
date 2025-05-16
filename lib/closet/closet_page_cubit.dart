@@ -163,6 +163,13 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
         await snapshot.docs.first.reference.delete();
       }
 
+      try {
+        final storageRef = FirebaseStorage.instance.refFromURL(item.path);
+        await storageRef.delete();
+      } catch (e) {
+        print('Storage 이미지 삭제 중 오류 발생: $e');
+      }
+
       final updatedItems =
           state.closetItems.where((e) => e.path != item.path).toList();
 
