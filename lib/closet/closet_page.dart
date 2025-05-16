@@ -72,7 +72,8 @@ class _ClosetPageState extends State<ClosetPage> {
 
                           if (result != null) {
                             final category = result['category'] as String;
-                            final tags = result['tags'] as Map<String, String?>;
+                            final tags =
+                                Map<String, String>.from(result['tags']);
                             final isLiked = result['isLiked'] as bool;
 
                             await context
@@ -112,7 +113,8 @@ class _ClosetPageState extends State<ClosetPage> {
 
                           if (result != null) {
                             final category = result['category'] as String;
-                            final tags = result['tags'] as Map<String, String?>;
+                            final tags =
+                                Map<String, String>.from(result['tags']);
                             final isLiked = result['isLiked'] as bool;
 
                             await context
@@ -198,20 +200,10 @@ class _ClosetPageState extends State<ClosetPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                // 사진 자체가 없는 경우
-                if (state.photoPaths.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "저장된 사진이 없습니다.",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  );
-                }
+                final filteredItems =
+                    context.read<ClosetPageCubit>().getFilteredClosetItems();
 
-                // 필터링 결과가 없는 경우
-                final filteredIndices =
-                    context.read<ClosetPageCubit>().getFilteredPhotoIndices();
-                if (filteredIndices.isEmpty) {
+                if (filteredItems.isEmpty) {
                   return const Center(
                     child: Text(
                       "필터링된 사진이 없습니다.",
@@ -220,17 +212,14 @@ class _ClosetPageState extends State<ClosetPage> {
                   );
                 }
 
-                // 필터링 결과가 있는 경우
                 return AutoHeightGridView(
-                  itemCount: filteredIndices.length,
+                  itemCount: filteredItems.length,
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   padding: const EdgeInsets.all(16),
                   builder: (context, index) {
-                    final photoIndex = filteredIndices[index];
-                    final category = state.photoCategories[photoIndex];
-                    final tags = state.photoTags[photoIndex];
+                    final item = filteredItems[index];
 
                     return Card(
                       elevation: 2,
@@ -241,10 +230,9 @@ class _ClosetPageState extends State<ClosetPage> {
                             children: [
                               ClipRRect(
                                 borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12),
-                                ),
+                                    top: Radius.circular(12)),
                                 child: Image.network(
-                                  state.photoPaths[photoIndex],
+                                  item.path,
                                   width: double.infinity,
                                   height: 180,
                                   fit: BoxFit.fill,
@@ -255,10 +243,10 @@ class _ClosetPageState extends State<ClosetPage> {
                                 right: 2,
                                 child: IconButton(
                                   icon: Icon(
-                                    state.photoLikes[photoIndex]
+                                    item.isLiked
                                         ? Icons.favorite
                                         : Icons.favorite_border,
-                                    color: state.photoLikes[photoIndex]
+                                    color: item.isLiked
                                         ? Colors.red
                                         : Colors.black,
                                     size: 24,
@@ -266,7 +254,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                   onPressed: () {
                                     context
                                         .read<ClosetPageCubit>()
-                                        .togglePhotoLike(photoIndex);
+                                        .togglePhotoLike(index);
                                   },
                                 ),
                               ),
@@ -278,7 +266,7 @@ class _ClosetPageState extends State<ClosetPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  category,
+                                  item.category,
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -289,10 +277,10 @@ class _ClosetPageState extends State<ClosetPage> {
                                   spacing: 8,
                                   runSpacing: 4,
                                   children: [
-                                    _buildTag(tags['season'] ?? ''),
-                                    _buildTag(tags['color'] ?? ''),
-                                    _buildTag(tags['style'] ?? ''),
-                                    _buildTag(tags['purpose'] ?? ''),
+                                    _buildTag(item.tags['season']!),
+                                    _buildTag(item.tags['color']!),
+                                    _buildTag(item.tags['style']!),
+                                    _buildTag(item.tags['purpose']!),
                                   ],
                                 ),
                               ],

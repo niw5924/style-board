@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/closet/closet_page_state.dart';
+import 'closet_item.dart';
+import 'closet_page_state.dart';
 
 class ClosetPageCubit extends Cubit<ClosetPageState> {
   final AuthProvider authProvider;
@@ -16,7 +17,6 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   String get _userId => authProvider.user!.uid;
 
   Future<void> loadUserPhotos() async {
-    // 필터 상태 초기화
     emit(state.copyWith(
       filterCategory: null,
       filterSeason: null,
@@ -34,23 +34,16 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
           .orderBy('timestamp', descending: false)
           .get();
 
-      final photoPaths =
-          snapshot.docs.map((doc) => doc['path'] as String).toList();
-      final photoCategories =
-          snapshot.docs.map((doc) => doc['category'] as String).toList();
-      final photoTags = snapshot.docs
-          .map((doc) => Map<String, String?>.from(doc['tags'] as Map))
-          .toList();
-      final photoLikes =
-          snapshot.docs.map((doc) => doc['isLiked'] as bool).toList();
+      final items = snapshot.docs.map((doc) {
+        return ClosetItem(
+          path: doc['path'] as String,
+          category: doc['category'] as String,
+          tags: Map<String, String>.from(doc['tags'] as Map),
+          isLiked: doc['isLiked'] as bool,
+        );
+      }).toList();
 
-      emit(state.copyWith(
-        photoPaths: photoPaths,
-        photoCategories: photoCategories,
-        photoTags: photoTags,
-        photoLikes: photoLikes,
-        isLoading: false,
-      ));
+      emit(state.copyWith(closetItems: items, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
     }
@@ -58,22 +51,16 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
 
   Future<XFile?> takePhoto() async {
     try {
-      final pickedXFile =
-          await _imagePicker.pickImage(source: ImageSource.camera);
-      return pickedXFile;
+      return await _imagePicker.pickImage(source: ImageSource.camera);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
 
   Future<XFile?> pickPhotoFromGallery() async {
     try {
-      final pickedXFile =
-          await _imagePicker.pickImage(source: ImageSource.gallery);
-      return pickedXFile;
+      return await _imagePicker.pickImage(source: ImageSource.gallery);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -81,7 +68,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   Future<void> savePhotoWithDetails({
     required XFile pickedXFile,
     required String category,
-    required Map<String, String?> tags,
+    required Map<String, String> tags,
     required bool isLiked,
   }) async {
     emit(state.copyWith(isLoading: true));
@@ -113,19 +100,15 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      final updatedPhotoPaths = List<String>.from(state.photoPaths)
-        ..add(downloadUrl);
-      final updatedPhotoCategories = List<String>.from(state.photoCategories)
-        ..add(category);
-      final updatedPhotoTags = List<Map<String, String?>>.from(state.photoTags)
-        ..add(tags);
-      final updatedPhotoLikes = List<bool>.from(state.photoLikes)..add(isLiked);
+      final newItem = ClosetItem(
+        path: downloadUrl,
+        category: category,
+        tags: tags,
+        isLiked: isLiked,
+      );
 
       emit(state.copyWith(
-        photoPaths: updatedPhotoPaths,
-        photoCategories: updatedPhotoCategories,
-        photoTags: updatedPhotoTags,
-        photoLikes: updatedPhotoLikes,
+        closetItems: [...state.closetItems, newItem],
         isLoading: false,
       ));
     } catch (e) {
@@ -134,61 +117,55 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
   }
 
   void togglePhotoLike(int index) async {
-    final updatedLikes = List<bool>.from(state.photoLikes);
-    updatedLikes[index] = !updatedLikes[index];
+    final updatedItems = List<ClosetItem>.from(state.closetItems);
+    final currentItem = updatedItems[index];
+    final updatedItem = ClosetItem(
+      path: currentItem.path,
+      category: currentItem.category,
+      tags: currentItem.tags,
+      isLiked: !currentItem.isLiked,
+    );
+    updatedItems[index] = updatedItem;
 
-    emit(state.copyWith(photoLikes: updatedLikes));
+    emit(state.copyWith(closetItems: updatedItems));
 
     try {
-      final photoPath = state.photoPaths[index];
       await FirebaseFirestore.instance
           .collection('users')
           .doc(_userId)
           .collection('photos')
-          .where('path', isEqualTo: photoPath)
+          .where('path', isEqualTo: currentItem.path)
           .get()
           .then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          snapshot.docs.first.reference.update({
-            'isLiked': updatedLikes[index],
-          });
+          snapshot.docs.first.reference
+              .update({'isLiked': updatedItem.isLiked});
         }
       });
     } catch (e) {
-      print("Error updating like status: $e");
+      print('좋아요 업데이트 중 오류 발생: $e');
     }
   }
 
-  // 필터 조건에 맞는 사진 인덱스를 반환하는 메서드 추가
-  List<int> getFilteredPhotoIndices() {
-    final indices = <int>[];
+  List<ClosetItem> getFilteredClosetItems() {
+    return state.closetItems.where((item) {
+      final matchCategory =
+          state.filterCategory == null || item.category == state.filterCategory;
+      final matchSeason = state.filterSeason == null ||
+          item.tags['season'] == state.filterSeason;
+      final matchColor =
+          state.filterColor == null || item.tags['color'] == state.filterColor;
+      final matchStyle =
+          state.filterStyle == null || item.tags['style'] == state.filterStyle;
+      final matchPurpose = state.filterPurpose == null ||
+          item.tags['purpose'] == state.filterPurpose;
 
-    for (int i = 0; i < state.photoPaths.length; i++) {
-      final matchesCategory = state.filterCategory == null ||
-          state.photoCategories[i] == state.filterCategory;
-
-      final matchesSeason = state.filterSeason == null ||
-          state.photoTags[i]['season'] == state.filterSeason;
-
-      final matchesColor = state.filterColor == null ||
-          state.photoTags[i]['color'] == state.filterColor;
-
-      final matchesStyle = state.filterStyle == null ||
-          state.photoTags[i]['style'] == state.filterStyle;
-
-      final matchesPurpose = state.filterPurpose == null ||
-          state.photoTags[i]['purpose'] == state.filterPurpose;
-
-      if (matchesCategory &&
-          matchesSeason &&
-          matchesColor &&
-          matchesStyle &&
-          matchesPurpose) {
-        indices.add(i);
-      }
-    }
-
-    return indices;
+      return matchCategory &&
+          matchSeason &&
+          matchColor &&
+          matchStyle &&
+          matchPurpose;
+    }).toList();
   }
 
   void updateCategory(String? category) {
