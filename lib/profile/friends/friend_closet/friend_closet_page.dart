@@ -1,6 +1,7 @@
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:style_board/widgets/tag_chip.dart';
 import 'friend_closet_page_cubit.dart';
 import 'friend_closet_page_state.dart';
 
@@ -110,10 +111,10 @@ class _FriendClosetPageState extends State<FriendClosetPage> {
                             spacing: 8,
                             runSpacing: 4,
                             children: [
-                              _buildTag(item.tags['season']!),
-                              _buildTag(item.tags['color']!),
-                              _buildTag(item.tags['style']!),
-                              _buildTag(item.tags['purpose']!),
+                              TagChip(text: item.tags['season']!),
+                              TagChip(text: item.tags['color']!),
+                              TagChip(text: item.tags['style']!),
+                              TagChip(text: item.tags['purpose']!),
                             ],
                           ),
                         ],
@@ -125,23 +126,6 @@ class _FriendClosetPageState extends State<FriendClosetPage> {
             },
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildTag(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onSurface,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.surface,
-          fontSize: 12,
-        ),
       ),
     );
   }

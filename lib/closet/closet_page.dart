@@ -7,6 +7,7 @@ import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/closet/closet_page_state.dart';
 import 'package:style_board/closet/delete_photo_popup.dart';
+import 'package:style_board/widgets/tag_chip.dart';
 
 class ClosetPage extends StatefulWidget {
   const ClosetPage({super.key});
@@ -308,10 +309,10 @@ class _ClosetPageState extends State<ClosetPage> {
                                     spacing: 8,
                                     runSpacing: 4,
                                     children: [
-                                      _buildTag(item.tags['season']!),
-                                      _buildTag(item.tags['color']!),
-                                      _buildTag(item.tags['style']!),
-                                      _buildTag(item.tags['purpose']!),
+                                      TagChip(text: item.tags['season']!),
+                                      TagChip(text: item.tags['color']!),
+                                      TagChip(text: item.tags['style']!),
+                                      TagChip(text: item.tags['purpose']!),
                                     ],
                                   ),
                                 ],
@@ -331,23 +332,6 @@ class _ClosetPageState extends State<ClosetPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openFilterSheet('카테고리'),
         child: const Icon(Icons.filter_list),
-      ),
-    );
-  }
-
-  Widget _buildTag(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onSurface,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.surface,
-          fontSize: 12,
-        ),
       ),
     );
   }
