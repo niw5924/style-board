@@ -134,14 +134,14 @@ class Styling3DPage extends StatelessWidget {
   }
 
   /// 카테고리 선택 UI
-  void _showCategorySelectionSheet(BuildContext context) {
+  void _showCategorySelectionSheet(BuildContext scaffoldContext) {
     showModalBottomSheet(
-      context: context,
+      context: scaffoldContext,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) {
+      builder: (_) {
         return FractionallySizedBox(
           heightFactor: 0.7,
           child: Column(
@@ -182,7 +182,7 @@ class Styling3DPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
                 child: ElevatedButton(
-                  onPressed: () => _start3DConversion(context),
+                  onPressed: () => _start3DConversion(scaffoldContext),
                   child: const Text('변환하기'),
                 ),
               ),
@@ -194,23 +194,29 @@ class Styling3DPage extends StatelessWidget {
   }
 
   /// 3D 변환
-  void _start3DConversion(BuildContext context) {
+  void _start3DConversion(BuildContext scaffoldContext) async {
     final selectedPhotos =
-        context.read<StylingPageCubit>().state.selectedPhotos;
+        scaffoldContext.read<StylingPageCubit>().state.selectedPhotos;
 
     if (selectedPhotos.isNotEmpty) {
-      Navigator.pop(context);
+      Navigator.pop(scaffoldContext);
 
-      List<String> imagePaths = selectedPhotos.values.toList();
-      List<String> categories = selectedPhotos.keys.toList();
+      final imagePaths = selectedPhotos.values.toList();
+      final categories = selectedPhotos.keys.toList();
 
-      context
-          .read<Styling3DPageCubit>()
-          .convertImagesTo3DModels(imagePaths, categories, 0);
+      try {
+        await scaffoldContext
+            .read<Styling3DPageCubit>()
+            .convertImagesTo3DModels(imagePaths, categories, 0);
+      } catch (e) {
+        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     } else {
-      Navigator.pop(context);
+      Navigator.pop(scaffoldContext);
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(scaffoldContext).showSnackBar(
         const SnackBar(content: Text('옷을 선택해주세요!')),
       );
     }

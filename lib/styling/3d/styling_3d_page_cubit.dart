@@ -21,11 +21,13 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
     return categoryToEnglish[category]!;
   }
 
-  /// 로컬 이미지 파일을 Base64로 변환
-  Future<String> _convertImageToBase64(String imagePath) async {
-    File imageFile = File(imagePath);
-    List<int> imageBytes = await imageFile.readAsBytes();
-    return "data:image/png;base64,${base64Encode(imageBytes)}";
+  /// Firebase Storage 이미지 URL을 Base64 문자열로 변환
+  Future<String> _convertImageToBase64(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+    if (response.statusCode != 200) {
+      throw Exception('이미지 다운로드 실패: ${response.statusCode}');
+    }
+    return "data:image/png;base64,${base64Encode(response.bodyBytes)}";
   }
 
   /// GLB 파일 다운로드 및 로컬 저장
@@ -156,11 +158,12 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
         await _checkJobStatus(taskId, category, imagePaths, categories, index);
       } else {
         print('[$category] 변환 요청 실패 (응답 데이터 없음)');
-        emit(state.copyWith(isLoading: {...state.isLoading, category: false}));
+        throw '[$category] 변환 요청 실패: 서버에서 Task ID를 받지 못했습니다.';
       }
     } catch (e) {
       print('[$category] 변환 중 오류 발생: $e');
       emit(state.copyWith(isLoading: {...state.isLoading, category: false}));
+      throw '[$category] 변환 중 오류 발생';
     }
   }
 
