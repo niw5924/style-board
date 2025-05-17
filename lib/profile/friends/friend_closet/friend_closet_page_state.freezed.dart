@@ -17,13 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FriendClosetPageState {
   bool get isLoading => throw _privateConstructorUsedError;
-  List<String> get friendPhotoPaths =>
-      throw _privateConstructorUsedError; // 친구 사진 경로 목록
-  List<String> get friendPhotoCategories =>
-      throw _privateConstructorUsedError; // 친구 사진 카테고리
-  List<Map<String, String?>> get friendPhotoTags =>
-      throw _privateConstructorUsedError; // 친구 사진 태그 정보
-  List<bool> get friendPhotoLikes => throw _privateConstructorUsedError;
+  List<ClosetItem> get friendClosetItems => throw _privateConstructorUsedError;
 
   /// Create a copy of FriendClosetPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,12 +32,7 @@ abstract class $FriendClosetPageStateCopyWith<$Res> {
           $Res Function(FriendClosetPageState) then) =
       _$FriendClosetPageStateCopyWithImpl<$Res, FriendClosetPageState>;
   @useResult
-  $Res call(
-      {bool isLoading,
-      List<String> friendPhotoPaths,
-      List<String> friendPhotoCategories,
-      List<Map<String, String?>> friendPhotoTags,
-      List<bool> friendPhotoLikes});
+  $Res call({bool isLoading, List<ClosetItem> friendClosetItems});
 }
 
 /// @nodoc
@@ -63,32 +52,17 @@ class _$FriendClosetPageStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? isLoading = null,
-    Object? friendPhotoPaths = null,
-    Object? friendPhotoCategories = null,
-    Object? friendPhotoTags = null,
-    Object? friendPhotoLikes = null,
+    Object? friendClosetItems = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      friendPhotoPaths: null == friendPhotoPaths
-          ? _value.friendPhotoPaths
-          : friendPhotoPaths // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      friendPhotoCategories: null == friendPhotoCategories
-          ? _value.friendPhotoCategories
-          : friendPhotoCategories // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      friendPhotoTags: null == friendPhotoTags
-          ? _value.friendPhotoTags
-          : friendPhotoTags // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, String?>>,
-      friendPhotoLikes: null == friendPhotoLikes
-          ? _value.friendPhotoLikes
-          : friendPhotoLikes // ignore: cast_nullable_to_non_nullable
-              as List<bool>,
+      friendClosetItems: null == friendClosetItems
+          ? _value.friendClosetItems
+          : friendClosetItems // ignore: cast_nullable_to_non_nullable
+              as List<ClosetItem>,
     ) as $Val);
   }
 }
@@ -102,12 +76,7 @@ abstract class _$$FriendClosetPageStateImplCopyWith<$Res>
       __$$FriendClosetPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool isLoading,
-      List<String> friendPhotoPaths,
-      List<String> friendPhotoCategories,
-      List<Map<String, String?>> friendPhotoTags,
-      List<bool> friendPhotoLikes});
+  $Res call({bool isLoading, List<ClosetItem> friendClosetItems});
 }
 
 /// @nodoc
@@ -125,32 +94,17 @@ class __$$FriendClosetPageStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? friendPhotoPaths = null,
-    Object? friendPhotoCategories = null,
-    Object? friendPhotoTags = null,
-    Object? friendPhotoLikes = null,
+    Object? friendClosetItems = null,
   }) {
     return _then(_$FriendClosetPageStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      friendPhotoPaths: null == friendPhotoPaths
-          ? _value._friendPhotoPaths
-          : friendPhotoPaths // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      friendPhotoCategories: null == friendPhotoCategories
-          ? _value._friendPhotoCategories
-          : friendPhotoCategories // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      friendPhotoTags: null == friendPhotoTags
-          ? _value._friendPhotoTags
-          : friendPhotoTags // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, String?>>,
-      friendPhotoLikes: null == friendPhotoLikes
-          ? _value._friendPhotoLikes
-          : friendPhotoLikes // ignore: cast_nullable_to_non_nullable
-              as List<bool>,
+      friendClosetItems: null == friendClosetItems
+          ? _value._friendClosetItems
+          : friendClosetItems // ignore: cast_nullable_to_non_nullable
+              as List<ClosetItem>,
     ));
   }
 }
@@ -160,66 +114,25 @@ class __$$FriendClosetPageStateImplCopyWithImpl<$Res>
 class _$FriendClosetPageStateImpl implements _FriendClosetPageState {
   const _$FriendClosetPageStateImpl(
       {this.isLoading = true,
-      final List<String> friendPhotoPaths = const [],
-      final List<String> friendPhotoCategories = const [],
-      final List<Map<String, String?>> friendPhotoTags = const [],
-      final List<bool> friendPhotoLikes = const []})
-      : _friendPhotoPaths = friendPhotoPaths,
-        _friendPhotoCategories = friendPhotoCategories,
-        _friendPhotoTags = friendPhotoTags,
-        _friendPhotoLikes = friendPhotoLikes;
+      final List<ClosetItem> friendClosetItems = const []})
+      : _friendClosetItems = friendClosetItems;
 
   @override
   @JsonKey()
   final bool isLoading;
-  final List<String> _friendPhotoPaths;
+  final List<ClosetItem> _friendClosetItems;
   @override
   @JsonKey()
-  List<String> get friendPhotoPaths {
-    if (_friendPhotoPaths is EqualUnmodifiableListView)
-      return _friendPhotoPaths;
+  List<ClosetItem> get friendClosetItems {
+    if (_friendClosetItems is EqualUnmodifiableListView)
+      return _friendClosetItems;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_friendPhotoPaths);
-  }
-
-// 친구 사진 경로 목록
-  final List<String> _friendPhotoCategories;
-// 친구 사진 경로 목록
-  @override
-  @JsonKey()
-  List<String> get friendPhotoCategories {
-    if (_friendPhotoCategories is EqualUnmodifiableListView)
-      return _friendPhotoCategories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_friendPhotoCategories);
-  }
-
-// 친구 사진 카테고리
-  final List<Map<String, String?>> _friendPhotoTags;
-// 친구 사진 카테고리
-  @override
-  @JsonKey()
-  List<Map<String, String?>> get friendPhotoTags {
-    if (_friendPhotoTags is EqualUnmodifiableListView) return _friendPhotoTags;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_friendPhotoTags);
-  }
-
-// 친구 사진 태그 정보
-  final List<bool> _friendPhotoLikes;
-// 친구 사진 태그 정보
-  @override
-  @JsonKey()
-  List<bool> get friendPhotoLikes {
-    if (_friendPhotoLikes is EqualUnmodifiableListView)
-      return _friendPhotoLikes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_friendPhotoLikes);
+    return EqualUnmodifiableListView(_friendClosetItems);
   }
 
   @override
   String toString() {
-    return 'FriendClosetPageState(isLoading: $isLoading, friendPhotoPaths: $friendPhotoPaths, friendPhotoCategories: $friendPhotoCategories, friendPhotoTags: $friendPhotoTags, friendPhotoLikes: $friendPhotoLikes)';
+    return 'FriendClosetPageState(isLoading: $isLoading, friendClosetItems: $friendClosetItems)';
   }
 
   @override
@@ -230,23 +143,12 @@ class _$FriendClosetPageStateImpl implements _FriendClosetPageState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality()
-                .equals(other._friendPhotoPaths, _friendPhotoPaths) &&
-            const DeepCollectionEquality()
-                .equals(other._friendPhotoCategories, _friendPhotoCategories) &&
-            const DeepCollectionEquality()
-                .equals(other._friendPhotoTags, _friendPhotoTags) &&
-            const DeepCollectionEquality()
-                .equals(other._friendPhotoLikes, _friendPhotoLikes));
+                .equals(other._friendClosetItems, _friendClosetItems));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      isLoading,
-      const DeepCollectionEquality().hash(_friendPhotoPaths),
-      const DeepCollectionEquality().hash(_friendPhotoCategories),
-      const DeepCollectionEquality().hash(_friendPhotoTags),
-      const DeepCollectionEquality().hash(_friendPhotoLikes));
+  int get hashCode => Object.hash(runtimeType, isLoading,
+      const DeepCollectionEquality().hash(_friendClosetItems));
 
   /// Create a copy of FriendClosetPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -261,21 +163,12 @@ class _$FriendClosetPageStateImpl implements _FriendClosetPageState {
 abstract class _FriendClosetPageState implements FriendClosetPageState {
   const factory _FriendClosetPageState(
       {final bool isLoading,
-      final List<String> friendPhotoPaths,
-      final List<String> friendPhotoCategories,
-      final List<Map<String, String?>> friendPhotoTags,
-      final List<bool> friendPhotoLikes}) = _$FriendClosetPageStateImpl;
+      final List<ClosetItem> friendClosetItems}) = _$FriendClosetPageStateImpl;
 
   @override
   bool get isLoading;
   @override
-  List<String> get friendPhotoPaths; // 친구 사진 경로 목록
-  @override
-  List<String> get friendPhotoCategories; // 친구 사진 카테고리
-  @override
-  List<Map<String, String?>> get friendPhotoTags; // 친구 사진 태그 정보
-  @override
-  List<bool> get friendPhotoLikes;
+  List<ClosetItem> get friendClosetItems;
 
   /// Create a copy of FriendClosetPageState
   /// with the given fields replaced by the non-null parameter values.
