@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'closet_item.dart';
+import '../models/closet_item.dart';
 
 part 'closet_page_state.freezed.dart';
 

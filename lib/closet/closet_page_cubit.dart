@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'closet_item.dart';
+import '../models/closet_item.dart';
 import 'closet_page_state.dart';
 
 class ClosetPageCubit extends Cubit<ClosetPageState> {

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:style_board/closet/closet_item.dart';
+import 'package:style_board/models/closet_item.dart';
 
 part 'friend_closet_page_state.freezed.dart';
 

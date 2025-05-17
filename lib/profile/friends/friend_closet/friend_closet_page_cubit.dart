@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:style_board/closet/closet_item.dart';
+import 'package:style_board/models/closet_item.dart';
 import 'friend_closet_page_state.dart';
 
 class FriendClosetPageCubit extends Cubit<FriendClosetPageState> {
