@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:style_board/styling/3d/styling_3d_page_cubit.dart';
 import 'package:style_board/styling/3d/styling_3d_page_state.dart';
-import 'package:style_board/styling/category_tile.dart';
+import 'package:style_board/widgets/category_tile.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 
 class Styling3DPage extends StatelessWidget {

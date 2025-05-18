@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:style_board/styling/category_tile.dart';
+import 'package:style_board/widgets/category_tile.dart';
 
 class Styling2DPage extends StatelessWidget {
   const Styling2DPage({super.key});
