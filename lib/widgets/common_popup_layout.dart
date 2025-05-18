@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CommonPopupLayout extends StatefulWidget {
@@ -26,12 +27,20 @@ class CommonPopupLayout extends StatefulWidget {
 
 class _CommonPopupLayoutState extends State<CommonPopupLayout> {
   String? errorMessage;
+  Timer? _errorTimer;
 
   void _showError(String message) {
     setState(() => errorMessage = message);
-    Future.delayed(const Duration(seconds: 2), () {
+    _errorTimer?.cancel();
+    _errorTimer = Timer(const Duration(seconds: 2), () {
       if (mounted) setState(() => errorMessage = null);
     });
+  }
+
+  @override
+  void dispose() {
+    _errorTimer?.cancel();
+    super.dispose();
   }
 
   @override
