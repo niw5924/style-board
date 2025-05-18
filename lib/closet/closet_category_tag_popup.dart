@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:style_board/widgets/common_popup_layout.dart';
 
 class ClosetCategoryTagPopup extends StatefulWidget {
   final XFile pickedXFile;
@@ -18,8 +19,6 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
   String? selectedStyle;
   String? selectedPurpose;
   bool isLiked = false;
-  bool showError = false;
-  String errorMessage = '';
 
   final categories = ['상의', '하의', '아우터', '신발'];
   final seasons = ['봄', '여름', '가을', '겨울'];
@@ -31,156 +30,112 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
   Widget build(BuildContext context) {
     final imageFile = File(widget.pickedXFile.path);
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      insetPadding: const EdgeInsets.all(16),
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    imageFile,
-                    width: double.infinity,
-                    height: 260,
-                    fit: BoxFit.fill,
-                  ),
+    return CommonPopupLayout(
+      icon: Icons.category,
+      title: '카테고리 및 태그 설정',
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(
+                  imageFile,
+                  width: double.infinity,
+                  height: 260,
+                  fit: BoxFit.fill,
                 ),
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: Icon(
-                      isLiked ? Icons.favorite : Icons.favorite_border,
-                      color: isLiked ? Colors.red : Colors.black,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isLiked = !isLiked;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              '카테고리 및 태그 설정',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            const SizedBox(height: 16),
-            _buildDropdown(
-              label: '카테고리 선택',
-              items: categories,
-              onChanged: (value) => setState(() => selectedCategory = value),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildDropdown(
-                    label: '계절 선택',
-                    items: seasons,
-                    onChanged: (value) =>
-                        setState(() => selectedSeason = value),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _buildDropdown(
-                    label: '색상 선택',
-                    items: colors,
-                    onChanged: (value) => setState(() => selectedColor = value),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildDropdown(
-                    label: '스타일 선택',
-                    items: styles,
-                    onChanged: (value) => setState(() => selectedStyle = value),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _buildDropdown(
-                    label: '용도 선택',
-                    items: purposes,
-                    onChanged: (value) =>
-                        setState(() => selectedPurpose = value),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            AnimatedOpacity(
-              opacity: showError ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: Text(
-                errorMessage,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('취소'),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
+              Positioned(
+                bottom: 8,
+                right: 8,
+                child: IconButton(
+                  icon: Icon(
+                    isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: isLiked ? Colors.red : Colors.black,
+                  ),
                   onPressed: () {
-                    if (selectedCategory != null &&
-                        selectedSeason != null &&
-                        selectedColor != null &&
-                        selectedStyle != null &&
-                        selectedPurpose != null) {
-                      Navigator.pop(context, {
-                        'category': selectedCategory,
-                        'tags': {
-                          'season': selectedSeason,
-                          'color': selectedColor,
-                          'style': selectedStyle,
-                          'purpose': selectedPurpose,
-                        },
-                        'isLiked': isLiked,
-                      });
-                    } else {
-                      setState(() {
-                        showError = true;
-                        errorMessage = '모든 태그를 설정해주세요.';
-                      });
-                      Future.delayed(const Duration(seconds: 2), () {
-                        if (mounted) {
-                          setState(() {
-                            showError = false;
-                            errorMessage = '';
-                          });
-                        }
-                      });
-                    }
+                    setState(() {
+                      isLiked = !isLiked;
+                    });
                   },
-                  child: const Text('완료'),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildDropdown(
+            label: '카테고리 선택',
+            items: categories,
+            onChanged: (value) => setState(() => selectedCategory = value),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _buildDropdown(
+                  label: '계절 선택',
+                  items: seasons,
+                  onChanged: (value) => setState(() => selectedSeason = value),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildDropdown(
+                  label: '색상 선택',
+                  items: colors,
+                  onChanged: (value) => setState(() => selectedColor = value),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _buildDropdown(
+                  label: '스타일 선택',
+                  items: styles,
+                  onChanged: (value) => setState(() => selectedStyle = value),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildDropdown(
+                  label: '용도 선택',
+                  items: purposes,
+                  onChanged: (value) => setState(() => selectedPurpose = value),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
+      cancelText: '취소',
+      confirmText: '완료',
+      onCancel: () => Navigator.pop(context),
+      onConfirm: () async {
+        if (selectedCategory != null &&
+            selectedSeason != null &&
+            selectedColor != null &&
+            selectedStyle != null &&
+            selectedPurpose != null) {
+          Navigator.pop(context, {
+            'category': selectedCategory,
+            'tags': {
+              'season': selectedSeason,
+              'color': selectedColor,
+              'style': selectedStyle,
+              'purpose': selectedPurpose,
+            },
+            'isLiked': isLiked,
+          });
+          return null;
+        } else {
+          return '모든 태그를 설정해주세요.';
+        }
+      },
     );
   }
 
