@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:style_board/widgets/common_popup_layout.dart';
+import 'package:style_board/constants/closet_category_and_tags.dart';
 
 class ClosetCategoryTagPopup extends StatefulWidget {
   final XFile pickedXFile;
@@ -19,12 +20,6 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
   String? selectedStyle;
   String? selectedPurpose;
   bool isLiked = false;
-
-  final categories = ['상의', '하의', '아우터', '신발'];
-  final seasons = ['봄', '여름', '가을', '겨울'];
-  final colors = ['빨강', '파랑', '초록', '노랑', '검정', '흰색', '회색', '보라', '베이지', '갈색'];
-  final styles = ['캐주얼', '포멀', '스포티', '트렌디', '빈티지', '모던'];
-  final purposes = ['일상', '운동', '여행', '파티', '출근', '데이트'];
 
   @override
   Widget build(BuildContext context) {
@@ -116,25 +111,28 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
       confirmText: '완료',
       onCancel: () => Navigator.pop(context),
       onConfirm: () async {
-        if (selectedCategory != null &&
-            selectedSeason != null &&
-            selectedColor != null &&
-            selectedStyle != null &&
-            selectedPurpose != null) {
-          Navigator.pop(context, {
-            'category': selectedCategory,
-            'tags': {
-              'season': selectedSeason,
-              'color': selectedColor,
-              'style': selectedStyle,
-              'purpose': selectedPurpose,
-            },
-            'isLiked': isLiked,
-          });
-          return null;
-        } else {
+        if (selectedCategory == null) {
+          return '카테고리를 선택해주세요.';
+        }
+        if (selectedSeason == null ||
+            selectedColor == null ||
+            selectedStyle == null ||
+            selectedPurpose == null) {
           return '모든 태그를 설정해주세요.';
         }
+
+        Navigator.pop(context, {
+          'category': selectedCategory,
+          'tags': {
+            'season': selectedSeason,
+            'color': selectedColor,
+            'style': selectedStyle,
+            'purpose': selectedPurpose,
+          },
+          'isLiked': isLiked,
+        });
+
+        return null;
       },
     );
   }
