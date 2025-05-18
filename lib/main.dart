@@ -14,6 +14,9 @@ import 'package:style_board/profile/weather/weather_page_cubit.dart';
 import 'package:style_board/styling/3d/styling_3d_page_cubit.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
@@ -21,7 +24,7 @@ void main() async {
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']!);
 
   final authProvider = AuthProvider();
-  await authProvider.checkLoginState(); // 로그인 상태 체크
+  await authProvider.checkLoginState();
 
   runApp(
     MultiProvider(
@@ -29,11 +32,13 @@ void main() async {
         ChangeNotifierProvider(create: (_) => authProvider),
         BlocProvider(create: (_) => HomePageCubit()),
         BlocProvider(
-            create: (context) => ClosetPageCubit(context.read<AuthProvider>())),
+          create: (context) => ClosetPageCubit(context.read<AuthProvider>()),
+        ),
         BlocProvider(create: (_) => WeatherCubit()),
         BlocProvider(
-            create: (context) =>
-                ProfileDetailPageCubit(context.read<AuthProvider>())),
+          create: (context) =>
+              ProfileDetailPageCubit(context.read<AuthProvider>()),
+        ),
       ],
       child: const StyleBoard(),
     ),
@@ -61,6 +66,7 @@ class StyleBoard extends StatelessWidget {
             ),
           ],
           child: MaterialApp(
+            scaffoldMessengerKey: scaffoldMessengerKey,
             title: 'Style Board',
             theme: ThemeData(
               useMaterial3: true,

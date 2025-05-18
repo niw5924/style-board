@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/profile/my_picks/my_pick_delete_popup.dart';
+import 'package:style_board/main.dart'; // scaffoldMessengerKey를 참조하기 위해 필요
 
 class MyPicksPage extends StatelessWidget {
   const MyPicksPage({super.key});
@@ -130,7 +131,38 @@ class _PickCardState extends State<_PickCard> {
               trailing: IconButton(
                 icon: Icon(Icons.delete,
                     color: Theme.of(context).colorScheme.error),
-                onPressed: () => _showDeletePopup(context),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return MyPickDeletePopup(
+                        pickName: widget.pickName,
+                        onConfirm: () async {
+                          final userId =
+                              Provider.of<AuthProvider>(context, listen: false)
+                                  .user!
+                                  .uid;
+                          try {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(userId)
+                                .collection('myPicks')
+                                .doc(widget.pickId)
+                                .delete();
+
+                            scaffoldMessengerKey.currentState?.showSnackBar(
+                              const SnackBar(content: Text('Pick이 삭제되었습니다.')),
+                            );
+                          } catch (e) {
+                            scaffoldMessengerKey.currentState?.showSnackBar(
+                              const SnackBar(content: Text('삭제 중 오류가 발생했습니다.')),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
               ),
             ),
             if (_isExpanded)
@@ -187,38 +219,5 @@ class _PickCardState extends State<_PickCard> {
         ),
       ),
     );
-  }
-
-  void _showDeletePopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return MyPickDeletePopup(
-          pickName: widget.pickName,
-          onConfirm: _deletePick,
-        );
-      },
-    );
-  }
-
-  Future<void> _deletePick() async {
-    final userId = Provider.of<AuthProvider>(context, listen: false).user!.uid;
-
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('myPicks')
-          .doc(widget.pickId)
-          .delete();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pick이 삭제되었습니다.')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('삭제 중 오류가 발생했습니다.')),
-      );
-    }
   }
 }
