@@ -124,8 +124,8 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                           showDialog(
                             context: context,
                             builder: (context) => ClosetResetPopup(
-                              onConfirm: () {
-                                context
+                              onConfirm: () async {
+                                await context
                                     .read<ProfileDetailPageCubit>()
                                     .resetCloset();
                               },

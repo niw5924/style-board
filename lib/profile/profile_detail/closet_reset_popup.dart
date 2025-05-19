@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ClosetResetPopup extends StatelessWidget {
-  final VoidCallback onConfirm;
+  final Future<void> Function() onConfirm;
 
   const ClosetResetPopup({super.key, required this.onConfirm});
 
@@ -45,9 +45,9 @@ class ClosetResetPopup extends StatelessWidget {
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pop(context);
-                    onConfirm();
+                    await onConfirm();
                   },
                   child: const Text('확인'),
                 ),
