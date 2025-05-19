@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:style_board/main.dart';
 import 'package:style_board/styling/2d/styling_2d_page.dart';
 import 'package:style_board/styling/3d/styling_3d_page.dart';
 import 'package:style_board/styling/add_my_pick_popup.dart';
@@ -112,7 +113,7 @@ class StylingPage extends StatelessWidget {
   void _resetRepresentativePhotos(BuildContext context) {
     final cubit = context.read<StylingPageCubit>();
     cubit.resetAllPhotos();
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessengerKey.currentState?.showSnackBar(
       const SnackBar(content: Text('대표 사진이 초기화되었습니다.')),
     );
   }
@@ -121,7 +122,7 @@ class StylingPage extends StatelessWidget {
     final cubit = context.read<StylingPageCubit>();
 
     if (!cubit.areAllCategoriesSelected()) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessengerKey.currentState?.showSnackBar(
         const SnackBar(content: Text('모든 카테고리를 선택해주세요!')),
       );
       return;
@@ -135,11 +136,11 @@ class StylingPage extends StatelessWidget {
     if (pickName != null) {
       try {
         await cubit.addToMyPickWithName(pickName);
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessengerKey.currentState?.showSnackBar(
           const SnackBar(content: Text('현재 코디가 나의 Pick에 추가되었습니다!')),
         );
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessengerKey.currentState?.showSnackBar(
           SnackBar(content: Text(e.toString())),
         );
       }

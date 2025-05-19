@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/profile/my_picks/my_pick_delete_popup.dart';
-import 'package:style_board/main.dart'; // scaffoldMessengerKey를 참조하기 위해 필요
+import 'package:style_board/main.dart';
 
 class MyPicksPage extends StatelessWidget {
   const MyPicksPage({super.key});
