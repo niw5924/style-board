@@ -7,6 +7,7 @@ import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/closet/closet_page_state.dart';
 import 'package:style_board/closet/delete_photo_popup.dart';
+import 'package:style_board/main.dart';
 import 'package:style_board/widgets/tag_chip.dart';
 
 class ClosetPage extends StatefulWidget {
@@ -87,7 +88,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                   isLiked: isLiked,
                                 );
 
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            scaffoldMessengerKey.currentState?.showSnackBar(
                               const SnackBar(
                                   content: Text('옷장에 새로운 아이템이 추가되었습니다!')),
                             );
@@ -128,7 +129,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                   isLiked: isLiked,
                                 );
 
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            scaffoldMessengerKey.currentState?.showSnackBar(
                               const SnackBar(
                                   content: Text('옷장에 새로운 아이템이 추가되었습니다!')),
                             );
