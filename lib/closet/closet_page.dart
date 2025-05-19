@@ -90,7 +90,8 @@ class _ClosetPageState extends State<ClosetPage> {
 
                             scaffoldMessengerKey.currentState?.showSnackBar(
                               const SnackBar(
-                                  content: Text('옷장에 새로운 아이템이 추가되었습니다!')),
+                                content: Text('새로운 사진이 옷장에 추가되었습니다!'),
+                              ),
                             );
                           }
                         }
@@ -131,7 +132,8 @@ class _ClosetPageState extends State<ClosetPage> {
 
                             scaffoldMessengerKey.currentState?.showSnackBar(
                               const SnackBar(
-                                  content: Text('옷장에 새로운 아이템이 추가되었습니다!')),
+                                content: Text('새로운 사진이 옷장에 추가되었습니다!'),
+                              ),
                             );
                           }
                         }
@@ -287,10 +289,17 @@ class _ClosetPageState extends State<ClosetPage> {
                                             showDialog(
                                               context: context,
                                               builder: (_) => DeletePhotoPopup(
-                                                onConfirm: () {
-                                                  context
+                                                onConfirm: () async {
+                                                  await context
                                                       .read<ClosetPageCubit>()
                                                       .deletePhoto(item);
+                                                  scaffoldMessengerKey
+                                                      .currentState
+                                                      ?.showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            '사진이 삭제되었습니다.')),
+                                                  );
                                                 },
                                               ),
                                             );

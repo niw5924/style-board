@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DeletePhotoPopup extends StatelessWidget {
-  final VoidCallback onConfirm;
+  final Future<void> Function() onConfirm;
 
   const DeletePhotoPopup({super.key, required this.onConfirm});
 
@@ -45,9 +45,9 @@ class DeletePhotoPopup extends StatelessWidget {
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pop(context);
-                    onConfirm();
+                    await onConfirm();
                   },
                   child: const Text('삭제'),
                 ),

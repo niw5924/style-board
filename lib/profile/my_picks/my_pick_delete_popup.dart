@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyPickDeletePopup extends StatelessWidget {
   final String pickName;
-  final VoidCallback onConfirm;
+  final Future<void> Function() onConfirm;
 
   const MyPickDeletePopup({
     super.key,
@@ -50,9 +50,9 @@ class MyPickDeletePopup extends StatelessWidget {
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pop(context);
-                    onConfirm();
+                    await onConfirm();
                   },
                   child: const Text('확인'),
                 ),
