@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/main.dart';
 import 'package:style_board/profile/friends/friend_add_popup.dart';
 import 'package:style_board/profile/friends/friend_closet/friend_closet_page.dart';
 import 'package:style_board/profile/friends/friend_closet/friend_closet_page_cubit.dart';
@@ -24,27 +25,27 @@ class FriendManagementPage extends StatelessWidget {
               Tab(text: '내 친구 목록'),
               Tab(text: '친구 요청'),
             ],
-            labelStyle: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
+            labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
             indicatorSize: TabBarIndicatorSize.tab,
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
-            _buildMyFriendsTab(context),
-            _buildFriendRequestsTab(context),
+            MyFriendsTab(),
+            FriendRequestsTab(),
           ],
         ),
       ),
     );
   }
+}
 
-  // 내 친구 목록 탭
-  Widget _buildMyFriendsTab(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.user!.uid;
+class MyFriendsTab extends StatelessWidget {
+  const MyFriendsTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = Provider.of<AuthProvider>(context, listen: false).user!.uid;
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
@@ -58,17 +59,12 @@ class FriendManagementPage extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Column(
+          return const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                '친구 목록이 없습니다.',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 12),
-              _buildAddFriendButton(context),
+              Text('친구 목록이 없습니다.', style: TextStyle(fontSize: 16)),
+              SizedBox(height: 12),
+              AddFriendButton(),
             ],
           );
         }
@@ -76,39 +72,36 @@ class FriendManagementPage extends StatelessWidget {
         final friends = snapshot.data!.docs;
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               ...friends.map((doc) {
-                final friendId = doc.id;
                 final data = doc.data() as Map<String, dynamic>;
-                final friendName = data['name'];
-                final friendTag = data['tag'];
-                final friendPhotoURL = data['photoURL'];
-
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: _buildFriendCard(
-                    context,
-                    friendId,
-                    friendName,
-                    friendTag,
-                    friendPhotoURL,
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: FriendCard(
+                    friendId: doc.id,
+                    friendName: data['name'],
+                    friendTag: data['tag'],
+                    friendPhotoURL: data['photoURL'],
                   ),
                 );
               }),
-              _buildAddFriendButton(context),
+              const AddFriendButton(),
             ],
           ),
         );
       },
     );
   }
+}
 
-  // 친구 요청 목록 탭
-  Widget _buildFriendRequestsTab(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.user!.uid;
+class FriendRequestsTab extends StatelessWidget {
+  const FriendRequestsTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = Provider.of<AuthProvider>(context, listen: false).user!.uid;
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
@@ -124,35 +117,24 @@ class FriendManagementPage extends StatelessWidget {
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Center(
-            child: Text(
-              '받은 친구 요청이 없습니다.',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
+            child: Text('받은 친구 요청이 없습니다.', style: TextStyle(fontSize: 16)),
           );
         }
 
-        final friendRequests = snapshot.data!.docs;
+        final requests = snapshot.data!.docs;
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
-            children: friendRequests.map((doc) {
-              final requesterId = doc.id;
+            children: requests.map((doc) {
               final data = doc.data() as Map<String, dynamic>;
-              final requesterName = data['name'];
-              final requesterTag = data['tag'];
-              final requesterPhotoURL = data['photoURL'];
-
               return Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: _buildFriendRequestCard(
-                  context,
-                  requesterId,
-                  requesterName,
-                  requesterTag,
-                  requesterPhotoURL,
+                padding: const EdgeInsets.only(bottom: 12),
+                child: FriendRequestCard(
+                  requesterId: doc.id,
+                  requesterName: data['name'],
+                  requesterTag: data['tag'],
+                  requesterPhotoURL: data['photoURL'],
                 ),
               );
             }).toList(),
@@ -161,30 +143,49 @@ class FriendManagementPage extends StatelessWidget {
       },
     );
   }
+}
 
-  // 친구 추가 버튼
-  Widget _buildAddFriendButton(BuildContext context) {
+class AddFriendButton extends StatelessWidget {
+  const AddFriendButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      onPressed: () {
-        showDialog(
+      onPressed: () async {
+        final result = await showDialog<bool>(
           context: context,
           builder: (context) => const FriendAddPopup(),
         );
+
+        if (result == true) {
+          scaffoldMessengerKey.currentState?.showSnackBar(
+            const SnackBar(content: Text('친구 요청을 보냈습니다.')),
+          );
+        }
       },
       icon: Icon(Icons.person_add_alt_1,
           color: Theme.of(context).colorScheme.surface),
       label: const Text('친구 추가'),
     );
   }
+}
 
-  // 친구 카드 UI
-  Widget _buildFriendCard(
-    BuildContext context,
-    String friendId,
-    String friendName,
-    String friendTag,
-    String? friendPhotoURL,
-  ) {
+class FriendCard extends StatelessWidget {
+  final String friendId;
+  final String friendName;
+  final String friendTag;
+  final String? friendPhotoURL;
+
+  const FriendCard({
+    super.key,
+    required this.friendId,
+    required this.friendName,
+    required this.friendTag,
+    required this.friendPhotoURL,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -195,23 +196,22 @@ class FriendManagementPage extends StatelessWidget {
               radius: 30,
               backgroundColor: Theme.of(context).colorScheme.primary,
               backgroundImage:
-                  friendPhotoURL != null ? NetworkImage(friendPhotoURL) : null,
+                  friendPhotoURL != null ? NetworkImage(friendPhotoURL!) : null,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 '$friendName#$friendTag',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             IconButton(
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.push(
+                  context,
                   MaterialPageRoute(
-                    builder: (context) => BlocProvider(
+                    builder: (_) => BlocProvider(
                       create: (_) => FriendClosetPageCubit(),
                       child: FriendClosetPage(
                         friendId: friendId,
@@ -223,7 +223,6 @@ class FriendManagementPage extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.visibility),
-              color: Theme.of(context).colorScheme.onSurface,
               tooltip: '옷장 보기',
             ),
             IconButton(
@@ -233,6 +232,9 @@ class FriendManagementPage extends StatelessWidget {
                   builder: (context) => FriendDeletePopup(
                     onConfirm: () async {
                       await FriendService.deleteFriend(context, friendId);
+                      scaffoldMessengerKey.currentState?.showSnackBar(
+                        const SnackBar(content: Text('친구가 삭제되었습니다.')),
+                      );
                     },
                   ),
                 );
@@ -246,15 +248,24 @@ class FriendManagementPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  // 친구 요청 카드 UI
-  Widget _buildFriendRequestCard(
-    BuildContext context,
-    String requesterId,
-    String requesterName,
-    String requesterTag,
-    String? requesterPhotoURL,
-  ) {
+class FriendRequestCard extends StatelessWidget {
+  final String requesterId;
+  final String requesterName;
+  final String requesterTag;
+  final String? requesterPhotoURL;
+
+  const FriendRequestCard({
+    super.key,
+    required this.requesterId,
+    required this.requesterName,
+    required this.requesterTag,
+    required this.requesterPhotoURL,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -265,22 +276,23 @@ class FriendManagementPage extends StatelessWidget {
               radius: 30,
               backgroundColor: Theme.of(context).colorScheme.primary,
               backgroundImage: requesterPhotoURL != null
-                  ? NetworkImage(requesterPhotoURL)
+                  ? NetworkImage(requesterPhotoURL!)
                   : null,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 '$requesterName#$requesterTag',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             IconButton(
               onPressed: () async {
                 await FriendService.acceptFriendRequest(context, requesterId);
+                scaffoldMessengerKey.currentState?.showSnackBar(
+                  const SnackBar(content: Text('친구 요청을 수락했습니다.')),
+                );
               },
               icon: const Icon(Icons.check_circle_outline),
               color: Theme.of(context).colorScheme.primary,
@@ -289,6 +301,9 @@ class FriendManagementPage extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 await FriendService.rejectFriendRequest(context, requesterId);
+                scaffoldMessengerKey.currentState?.showSnackBar(
+                  const SnackBar(content: Text('친구 요청을 거절했습니다.')),
+                );
               },
               icon: const Icon(Icons.cancel_outlined),
               color: Theme.of(context).colorScheme.error,

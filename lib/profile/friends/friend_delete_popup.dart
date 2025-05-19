@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FriendDeletePopup extends StatelessWidget {
-  final VoidCallback onConfirm;
+  final Future<void> Function() onConfirm;
 
   const FriendDeletePopup({super.key, required this.onConfirm});
 
@@ -25,10 +25,7 @@ class FriendDeletePopup extends StatelessWidget {
             const SizedBox(height: 15),
             const Text(
               '친구 삭제',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             const Text(
@@ -45,9 +42,9 @@ class FriendDeletePopup extends StatelessWidget {
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pop(context);
-                    onConfirm();
+                    await onConfirm();
                   },
                   child: const Text('확인'),
                 ),

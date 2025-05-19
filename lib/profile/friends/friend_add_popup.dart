@@ -26,7 +26,8 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
               labelText: '친구 이름',
               prefixIcon: Icon(Icons.person),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -37,7 +38,8 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
               labelText: '태그 (4자리)',
               prefixIcon: Icon(Icons.tag),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
           ),
         ],
@@ -64,7 +66,7 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
           return result;
         }
 
-        Navigator.pop(context);
+        Navigator.pop(context, true);
         return null;
       },
     );
