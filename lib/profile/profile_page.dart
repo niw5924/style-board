@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/main.dart';
 import 'package:style_board/profile/friends/friend_management_page.dart';
 import 'package:style_board/profile/body_info_popup.dart';
 import 'package:style_board/profile/my_picks/my_picks_page.dart';
@@ -67,7 +68,7 @@ class ProfilePage extends StatelessWidget {
                 );
 
                 if (result == true) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  scaffoldMessengerKey.currentState?.showSnackBar(
                     const SnackBar(
                       content: Text('신체정보가 성공적으로 저장되었습니다!'),
                     ),
