@@ -5,6 +5,7 @@ import 'package:style_board/styling/3d/styling_3d_page_cubit.dart';
 import 'package:style_board/styling/3d/styling_3d_page_state.dart';
 import 'package:style_board/widgets/category_tile.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
+import 'package:style_board/main.dart';
 
 class Styling3DPage extends StatelessWidget {
   const Styling3DPage({super.key});
@@ -44,7 +45,6 @@ class Styling3DPage extends StatelessWidget {
     );
   }
 
-  /// 3D 모델 뷰어 위젯
   Widget _buildModelView(BuildContext context, String category) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -133,10 +133,9 @@ class Styling3DPage extends StatelessWidget {
     );
   }
 
-  /// 카테고리 선택 UI
-  void _showCategorySelectionSheet(BuildContext scaffoldContext) {
+  void _showCategorySelectionSheet(BuildContext context) {
     showModalBottomSheet(
-      context: scaffoldContext,
+      context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -182,7 +181,7 @@ class Styling3DPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
                 child: ElevatedButton(
-                  onPressed: () => _start3DConversion(scaffoldContext),
+                  onPressed: () => _start3DConversion(context),
                   child: const Text('변환하기'),
                 ),
               ),
@@ -193,30 +192,27 @@ class Styling3DPage extends StatelessWidget {
     );
   }
 
-  /// 3D 변환
-  void _start3DConversion(BuildContext scaffoldContext) async {
+  void _start3DConversion(BuildContext context) async {
     final selectedPhotos =
-        scaffoldContext.read<StylingPageCubit>().state.selectedPhotos;
+        context.read<StylingPageCubit>().state.selectedPhotos;
+
+    Navigator.pop(context);
 
     if (selectedPhotos.isNotEmpty) {
-      Navigator.pop(scaffoldContext);
-
       final imagePaths = selectedPhotos.values.toList();
       final categories = selectedPhotos.keys.toList();
 
       try {
-        await scaffoldContext
+        await context
             .read<Styling3DPageCubit>()
             .convertImagesTo3DModels(imagePaths, categories, 0);
       } catch (e) {
-        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+        scaffoldMessengerKey.currentState?.showSnackBar(
           SnackBar(content: Text(e.toString())),
         );
       }
     } else {
-      Navigator.pop(scaffoldContext);
-
-      ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+      scaffoldMessengerKey.currentState?.showSnackBar(
         const SnackBar(content: Text('옷을 선택해주세요!')),
       );
     }
