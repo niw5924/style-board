@@ -28,14 +28,20 @@ class _ClosetPageState extends State<ClosetPage> {
     final cubit = context.read<ClosetPageCubit>();
     final state = cubit.state;
 
-    final result = await closetFilterBottomSheet(
-      context,
-      section: section,
-      filterCategory: state.filterCategory,
-      filterSeason: state.filterSeason,
-      filterColor: state.filterColor,
-      filterStyle: state.filterStyle,
-      filterPurpose: state.filterPurpose,
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => ClosetFilterBottomSheet(
+        section: section,
+        filterCategory: state.filterCategory,
+        filterSeason: state.filterSeason,
+        filterColor: state.filterColor,
+        filterStyle: state.filterStyle,
+        filterPurpose: state.filterPurpose,
+      ),
     );
 
     if (result != null) {

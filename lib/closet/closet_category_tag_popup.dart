@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:style_board/widgets/common_popup_layout.dart';
-import 'package:style_board/constants/closet_category_and_tags.dart';
+import 'package:style_board/constants/closet_data.dart';
 
 class ClosetCategoryTagPopup extends StatefulWidget {
   final XFile pickedXFile;

@@ -58,12 +58,19 @@ class _CommonPopupLayoutState extends State<CommonPopupLayout> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(widget.icon,
-                    size: 24, color: Theme.of(context).colorScheme.onSurface),
+                Icon(
+                  widget.icon,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 const SizedBox(width: 8),
-                Text(widget.title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20)),
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -83,7 +90,9 @@ class _CommonPopupLayoutState extends State<CommonPopupLayout> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: widget.onCancel, child: Text(widget.cancelText)),
+                  onPressed: widget.onCancel,
+                  child: Text(widget.cancelText),
+                ),
                 const SizedBox(width: 12),
                 ElevatedButton(
                   onPressed: () async {
