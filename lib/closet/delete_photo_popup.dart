@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:style_board/models/closet_item.dart';
 
 class DeletePhotoPopup extends StatelessWidget {
-  final ClosetItem item;
-
-  const DeletePhotoPopup({super.key, required this.item});
+  const DeletePhotoPopup({super.key});
 
   @override
   Widget build(BuildContext context) {

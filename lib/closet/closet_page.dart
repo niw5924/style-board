@@ -296,7 +296,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                                 await showDialog<bool>(
                                               context: context,
                                               builder: (_) =>
-                                                  DeletePhotoPopup(item: item),
+                                                  const DeletePhotoPopup(),
                                             );
 
                                             if (result == true) {
