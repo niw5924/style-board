@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/auth/account_deletion_popup.dart';
-import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/auth/logout_popup.dart';
 import 'package:style_board/utils/overlay_loader.dart';
 import 'closet_reset_popup.dart';
@@ -168,15 +167,7 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (context) => AccountDeletionPopup(
-                              onConfirm: () async {
-                                OverlayLoader.show(context);
-                                await context
-                                    .read<AuthProvider>()
-                                    .deleteAccount();
-                                OverlayLoader.hide();
-                              },
-                            ),
+                            builder: (context) => const AccountDeletionPopup(),
                           );
                         },
                         child: Text(
