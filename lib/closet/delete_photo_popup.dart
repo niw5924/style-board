@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:style_board/models/closet_item.dart';
 
 class DeletePhotoPopup extends StatelessWidget {
-  final Future<void> Function() onConfirm;
+  final ClosetItem item;
 
-  const DeletePhotoPopup({super.key, required this.onConfirm});
+  const DeletePhotoPopup({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +42,11 @@ class DeletePhotoPopup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, false),
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await onConfirm();
-                  },
+                  onPressed: () => Navigator.pop(context, true),
                   child: const Text('삭제'),
                 ),
               ],

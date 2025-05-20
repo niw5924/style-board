@@ -290,25 +290,29 @@ class _ClosetPageState extends State<ClosetPage> {
                                       ),
                                       PopupMenuButton<String>(
                                         icon: const Icon(Icons.more_vert),
-                                        onSelected: (value) {
+                                        onSelected: (value) async {
                                           if (value == 'delete') {
-                                            showDialog(
+                                            final result =
+                                                await showDialog<bool>(
                                               context: context,
-                                              builder: (_) => DeletePhotoPopup(
-                                                onConfirm: () async {
-                                                  await context
-                                                      .read<ClosetPageCubit>()
-                                                      .deletePhoto(item);
-                                                  scaffoldMessengerKey
-                                                      .currentState
-                                                      ?.showSnackBar(
-                                                    const SnackBar(
-                                                        content: Text(
-                                                            '사진이 삭제되었습니다.')),
-                                                  );
-                                                },
-                                              ),
+                                              builder: (_) =>
+                                                  DeletePhotoPopup(item: item),
                                             );
+
+                                            if (result == true) {
+                                              await context
+                                                  .read<ClosetPageCubit>()
+                                                  .deletePhoto(item);
+                                              if (context.mounted) {
+                                                scaffoldMessengerKey
+                                                    .currentState
+                                                    ?.showSnackBar(
+                                                  const SnackBar(
+                                                      content:
+                                                          Text('사진이 삭제되었습니다.')),
+                                                );
+                                              }
+                                            }
                                           }
                                         },
                                         itemBuilder: (context) => [
