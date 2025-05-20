@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:style_board/auth/auth_provider.dart';
+import 'package:style_board/utils/overlay_loader.dart';
 
 class LogoutPopup extends StatelessWidget {
-  final VoidCallback onConfirm;
-
-  const LogoutPopup({super.key, required this.onConfirm});
+  const LogoutPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +46,11 @@ class LogoutPopup extends StatelessWidget {
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    onConfirm();
+                  onPressed: () async {
+                    OverlayLoader.show(context);
+                    await context.read<AuthProvider>().logout();
+                    OverlayLoader.hide();
+                    if (context.mounted) Navigator.pop(context);
                   },
                   child: const Text('확인'),
                 ),

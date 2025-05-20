@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/auth/account_deletion_popup.dart';
 import 'package:style_board/auth/logout_popup.dart';
-import 'package:style_board/utils/overlay_loader.dart';
 import 'closet_reset_popup.dart';
 import 'profile_detail_page_cubit.dart';
 import 'profile_detail_page_state.dart';
@@ -143,16 +142,7 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (context) => LogoutPopup(
-                              onConfirm: () async {
-                                OverlayLoader.show(context);
-                                await context
-                                    .read<ProfileDetailPageCubit>()
-                                    .authProvider
-                                    .logout();
-                                OverlayLoader.hide();
-                              },
-                            ),
+                            builder: (context) => const LogoutPopup(),
                           );
                         },
                         child: const Text(
