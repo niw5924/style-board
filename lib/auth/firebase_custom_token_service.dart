@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class FirebaseCustomTokenService {
-  static const String _serverUrl =
-      'https://getfirebasecustomtoken-6rqnvjtpda-uc.a.run.app'; // Firebase Functions API URL
+  static final String _serverUrl = dotenv.env['CUSTOM_TOKEN_API_URL']!;
 
   static Future<String?> getFirebaseCustomToken(String kakaoAccessToken) async {
     try {
