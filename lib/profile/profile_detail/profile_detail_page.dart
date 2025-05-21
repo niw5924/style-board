@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/auth/account_deletion_popup.dart';
+import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/auth/logout_popup.dart';
+import 'package:style_board/utils/overlay_loader.dart';
 import 'closet_reset_popup.dart';
 import 'profile_detail_page_cubit.dart';
 import 'profile_detail_page_state.dart';
@@ -118,17 +120,17 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                       ),
                       const SizedBox(height: 4),
                       TextButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          final result = await showDialog<bool>(
                             context: context,
-                            builder: (context) => ClosetResetPopup(
-                              onConfirm: () async {
-                                await context
-                                    .read<ProfileDetailPageCubit>()
-                                    .resetCloset();
-                              },
-                            ),
+                            builder: (context) => const ClosetResetPopup(),
                           );
+
+                          if (result == true) {
+                            await context
+                                .read<ProfileDetailPageCubit>()
+                                .resetCloset();
+                          }
                         },
                         child: const Text(
                           '옷장 초기화',
@@ -139,11 +141,17 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          final result = await showDialog<bool>(
                             context: context,
                             builder: (context) => const LogoutPopup(),
                           );
+
+                          if (result == true) {
+                            OverlayLoader.show(context);
+                            await context.read<AuthProvider>().logout();
+                            OverlayLoader.hide();
+                          }
                         },
                         child: const Text(
                           '로그아웃',
@@ -154,11 +162,17 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          final result = await showDialog<bool>(
                             context: context,
                             builder: (context) => const AccountDeletionPopup(),
                           );
+
+                          if (result == true) {
+                            OverlayLoader.show(context);
+                            await context.read<AuthProvider>().deleteAccount();
+                            OverlayLoader.hide();
+                          }
                         },
                         child: Text(
                           '탈퇴하기',

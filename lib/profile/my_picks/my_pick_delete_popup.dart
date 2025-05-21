@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyPickDeletePopup extends StatelessWidget {
-  final String pickName;
-  final Future<void> Function() onConfirm;
-
-  const MyPickDeletePopup({
-    super.key,
-    required this.pickName,
-    required this.onConfirm,
-  });
+  const MyPickDeletePopup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +21,9 @@ class MyPickDeletePopup extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
             ),
             const SizedBox(height: 15),
-            Text(
-              '$pickName 삭제',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            const Text(
+              'Pick 삭제',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             const Text(
@@ -46,14 +36,11 @@ class MyPickDeletePopup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, false),
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await onConfirm();
-                  },
+                  onPressed: () => Navigator.pop(context, true),
                   child: const Text('확인'),
                 ),
               ],

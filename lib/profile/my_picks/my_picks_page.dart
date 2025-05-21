@@ -131,37 +131,29 @@ class _PickCardState extends State<_PickCard> {
               trailing: IconButton(
                 icon: Icon(Icons.delete,
                     color: Theme.of(context).colorScheme.error),
-                onPressed: () {
-                  showDialog(
+                onPressed: () async {
+                  final result = await showDialog<bool>(
                     context: context,
-                    builder: (context) {
-                      return MyPickDeletePopup(
-                        pickName: widget.pickName,
-                        onConfirm: () async {
-                          final userId =
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .user!
-                                  .uid;
-                          try {
-                            await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(userId)
-                                .collection('myPicks')
-                                .doc(widget.pickId)
-                                .delete();
-
-                            scaffoldMessengerKey.currentState?.showSnackBar(
-                              const SnackBar(content: Text('Pick이 삭제되었습니다.')),
-                            );
-                          } catch (e) {
-                            scaffoldMessengerKey.currentState?.showSnackBar(
-                              const SnackBar(content: Text('삭제 중 오류가 발생했습니다.')),
-                            );
-                          }
-                        },
-                      );
-                    },
+                    builder: (context) => const MyPickDeletePopup(),
                   );
+
+                  if (result == true) {
+                    final userId =
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .user!
+                            .uid;
+
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .collection('myPicks')
+                        .doc(widget.pickId)
+                        .delete();
+
+                    scaffoldMessengerKey.currentState?.showSnackBar(
+                      const SnackBar(content: Text('Pick이 삭제되었습니다.')),
+                    );
+                  }
                 },
               ),
             ),

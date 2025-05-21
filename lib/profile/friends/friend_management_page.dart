@@ -226,18 +226,18 @@ class FriendCard extends StatelessWidget {
               tooltip: '옷장 보기',
             ),
             IconButton(
-              onPressed: () {
-                showDialog(
+              onPressed: () async {
+                final result = await showDialog<bool>(
                   context: context,
-                  builder: (context) => FriendDeletePopup(
-                    onConfirm: () async {
-                      await FriendService.deleteFriend(context, friendId);
-                      scaffoldMessengerKey.currentState?.showSnackBar(
-                        const SnackBar(content: Text('친구가 삭제되었습니다.')),
-                      );
-                    },
-                  ),
+                  builder: (context) => const FriendDeletePopup(),
                 );
+
+                if (result == true) {
+                  await FriendService.deleteFriend(context, friendId);
+                  scaffoldMessengerKey.currentState?.showSnackBar(
+                    const SnackBar(content: Text('친구가 삭제되었습니다.')),
+                  );
+                }
               },
               icon: const Icon(Icons.delete_outline),
               color: Theme.of(context).colorScheme.error,

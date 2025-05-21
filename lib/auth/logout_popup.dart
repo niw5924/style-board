@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/utils/overlay_loader.dart';
 
 class LogoutPopup extends StatelessWidget {
   const LogoutPopup({super.key});
@@ -42,16 +39,11 @@ class LogoutPopup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, false),
                   child: const Text('취소'),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    OverlayLoader.show(context);
-                    await context.read<AuthProvider>().logout();
-                    OverlayLoader.hide();
-                    if (context.mounted) Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context, true),
                   child: const Text('확인'),
                 ),
               ],
