@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:style_board/widgets/common_popup_layout.dart';
+import 'package:style_board/widgets/validated_action_dialog.dart';
 
 class AddMyPickPopup extends StatefulWidget {
   const AddMyPickPopup({super.key});
@@ -13,7 +13,7 @@ class _AddMyPickPopupState extends State<AddMyPickPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonPopupLayout(
+    return ValidatedActionDialog(
       icon: Icons.bookmark_add,
       title: '나의 Pick 추가',
       content: TextField(

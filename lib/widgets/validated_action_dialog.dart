@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class CommonPopupLayout extends StatefulWidget {
+class ValidatedActionDialog extends StatefulWidget {
   final IconData icon;
   final String title;
   final Widget content;
@@ -10,7 +10,7 @@ class CommonPopupLayout extends StatefulWidget {
   final VoidCallback onCancel;
   final Future<String?> Function() onConfirm;
 
-  const CommonPopupLayout({
+  const ValidatedActionDialog({
     super.key,
     required this.icon,
     required this.title,
@@ -22,10 +22,10 @@ class CommonPopupLayout extends StatefulWidget {
   });
 
   @override
-  State<CommonPopupLayout> createState() => _CommonPopupLayoutState();
+  State<ValidatedActionDialog> createState() => _ValidatedActionDialogState();
 }
 
-class _CommonPopupLayoutState extends State<CommonPopupLayout> {
+class _ValidatedActionDialogState extends State<ValidatedActionDialog> {
   String? errorMessage;
   Timer? _errorTimer;
 

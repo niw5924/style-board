@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:style_board/profile/friends/friend_service.dart';
-import 'package:style_board/widgets/common_popup_layout.dart';
+import 'package:style_board/widgets/validated_action_dialog.dart';
 
 class FriendAddPopup extends StatefulWidget {
   const FriendAddPopup({super.key});
@@ -15,7 +15,7 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonPopupLayout(
+    return ValidatedActionDialog(
       icon: Icons.person_add,
       title: '친구 추가',
       content: Column(

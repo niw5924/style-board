@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/widgets/common_popup_layout.dart';
+import 'package:style_board/widgets/validated_action_dialog.dart';
 
 class BodyInfoPopup extends StatefulWidget {
   const BodyInfoPopup({super.key});
@@ -36,7 +36,7 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final userId = authProvider.user!.uid;
 
-    return CommonPopupLayout(
+    return ValidatedActionDialog(
       icon: Icons.info,
       title: '신체정보 입력',
       content: Column(

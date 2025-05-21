@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:style_board/widgets/common_popup_layout.dart';
+import 'package:style_board/widgets/validated_action_dialog.dart';
 import 'package:style_board/constants/closet_data.dart';
 
 class ClosetCategoryTagPopup extends StatefulWidget {
@@ -25,7 +25,7 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
   Widget build(BuildContext context) {
     final imageFile = File(widget.pickedXFile.path);
 
-    return CommonPopupLayout(
+    return ValidatedActionDialog(
       icon: Icons.category,
       title: '카테고리 및 태그 설정',
       content: Column(
