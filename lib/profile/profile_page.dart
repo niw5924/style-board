@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/main.dart';
 import 'package:style_board/profile/friends/friend_management_page.dart';
-import 'package:style_board/profile/body_info_popup.dart';
+import 'package:style_board/profile/body_info_dialog.dart';
 import 'package:style_board/profile/my_picks/my_picks_page.dart';
 import 'package:style_board/profile/profile_detail/profile_detail_page.dart';
 import 'package:style_board/profile/weather/weather_page.dart';
@@ -62,16 +62,14 @@ class ProfilePage extends StatelessWidget {
               title: '신체정보',
               subtitle: '신체정보를 설정합니다.',
               onTap: () async {
-                final bool? result = await showDialog<bool>(
+                final confirmed = await showDialog<bool>(
                   context: context,
-                  builder: (context) => const BodyInfoPopup(),
+                  builder: (context) => const BodyInfoDialog(),
                 );
 
-                if (result == true) {
+                if (confirmed == true) {
                   scaffoldMessengerKey.currentState?.showSnackBar(
-                    const SnackBar(
-                      content: Text('신체정보가 성공적으로 저장되었습니다!'),
-                    ),
+                    const SnackBar(content: Text('신체정보가 성공적으로 저장되었습니다!')),
                   );
                 }
               },

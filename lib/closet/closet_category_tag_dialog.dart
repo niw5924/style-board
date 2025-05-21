@@ -4,16 +4,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:style_board/widgets/validated_action_dialog.dart';
 import 'package:style_board/constants/closet_data.dart';
 
-class ClosetCategoryTagPopup extends StatefulWidget {
+class ClosetCategoryTagDialog extends StatefulWidget {
   final XFile pickedXFile;
 
-  const ClosetCategoryTagPopup({super.key, required this.pickedXFile});
+  const ClosetCategoryTagDialog({super.key, required this.pickedXFile});
 
   @override
-  State<ClosetCategoryTagPopup> createState() => _ClosetCategoryTagPopupState();
+  State<ClosetCategoryTagDialog> createState() =>
+      _ClosetCategoryTagDialogState();
 }
 
-class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
+class _ClosetCategoryTagDialogState extends State<ClosetCategoryTagDialog> {
   String? selectedCategory;
   String? selectedSeason;
   String? selectedColor;
@@ -28,6 +29,7 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
     return ValidatedActionDialog(
       icon: Icons.category,
       title: '카테고리 및 태그 설정',
+      confirmText: '완료',
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -39,7 +41,7 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
                   imageFile,
                   width: double.infinity,
                   height: 260,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
               Positioned(
@@ -107,21 +109,18 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
           ),
         ],
       ),
-      cancelText: '취소',
-      confirmText: '완료',
-      onCancel: () => Navigator.pop(context),
-      onConfirm: () async {
+      submitIfValid: () async {
         if (selectedCategory == null) {
           return '카테고리를 선택해주세요.';
         }
-        if (selectedSeason == null ||
-            selectedColor == null ||
-            selectedStyle == null ||
-            selectedPurpose == null) {
+        if ([selectedSeason, selectedColor, selectedStyle, selectedPurpose]
+            .contains(null)) {
           return '모든 태그를 설정해주세요.';
         }
-
-        Navigator.pop(context, {
+        return null;
+      },
+      onSuccessResult: () {
+        return {
           'category': selectedCategory,
           'tags': {
             'season': selectedSeason,
@@ -130,9 +129,7 @@ class _ClosetCategoryTagPopupState extends State<ClosetCategoryTagPopup> {
             'purpose': selectedPurpose,
           },
           'isLiked': isLiked,
-        });
-
-        return null;
+        };
       },
     );
   }

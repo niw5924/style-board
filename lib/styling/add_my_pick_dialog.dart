@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:style_board/widgets/validated_action_dialog.dart';
 
-class AddMyPickPopup extends StatefulWidget {
-  const AddMyPickPopup({super.key});
+class AddMyPickDialog extends StatefulWidget {
+  const AddMyPickDialog({super.key});
 
   @override
-  State<AddMyPickPopup> createState() => _AddMyPickPopupState();
+  State<AddMyPickDialog> createState() => _AddMyPickDialogState();
 }
 
-class _AddMyPickPopupState extends State<AddMyPickPopup> {
+class _AddMyPickDialogState extends State<AddMyPickDialog> {
   final TextEditingController pickNameController = TextEditingController();
 
   @override
@@ -16,6 +16,7 @@ class _AddMyPickPopupState extends State<AddMyPickPopup> {
     return ValidatedActionDialog(
       icon: Icons.bookmark_add,
       title: '나의 Pick 추가',
+      confirmText: '저장',
       content: TextField(
         controller: pickNameController,
         decoration: InputDecoration(
@@ -24,19 +25,14 @@ class _AddMyPickPopupState extends State<AddMyPickPopup> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
-      cancelText: '취소',
-      confirmText: '저장',
-      onCancel: () => Navigator.pop(context, null),
-      onConfirm: () async {
-        final pickName = pickNameController.text.trim();
-
-        if (pickName.isEmpty) {
+      submitIfValid: () async {
+        final name = pickNameController.text.trim();
+        if (name.isEmpty) {
           return '이름을 입력해주세요.';
         }
-
-        Navigator.pop(context, pickName);
         return null;
       },
+      onSuccessResult: () => pickNameController.text.trim(),
     );
   }
 }

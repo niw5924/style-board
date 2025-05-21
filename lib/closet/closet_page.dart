@@ -2,7 +2,7 @@ import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:style_board/closet/closet_category_tag_popup.dart';
+import 'package:style_board/closet/closet_category_tag_dialog.dart';
 import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/closet/closet_page_state.dart';
@@ -73,17 +73,18 @@ class _ClosetPageState extends State<ClosetPage> {
                             await context.read<ClosetPageCubit>().takePhoto();
 
                         if (pickedXFile != null) {
-                          final result = await showDialog<Map<String, dynamic>>(
+                          final photoDetails =
+                              await showDialog<Map<String, dynamic>>(
                             context: context,
-                            builder: (_) => ClosetCategoryTagPopup(
+                            builder: (_) => ClosetCategoryTagDialog(
                                 pickedXFile: pickedXFile),
                           );
 
-                          if (result != null) {
-                            final category = result['category'] as String;
+                          if (photoDetails != null) {
+                            final category = photoDetails['category'] as String;
                             final tags =
-                                Map<String, String>.from(result['tags']);
-                            final isLiked = result['isLiked'] as bool;
+                                Map<String, String>.from(photoDetails['tags']);
+                            final isLiked = photoDetails['isLiked'] as bool;
 
                             await context
                                 .read<ClosetPageCubit>()
@@ -96,8 +97,7 @@ class _ClosetPageState extends State<ClosetPage> {
 
                             scaffoldMessengerKey.currentState?.showSnackBar(
                               const SnackBar(
-                                content: Text('새로운 사진이 옷장에 추가되었습니다!'),
-                              ),
+                                  content: Text('새로운 사진이 옷장에 추가되었습니다!')),
                             );
                           }
                         }
@@ -115,17 +115,18 @@ class _ClosetPageState extends State<ClosetPage> {
                             .pickPhotoFromGallery();
 
                         if (pickedXFile != null) {
-                          final result = await showDialog<Map<String, dynamic>>(
+                          final photoDetails =
+                              await showDialog<Map<String, dynamic>>(
                             context: context,
-                            builder: (_) => ClosetCategoryTagPopup(
+                            builder: (_) => ClosetCategoryTagDialog(
                                 pickedXFile: pickedXFile),
                           );
 
-                          if (result != null) {
-                            final category = result['category'] as String;
+                          if (photoDetails != null) {
+                            final category = photoDetails['category'] as String;
                             final tags =
-                                Map<String, String>.from(result['tags']);
-                            final isLiked = result['isLiked'] as bool;
+                                Map<String, String>.from(photoDetails['tags']);
+                            final isLiked = photoDetails['isLiked'] as bool;
 
                             await context
                                 .read<ClosetPageCubit>()
@@ -138,8 +139,7 @@ class _ClosetPageState extends State<ClosetPage> {
 
                             scaffoldMessengerKey.currentState?.showSnackBar(
                               const SnackBar(
-                                content: Text('새로운 사진이 옷장에 추가되었습니다!'),
-                              ),
+                                  content: Text('새로운 사진이 옷장에 추가되었습니다!')),
                             );
                           }
                         }

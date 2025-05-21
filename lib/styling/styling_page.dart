@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/main.dart';
 import 'package:style_board/styling/2d/styling_2d_page.dart';
 import 'package:style_board/styling/3d/styling_3d_page.dart';
-import 'package:style_board/styling/add_my_pick_popup.dart';
+import 'package:style_board/styling/add_my_pick_dialog.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 import 'package:style_board/styling/styling_page_state.dart';
 
@@ -128,14 +128,14 @@ class StylingPage extends StatelessWidget {
       return;
     }
 
-    final pickName = await showDialog<String>(
+    final confirmedPickName = await showDialog<String>(
       context: context,
-      builder: (_) => const AddMyPickPopup(),
+      builder: (_) => const AddMyPickDialog(),
     );
 
-    if (pickName != null) {
+    if (confirmedPickName != null) {
       try {
-        await cubit.addToMyPickWithName(pickName);
+        await cubit.addToMyPickWithName(confirmedPickName);
         scaffoldMessengerKey.currentState?.showSnackBar(
           const SnackBar(content: Text('현재 코디가 나의 Pick에 추가되었습니다!')),
         );

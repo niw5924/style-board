@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/widgets/validated_action_dialog.dart';
 
-class BodyInfoPopup extends StatefulWidget {
-  const BodyInfoPopup({super.key});
+class BodyInfoDialog extends StatefulWidget {
+  const BodyInfoDialog({super.key});
 
   @override
-  State<BodyInfoPopup> createState() => _BodyInfoPopupState();
+  State<BodyInfoDialog> createState() => _BodyInfoDialogState();
 }
 
-class _BodyInfoPopupState extends State<BodyInfoPopup> {
+class _BodyInfoDialogState extends State<BodyInfoDialog> {
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   String? selectedGender;
@@ -79,10 +79,8 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
           ),
         ],
       ),
-      cancelText: '취소',
       confirmText: '저장',
-      onCancel: () => Navigator.pop(context),
-      onConfirm: () async {
+      submitIfValid: () async {
         final heightStr = heightController.text.trim();
         final weightStr = weightController.text.trim();
         final height = int.tryParse(heightStr) ?? 0;
@@ -97,7 +95,6 @@ class _BodyInfoPopupState extends State<BodyInfoPopup> {
         }
 
         await saveBodyInfoToFirestore(userId);
-        Navigator.pop(context, true);
         return null;
       },
     );

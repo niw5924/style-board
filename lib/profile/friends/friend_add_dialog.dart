@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:style_board/profile/friends/friend_service.dart';
 import 'package:style_board/widgets/validated_action_dialog.dart';
+import 'package:style_board/profile/friends/friend_service.dart';
 
-class FriendAddPopup extends StatefulWidget {
-  const FriendAddPopup({super.key});
+class FriendAddDialog extends StatefulWidget {
+  const FriendAddDialog({super.key});
 
   @override
-  State<FriendAddPopup> createState() => _FriendAddPopupState();
+  State<FriendAddDialog> createState() => _FriendAddDialogState();
 }
 
-class _FriendAddPopupState extends State<FriendAddPopup> {
+class _FriendAddDialogState extends State<FriendAddDialog> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController tagController = TextEditingController();
 
@@ -18,6 +18,7 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
     return ValidatedActionDialog(
       icon: Icons.person_add,
       title: '친구 추가',
+      confirmText: '추가',
       content: Column(
         children: [
           TextField(
@@ -44,10 +45,7 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
           ),
         ],
       ),
-      cancelText: '취소',
-      confirmText: '추가',
-      onCancel: () => Navigator.pop(context),
-      onConfirm: () async {
+      submitIfValid: () async {
         final name = nameController.text.trim();
         final tag = tagController.text.trim();
 
@@ -61,12 +59,10 @@ class _FriendAddPopupState extends State<FriendAddPopup> {
 
         final result =
             await FriendService.sendFriendRequest(context, name, tag);
-
         if (result != null) {
           return result;
         }
 
-        Navigator.pop(context, true);
         return null;
       },
     );
