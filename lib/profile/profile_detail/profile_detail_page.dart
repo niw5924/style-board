@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:style_board/auth/account_deletion_popup.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/auth/logout_popup.dart';
 import 'package:style_board/utils/overlay_loader.dart';
-import 'closet_reset_popup.dart';
+import 'package:style_board/widgets/confirm_dialog.dart';
 import 'profile_detail_page_cubit.dart';
 import 'profile_detail_page_state.dart';
 
@@ -121,12 +119,18 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                       const SizedBox(height: 4),
                       TextButton(
                         onPressed: () async {
-                          final result = await showDialog<bool>(
+                          final confirmed = await showDialog<bool>(
                             context: context,
-                            builder: (context) => const ClosetResetPopup(),
+                            builder: (context) => const ConfirmDialog(
+                              icon: Icons.warning_rounded,
+                              title: '옷장 초기화',
+                              message: '정말로 옷장을 초기화하시겠습니까?\n저장된 모든 옷이 삭제됩니다.',
+                              cancelText: '취소',
+                              confirmText: '확인',
+                            ),
                           );
 
-                          if (result == true) {
+                          if (confirmed == true) {
                             await context
                                 .read<ProfileDetailPageCubit>()
                                 .resetCloset();
@@ -142,12 +146,18 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          final result = await showDialog<bool>(
+                          final confirmed = await showDialog<bool>(
                             context: context,
-                            builder: (context) => const LogoutPopup(),
+                            builder: (context) => const ConfirmDialog(
+                              icon: Icons.logout,
+                              title: '로그아웃',
+                              message: '정말로 로그아웃하시겠습니까?',
+                              cancelText: '취소',
+                              confirmText: '확인',
+                            ),
                           );
 
-                          if (result == true) {
+                          if (confirmed == true) {
                             OverlayLoader.show(context);
                             await context.read<AuthProvider>().logout();
                             OverlayLoader.hide();
@@ -163,12 +173,19 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          final result = await showDialog<bool>(
+                          final confirmed = await showDialog<bool>(
                             context: context,
-                            builder: (context) => const AccountDeletionPopup(),
+                            builder: (context) => const ConfirmDialog(
+                              icon: Icons.warning_rounded,
+                              title: '탈퇴하기',
+                              message:
+                                  '정말로 회원 탈퇴를 진행하시겠습니까?\n모든 데이터가 영구 삭제됩니다.',
+                              cancelText: '취소',
+                              confirmText: '확인',
+                            ),
                           );
 
-                          if (result == true) {
+                          if (confirmed == true) {
                             OverlayLoader.show(context);
                             await context.read<AuthProvider>().deleteAccount();
                             OverlayLoader.hide();

@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
-class AccountDeletionPopup extends StatelessWidget {
-  const AccountDeletionPopup({super.key});
+class ConfirmDialog extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String message;
+  final String cancelText;
+  final String confirmText;
+
+  const ConfirmDialog({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.message,
+    required this.cancelText,
+    required this.confirmText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,23 +29,23 @@ class AccountDeletionPopup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.warning_rounded,
+              icon,
               size: 50,
               color: Theme.of(context).colorScheme.error,
             ),
             const SizedBox(height: 15),
-            const Text(
-              '탈퇴하기',
-              style: TextStyle(
+            Text(
+              title,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              '정말로 회원 탈퇴를 진행하시겠습니까?\n모든 데이터가 영구 삭제됩니다.',
+            Text(
+              message,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             Row(
@@ -40,11 +53,11 @@ class AccountDeletionPopup extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('취소'),
+                  child: Text(cancelText),
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text('확인'),
+                  child: Text(confirmText),
                 ),
               ],
             ),

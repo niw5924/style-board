@@ -6,8 +6,8 @@ import 'package:style_board/closet/closet_category_tag_popup.dart';
 import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
 import 'package:style_board/closet/closet_page_state.dart';
-import 'package:style_board/closet/delete_photo_popup.dart';
 import 'package:style_board/main.dart';
+import 'package:style_board/widgets/confirm_dialog.dart';
 import 'package:style_board/widgets/tag_chip.dart';
 
 class ClosetPage extends StatefulWidget {
@@ -292,26 +292,31 @@ class _ClosetPageState extends State<ClosetPage> {
                                         icon: const Icon(Icons.more_vert),
                                         onSelected: (value) async {
                                           if (value == 'delete') {
-                                            final result =
+                                            final confirmed =
                                                 await showDialog<bool>(
                                               context: context,
                                               builder: (_) =>
-                                                  const DeletePhotoPopup(),
+                                                  const ConfirmDialog(
+                                                icon: Icons.warning_rounded,
+                                                title: '사진 삭제',
+                                                message:
+                                                    '정말로 이 사진을 삭제하시겠습니까?\n삭제된 사진은 복구할 수 없습니다.',
+                                                cancelText: '취소',
+                                                confirmText: '삭제',
+                                              ),
                                             );
 
-                                            if (result == true) {
+                                            if (confirmed == true) {
                                               await context
                                                   .read<ClosetPageCubit>()
                                                   .deletePhoto(item);
-                                              if (context.mounted) {
-                                                scaffoldMessengerKey
-                                                    .currentState
-                                                    ?.showSnackBar(
-                                                  const SnackBar(
-                                                      content:
-                                                          Text('사진이 삭제되었습니다.')),
-                                                );
-                                              }
+
+                                              scaffoldMessengerKey.currentState
+                                                  ?.showSnackBar(
+                                                const SnackBar(
+                                                    content:
+                                                        Text('사진이 삭제되었습니다.')),
+                                              );
                                             }
                                           }
                                         },

@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
-import 'package:style_board/profile/my_picks/my_pick_delete_popup.dart';
 import 'package:style_board/main.dart';
+import 'package:style_board/widgets/confirm_dialog.dart';
 
 class MyPicksPage extends StatelessWidget {
   const MyPicksPage({super.key});
@@ -132,12 +132,18 @@ class _PickCardState extends State<_PickCard> {
                 icon: Icon(Icons.delete,
                     color: Theme.of(context).colorScheme.error),
                 onPressed: () async {
-                  final result = await showDialog<bool>(
+                  final confirmed = await showDialog<bool>(
                     context: context,
-                    builder: (context) => const MyPickDeletePopup(),
+                    builder: (context) => const ConfirmDialog(
+                      icon: Icons.warning_rounded,
+                      title: 'Pick 삭제',
+                      message: '정말로 이 Pick을 삭제하시겠습니까?',
+                      cancelText: '취소',
+                      confirmText: '확인',
+                    ),
                   );
 
-                  if (result == true) {
+                  if (confirmed == true) {
                     final userId =
                         Provider.of<AuthProvider>(context, listen: false)
                             .user!

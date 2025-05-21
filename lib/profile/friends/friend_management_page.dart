@@ -7,8 +7,8 @@ import 'package:style_board/main.dart';
 import 'package:style_board/profile/friends/friend_add_popup.dart';
 import 'package:style_board/profile/friends/friend_closet/friend_closet_page.dart';
 import 'package:style_board/profile/friends/friend_closet/friend_closet_page_cubit.dart';
-import 'package:style_board/profile/friends/friend_delete_popup.dart';
 import 'package:style_board/profile/friends/friend_service.dart';
+import 'package:style_board/widgets/confirm_dialog.dart';
 
 class FriendManagementPage extends StatelessWidget {
   const FriendManagementPage({super.key});
@@ -227,12 +227,18 @@ class FriendCard extends StatelessWidget {
             ),
             IconButton(
               onPressed: () async {
-                final result = await showDialog<bool>(
+                final confirmed = await showDialog<bool>(
                   context: context,
-                  builder: (context) => const FriendDeletePopup(),
+                  builder: (context) => const ConfirmDialog(
+                    icon: Icons.warning_rounded,
+                    title: '친구 삭제',
+                    message: '정말로 친구를 삭제하시겠습니까?\n되돌릴 수 없습니다.',
+                    cancelText: '취소',
+                    confirmText: '확인',
+                  ),
                 );
 
-                if (result == true) {
+                if (confirmed == true) {
                   await FriendService.deleteFriend(context, friendId);
                   scaffoldMessengerKey.currentState?.showSnackBar(
                     const SnackBar(content: Text('친구가 삭제되었습니다.')),
