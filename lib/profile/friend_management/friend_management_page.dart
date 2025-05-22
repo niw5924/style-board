@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'tabs/my_friends_tab_page.dart';
-import 'tabs/friend_requests_tab_page.dart';
+import 'tabs/my_friends/my_friends_tab_page.dart';
+import 'tabs/friend_requests/friend_requests_tab_page.dart';
 
 class FriendManagementPage extends StatelessWidget {
   const FriendManagementPage({super.key});

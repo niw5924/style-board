@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:style_board/profile/friend_management/friend_service.dart';
 import 'package:style_board/widgets/validated_action_dialog.dart';
-import 'package:style_board/profile/friends/friend_service.dart';
 
 class FriendAddDialog extends StatefulWidget {
   const FriendAddDialog({super.key});

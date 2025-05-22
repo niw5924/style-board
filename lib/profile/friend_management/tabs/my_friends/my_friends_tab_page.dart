@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/main.dart';
+import 'package:style_board/profile/friend_management/tabs/my_friends/friend_closet/friend_closet_page.dart';
+import 'package:style_board/profile/friend_management/tabs/my_friends/friend_closet/friend_closet_page_cubit.dart';
 import 'package:style_board/widgets/confirm_dialog.dart';
-import '../friend_closet/friend_closet_page.dart';
-import '../friend_closet/friend_closet_page_cubit.dart';
-import '../friend_service.dart';
-import '../friend_add_dialog.dart';
+import '../../friend_service.dart';
+import 'friend_add_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyFriendsTabPage extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/main.dart';
-import '../friend_service.dart';
+import '../../friend_service.dart';
 
 class FriendRequestsTabPage extends StatelessWidget {
   const FriendRequestsTabPage({super.key});
