@@ -6,7 +6,6 @@ import 'package:style_board/main.dart';
 import 'package:style_board/widgets/confirm_dialog.dart';
 import 'package:style_board/profile/friend_management/tabs/my_friends/friend_add_dialog.dart';
 import 'package:style_board/profile/friend_management/tabs/my_friends/friend_closet/friend_closet_page.dart';
-import 'package:style_board/profile/friend_management/tabs/my_friends/friend_closet/friend_closet_page_cubit.dart';
 import 'my_friends_tab_page_cubit.dart';
 import 'my_friends_tab_page_state.dart';
 
@@ -77,13 +76,10 @@ class MyFriendsTabPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => BlocProvider(
-                                        create: (_) => FriendClosetPageCubit(),
-                                        child: FriendClosetPage(
-                                          friendId: friend.id,
-                                          friendName: friend.name,
-                                          friendTag: friend.tag,
-                                        ),
+                                      builder: (_) => FriendClosetPage(
+                                        friendId: friend.id,
+                                        friendName: friend.name,
+                                        friendTag: friend.tag,
                                       ),
                                     ),
                                   );
