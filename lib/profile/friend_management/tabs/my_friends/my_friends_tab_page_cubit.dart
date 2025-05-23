@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/models/friend_item.dart';
 import 'my_friends_tab_page_state.dart';
@@ -30,7 +31,7 @@ class MyFriendsTabPageCubit extends Cubit<MyFriendsTabPageState> {
       emit(state.copyWith(friendItems: items, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
-      print("Error loading friends: $e");
+      debugPrint("Error loading friends: $e");
     }
   }
 
@@ -65,7 +66,7 @@ class MyFriendsTabPageCubit extends Cubit<MyFriendsTabPageState> {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      print("Error sending friend request: $e");
+      debugPrint("Error sending friend request: $e");
     }
   }
 
@@ -95,7 +96,7 @@ class MyFriendsTabPageCubit extends Cubit<MyFriendsTabPageState> {
       emit(state.copyWith(friendItems: updatedList, isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
-      print("Error deleting friend: $e");
+      debugPrint("Error deleting friend: $e");
     }
   }
 }

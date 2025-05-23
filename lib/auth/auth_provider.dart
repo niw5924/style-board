@@ -19,12 +19,12 @@ class AuthProvider with ChangeNotifier {
   Future<void> checkLoginState() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      print('이전 로그인 정보 확인됨: ${user.displayName} (UID: ${user.uid})');
+      debugPrint('이전 로그인 정보 확인됨: ${user.displayName} (UID: ${user.uid})');
       final loginMethod = await _authService.getLoginMethod();
-      print('이전 로그인 방식: $loginMethod');
+      debugPrint('이전 로그인 방식: $loginMethod');
       await setUser(user);
     } else {
-      print('로그인 정보 없음');
+      debugPrint('로그인 정보 없음');
     }
   }
 
@@ -47,14 +47,14 @@ class AuthProvider with ChangeNotifier {
           }
         }
       } catch (e) {
-        print('Firestore에서 태그를 가져오는 중 오류 발생: $e');
+        debugPrint('Firestore에서 태그를 가져오는 중 오류 발생: $e');
         _userTag = null;
       }
 
-      print("로그인 성공");
-      print(_user?.displayName);
-      print(_user?.photoURL);
-      print("태그: $_userTag");
+      debugPrint("로그인 성공");
+      debugPrint(_user?.displayName);
+      debugPrint(_user?.photoURL);
+      debugPrint("태그: $_userTag");
     }
 
     notifyListeners();
@@ -66,7 +66,7 @@ class AuthProvider with ChangeNotifier {
     if (user != null) {
       await setUser(user);
     }
-    print("Google 로그인 완료");
+    debugPrint("Google 로그인 완료");
   }
 
   /// Kakao 로그인 실행.
@@ -75,17 +75,17 @@ class AuthProvider with ChangeNotifier {
     if (user != null) {
       await setUser(user);
     }
-    print("Kakao 로그인 완료");
+    debugPrint("Kakao 로그인 완료");
   }
 
   /// 로그아웃을 수행하고 상태를 초기화.
   Future<void> logout() async {
     try {
       await _authService.signOut();
-      print('로그아웃 성공 및 상태 초기화 완료');
+      debugPrint('로그아웃 성공 및 상태 초기화 완료');
       setUser(null);
     } catch (e) {
-      print('로그아웃 실패: $e');
+      debugPrint('로그아웃 실패: $e');
     }
   }
 
@@ -95,7 +95,7 @@ class AuthProvider with ChangeNotifier {
       await _authService.deleteAccount();
       await logout();
     } catch (e) {
-      print('회원탈퇴 오류: $e');
+      debugPrint('회원탈퇴 오류: $e');
     }
   }
 }

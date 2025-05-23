@@ -93,7 +93,7 @@ class FriendService {
 
       return null; // 성공
     } catch (e) {
-      print('친구 요청 전송 실패: $e');
+      debugPrint('친구 요청 전송 실패: $e');
       return '요청 전송 중 오류가 발생했습니다.';
     }
   }
@@ -162,7 +162,7 @@ class FriendService {
           .doc(currentUserId)
           .delete();
     } catch (e) {
-      print('친구 요청 수락 실패: $e');
+      debugPrint('친구 요청 수락 실패: $e');
     }
   }
 
@@ -191,7 +191,7 @@ class FriendService {
           .doc(currentUserId)
           .delete();
     } catch (e) {
-      print('친구 요청 거절 실패: $e');
+      debugPrint('친구 요청 거절 실패: $e');
     }
   }
 
@@ -221,7 +221,7 @@ class FriendService {
           .doc(currentUserId)
           .delete();
     } catch (e) {
-      print('친구 삭제 실패: $e');
+      debugPrint('친구 삭제 실패: $e');
     }
   }
 }

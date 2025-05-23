@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,10 +18,10 @@ class FirebaseCustomTokenService {
         final data = jsonDecode(response.body);
         return data['firebaseCustomToken'];
       } else {
-        print('Custom Token API 호출 실패: ${response.body}');
+        debugPrint('Custom Token API 호출 실패: ${response.body}');
       }
     } catch (e) {
-      print('Firebase Custom Token 가져오기 실패: $e');
+      debugPrint('Firebase Custom Token 가져오기 실패: $e');
     }
     return null;
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
@@ -69,7 +70,7 @@ class WeatherCubit extends Cubit<WeatherState> {
         recommendations: recommendations,
       ));
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       emit(state
           .copyWith(isLoading: false, filteredData: {}, recommendations: {}));
     }

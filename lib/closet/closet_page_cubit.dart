@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:style_board/auth/auth_provider.dart';
@@ -144,7 +145,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
         });
       }
     } catch (e) {
-      print('좋아요 업데이트 중 오류 발생: $e');
+      debugPrint('좋아요 업데이트 중 오류 발생: $e');
     }
   }
 
@@ -167,7 +168,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
         final storageRef = FirebaseStorage.instance.refFromURL(item.path);
         await storageRef.delete();
       } catch (e) {
-        print('Storage 이미지 삭제 중 오류 발생: $e');
+        debugPrint('Storage 이미지 삭제 중 오류 발생: $e');
       }
 
       final updatedItems =

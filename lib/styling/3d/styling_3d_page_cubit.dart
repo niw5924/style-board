@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,7 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
 
   /// GLB 파일 다운로드 및 로컬 저장
   Future<String?> _downloadGLBFile(String url, String category) async {
-    print('[$category] GLB 다운로드 시작...');
+    debugPrint('[$category] GLB 다운로드 시작...');
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -42,13 +43,13 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
         final filePath = "${directory.path}/$safeCategory.glb";
         final file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
-        print('[$category] GLB 다운로드 완료: $filePath');
+        debugPrint('[$category] GLB 다운로드 완료: $filePath');
         return filePath;
       } else {
-        print('[$category] GLB 다운로드 실패 (응답 코드: ${response.statusCode})');
+        debugPrint('[$category] GLB 다운로드 실패 (응답 코드: ${response.statusCode})');
       }
     } catch (e) {
-      print('[$category] GLB 다운로드 중 오류 발생: $e');
+      debugPrint('[$category] GLB 다운로드 중 오류 발생: $e');
     }
     return null;
   }
@@ -61,7 +62,7 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
     List<String> categories,
     int index,
   ) async {
-    print('[$category] 변환 상태 확인 중...');
+    debugPrint('[$category] 변환 상태 확인 중...');
     emit(state.copyWith(isLoading: {...state.isLoading, category: true}));
 
     final apiKey = dotenv.env['MESHY_API_KEY'];
@@ -73,7 +74,7 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
         final response =
             await http.get(url, headers: {'Authorization': 'Bearer $apiKey'});
         final data = jsonDecode(response.body);
-        print(data);
+        debugPrint(data);
 
         if (data.containsKey('progress')) {
           final int progress = data['progress'];
@@ -84,7 +85,7 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
 
         if (data['status'] == 'SUCCEEDED' &&
             data['model_urls'].containsKey('glb')) {
-          print('[$category] 변환 완료! GLB 다운로드 시작...');
+          debugPrint('[$category] 변환 완료! GLB 다운로드 시작...');
 
           final localPath =
               await _downloadGLBFile(data['model_urls']['glb'], category);
@@ -99,21 +100,21 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
                 category: null
               }, // 변환 완료 후 progress 제거
             ));
-            print('[$category] GLB 다운로드 및 저장 완료.');
+            debugPrint('[$category] GLB 다운로드 및 저장 완료.');
           }
 
           await convertImagesTo3DModels(imagePaths, categories, index + 1);
           return;
         } else if (data['status'] == 'FAILED') {
-          print('[$category] 변환 실패!');
+          debugPrint('[$category] 변환 실패!');
           emit(
               state.copyWith(isLoading: {...state.isLoading, category: false}));
           return;
         } else {
-          print('[$category] 변환 진행 중... ${data['progress']}% 완료');
+          debugPrint('[$category] 변환 진행 중... ${data['progress']}% 완료');
         }
       } catch (e) {
-        print('[$category] 변환 상태 확인 중 오류 발생: $e');
+        debugPrint('[$category] 변환 상태 확인 중 오류 발생: $e');
       }
       await Future.delayed(const Duration(seconds: 5));
     }
@@ -126,12 +127,12 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
     int index,
   ) async {
     if (index >= imagePaths.length) {
-      print('모든 이미지 변환 완료.');
+      debugPrint('모든 이미지 변환 완료.');
       return;
     }
 
     final category = categories[index];
-    print('[$category] 변환 시작...');
+    debugPrint('[$category] 변환 시작...');
 
     emit(state.copyWith(isLoading: {...state.isLoading, category: true}));
 
@@ -153,15 +154,15 @@ class Styling3DPageCubit extends Cubit<Styling3DPageState> {
       final data = jsonDecode(response.body);
       if (data.containsKey('result')) {
         String taskId = data['result'];
-        print('[$category] 변환 요청 성공 (Task ID: $taskId)');
+        debugPrint('[$category] 변환 요청 성공 (Task ID: $taskId)');
 
         await _checkJobStatus(taskId, category, imagePaths, categories, index);
       } else {
-        print('[$category] 변환 요청 실패 (응답 데이터 없음)');
+        debugPrint('[$category] 변환 요청 실패 (응답 데이터 없음)');
         throw '[$category] 변환 요청 실패: 서버에서 Task ID를 받지 못했습니다.';
       }
     } catch (e) {
-      print('[$category] 변환 중 오류 발생: $e');
+      debugPrint('[$category] 변환 중 오류 발생: $e');
       emit(state.copyWith(isLoading: {...state.isLoading, category: false}));
       throw '[$category] 변환 중 오류 발생';
     }

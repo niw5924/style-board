@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'profile_detail_page_state.dart';
 import 'package:style_board/auth/auth_provider.dart';
@@ -79,7 +80,7 @@ class ProfileDetailPageCubit extends Cubit<ProfileDetailPageState> {
       ));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
-      print('Error loading profile data: $e');
+      debugPrint('Error loading profile data: $e');
     }
   }
 
@@ -111,7 +112,7 @@ class ProfileDetailPageCubit extends Cubit<ProfileDetailPageState> {
       ));
     } catch (e) {
       emit(state.copyWith(isLoading: false));
-      print('옷장 초기화 중 오류 발생: $e');
+      debugPrint('옷장 초기화 중 오류 발생: $e');
     }
   }
 }

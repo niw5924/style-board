@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -41,12 +42,12 @@ class AuthService {
         // Firestore에 유저 정보 저장
         await _saveUserToFirestore(user);
         await _saveLoginMethod('google'); // 기기에 구글 로그인 방식 저장
-        print('Firebase Google 로그인 성공');
+        debugPrint('Firebase Google 로그인 성공');
       }
 
       return user;
     } catch (e) {
-      print('Google 로그인 실패: $e');
+      debugPrint('Google 로그인 실패: $e');
     }
     return null;
   }
@@ -57,10 +58,10 @@ class AuthService {
       OAuthToken token;
       if (await isKakaoTalkInstalled()) {
         token = await UserApi.instance.loginWithKakaoTalk();
-        print('KakaoTalk 로그인 성공: ${token.accessToken}');
+        debugPrint('KakaoTalk 로그인 성공: ${token.accessToken}');
       } else {
         token = await UserApi.instance.loginWithKakaoAccount();
-        print('Kakao 계정 로그인 성공: ${token.accessToken}');
+        debugPrint('Kakao 계정 로그인 성공: ${token.accessToken}');
       }
 
       final userResponse = await UserApi.instance.me();
@@ -73,7 +74,7 @@ class AuthService {
         token.accessToken,
       );
       if (customToken == null) {
-        print('Firebase Custom Token 요청 실패');
+        debugPrint('Firebase Custom Token 요청 실패');
         return null;
       }
 
@@ -89,12 +90,12 @@ class AuthService {
         // Firestore에 유저 정보 저장
         await _saveUserToFirestore(user);
         await _saveLoginMethod('kakao'); // 기기에 카카오 로그인 방식 저장
-        print('Firebase Kakao 로그인 성공');
+        debugPrint('Firebase Kakao 로그인 성공');
       }
 
       return user;
     } catch (e) {
-      print('Kakao 로그인 실패: $e');
+      debugPrint('Kakao 로그인 실패: $e');
     }
     return null;
   }
@@ -140,9 +141,9 @@ class AuthService {
           'lastLoginAt': FieldValue.serverTimestamp(), // 마지막 로그인 시간
         },
       }, SetOptions(merge: true)); // 기존 필드 병합
-      print('Firestore에 유저 정보 저장 성공');
+      debugPrint('Firestore에 유저 정보 저장 성공');
     } catch (e) {
-      print('Firestore에 유저 정보 저장 실패: $e');
+      debugPrint('Firestore에 유저 정보 저장 실패: $e');
     }
   }
 
@@ -178,20 +179,20 @@ class AuthService {
         case 'google':
           await _googleSignIn.signOut();
           await _firebaseAuth.signOut();
-          print('Google 로그아웃 성공');
+          debugPrint('Google 로그아웃 성공');
           break;
 
         case 'kakao':
           await UserApi.instance.logout();
           await _firebaseAuth.signOut();
-          print('Kakao 로그아웃 성공');
+          debugPrint('Kakao 로그아웃 성공');
           break;
       }
 
       await _clearLoginMethod(); // 저장된 로그인 방식 삭제
-      print('로그아웃 완료');
+      debugPrint('로그아웃 완료');
     } catch (e) {
-      print('로그아웃 중 오류 발생: $e');
+      debugPrint('로그아웃 중 오류 발생: $e');
     }
   }
 
@@ -213,15 +214,15 @@ class AuthService {
 
       // Firestore에서 사용자 문서 삭제
       await userRef.delete();
-      print("Firestore 사용자 데이터 삭제 완료");
+      debugPrint("Firestore 사용자 데이터 삭제 완료");
 
       // Firebase Authentication 계정 삭제
       await user.delete();
-      print("Firebase Authentication 계정 삭제 완료");
+      debugPrint("Firebase Authentication 계정 삭제 완료");
 
-      print("회원탈퇴 완료");
+      debugPrint("회원탈퇴 완료");
     } catch (e) {
-      print('회원탈퇴 실패: $e');
+      debugPrint('회원탈퇴 실패: $e');
     }
   }
 }
