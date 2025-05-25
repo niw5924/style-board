@@ -9,7 +9,6 @@ import 'package:style_board/home/home_page.dart';
 import 'package:style_board/home/home_page_cubit.dart';
 import 'package:style_board/auth/login_page.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
-import 'package:style_board/profile/profile_detail/profile_detail_page_cubit.dart';
 import 'package:style_board/profile/weather/weather_page_cubit.dart';
 import 'package:style_board/styling/3d/styling_3d_page_cubit.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
@@ -35,10 +34,6 @@ void main() async {
           create: (context) => ClosetPageCubit(context.read<AuthProvider>()),
         ),
         BlocProvider(create: (_) => WeatherCubit()),
-        BlocProvider(
-          create: (context) =>
-              ProfileDetailPageCubit(context.read<AuthProvider>()),
-        ),
       ],
       child: const StyleBoard(),
     ),

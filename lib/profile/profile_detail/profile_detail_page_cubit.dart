@@ -38,32 +38,26 @@ class ProfileDetailPageCubit extends Cubit<ProfileDetailPageState> {
       final Map<String, int> purposeTagCounts = {};
 
       for (var photo in photosSnapshot.docs) {
-        final category = photo['category'] as String?;
-        if (category != null) {
-          categoryCounts[category] = (categoryCounts[category] ?? 0) + 1;
-        }
+        final category = photo['category'] as String;
+        categoryCounts[category] = (categoryCounts[category] ?? 0) + 1;
 
-        final tags = photo['tags'] as Map<String, dynamic>?;
-        if (tags != null) {
-          tags.forEach((key, value) {
-            if (value is String) {
-              switch (key) {
-                case 'season':
-                  seasonTagCounts[value] = (seasonTagCounts[value] ?? 0) + 1;
-                  break;
-                case 'color':
-                  colorTagCounts[value] = (colorTagCounts[value] ?? 0) + 1;
-                  break;
-                case 'style':
-                  styleTagCounts[value] = (styleTagCounts[value] ?? 0) + 1;
-                  break;
-                case 'purpose':
-                  purposeTagCounts[value] = (purposeTagCounts[value] ?? 0) + 1;
-                  break;
-              }
-            }
-          });
-        }
+        final tags = Map<String, String>.from(photo['tags'] as Map);
+        tags.forEach((key, value) {
+          switch (key) {
+            case 'season':
+              seasonTagCounts[value] = (seasonTagCounts[value] ?? 0) + 1;
+              break;
+            case 'color':
+              colorTagCounts[value] = (colorTagCounts[value] ?? 0) + 1;
+              break;
+            case 'style':
+              styleTagCounts[value] = (styleTagCounts[value] ?? 0) + 1;
+              break;
+            case 'purpose':
+              purposeTagCounts[value] = (purposeTagCounts[value] ?? 0) + 1;
+              break;
+          }
+        });
       }
 
       emit(state.copyWith(

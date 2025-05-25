@@ -18,11 +18,16 @@ class _BodyInfoDialogState extends State<BodyInfoDialog> {
 
   final genders = ['남성', '여성'];
 
-  Future<void> saveBodyInfoToFirestore(String userId) async {
+  Future<void> saveBodyInfo({
+    required String userId,
+    required String gender,
+    required int height,
+    required int weight,
+  }) async {
     final bodyInfo = {
-      'gender': selectedGender,
-      'height': int.tryParse(heightController.text.trim()) ?? 0,
-      'weight': int.tryParse(weightController.text.trim()) ?? 0,
+      'gender': gender,
+      'height': height,
+      'weight': weight,
     };
 
     await FirebaseFirestore.instance
@@ -83,18 +88,29 @@ class _BodyInfoDialogState extends State<BodyInfoDialog> {
       submitIfValid: () async {
         final heightStr = heightController.text.trim();
         final weightStr = weightController.text.trim();
-        final height = int.tryParse(heightStr) ?? 0;
-        final weight = int.tryParse(weightStr) ?? 0;
 
         if (selectedGender == null || heightStr.isEmpty || weightStr.isEmpty) {
           return '모든 정보를 입력해주세요.';
         }
 
-        if (height <= 0 || weight <= 0) {
-          return '키와 몸무게는 0보다 큰 값을 입력해주세요.';
+        final height = int.tryParse(heightStr);
+        final weight = int.tryParse(weightStr);
+
+        if (height == null || weight == null) {
+          return '키와 몸무게는 숫자로 입력해주세요.';
         }
 
-        await saveBodyInfoToFirestore(userId);
+        if (height <= 0 || weight <= 0) {
+          return '키와 몸무게는 0보다 큰 숫자를 입력해주세요.';
+        }
+
+        await saveBodyInfo(
+          userId: userId,
+          gender: selectedGender!,
+          height: height,
+          weight: weight,
+        );
+
         return null;
       },
     );
