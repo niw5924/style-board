@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,20 +45,13 @@ class MyPicksPage extends StatelessWidget {
             itemCount: picks.length,
             itemBuilder: (context, index) {
               final pick = picks[index];
-              final pickId = pick.id;
-              final pickName = pick['name'];
-              final top = pick['상의'];
-              final bottom = pick['하의'];
-              final outer = pick['아우터'];
-              final shoes = pick['신발'];
-
               return _PickCard(
-                pickId: pickId,
-                pickName: pickName,
-                top: top,
-                bottom: bottom,
-                outer: outer,
-                shoes: shoes,
+                pickId: pick.id,
+                pickName: pick['name'],
+                top: pick['상의'],
+                bottom: pick['하의'],
+                outer: pick['아우터'],
+                shoes: pick['신발'],
               );
             },
           );
@@ -193,20 +185,12 @@ class _PickCardState extends State<_PickCard> {
                       Expanded(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: imagePath.startsWith('http') ||
-                                  imagePath.startsWith('https')
-                              ? Image.network(
-                                  imagePath,
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                )
-                              : Image.file(
-                                  File(imagePath),
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
+                          child: Image.network(
+                            imagePath,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ],
