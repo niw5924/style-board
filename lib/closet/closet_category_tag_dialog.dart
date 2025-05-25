@@ -24,8 +24,6 @@ class _ClosetCategoryTagDialogState extends State<ClosetCategoryTagDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final imageFile = File(widget.pickedXFile.path);
-
     return ValidatedActionDialog(
       icon: Icons.category,
       title: '카테고리 및 태그 설정',
@@ -38,10 +36,10 @@ class _ClosetCategoryTagDialogState extends State<ClosetCategoryTagDialog> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.file(
-                  imageFile,
+                  File(widget.pickedXFile.path),
                   width: double.infinity,
-                  height: 260,
-                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  fit: BoxFit.fill,
                 ),
               ),
               Positioned(

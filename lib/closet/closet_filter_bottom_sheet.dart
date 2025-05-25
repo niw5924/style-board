@@ -54,6 +54,7 @@ class _ClosetFilterBottomSheetState extends State<ClosetFilterBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final sectionHeight = MediaQuery.of(context).size.height * 0.3;
     final currentOptions = options[selectedSection]!;
     String? selectedOption;
     switch (selectedSection) {
@@ -87,8 +88,10 @@ class _ClosetFilterBottomSheetState extends State<ClosetFilterBottomSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("필터",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const Text(
+                "필터",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               TextButton.icon(
                 onPressed: () {
                   setState(() {
@@ -110,7 +113,7 @@ class _ClosetFilterBottomSheetState extends State<ClosetFilterBottomSheet> {
               Expanded(
                 flex: 1,
                 child: SizedBox(
-                  height: 260,
+                  height: sectionHeight,
                   child: ListView.builder(
                     itemCount: options.keys.length,
                     itemBuilder: (context, index) {
@@ -144,7 +147,7 @@ class _ClosetFilterBottomSheetState extends State<ClosetFilterBottomSheet> {
               Expanded(
                 flex: 3,
                 child: SizedBox(
-                  height: 260,
+                  height: sectionHeight,
                   child: AutoHeightGridView(
                     itemCount: currentOptions.length,
                     crossAxisCount: currentOptions.length > 4 ? 2 : 1,
@@ -185,20 +188,19 @@ class _ClosetFilterBottomSheetState extends State<ClosetFilterBottomSheet> {
                             border: Border.all(
                               color: isSelected
                                   ? Theme.of(context).colorScheme.primary
-                                  : Colors.grey.shade300,
+                                  : Colors.grey.shade400,
                             ),
                           ),
-                          child: Center(
-                            child: Text(
-                              option,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onSurface,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       );
@@ -220,7 +222,8 @@ class _ClosetFilterBottomSheetState extends State<ClosetFilterBottomSheet> {
               });
             },
             style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48)),
+              minimumSize: const Size(double.infinity, 48),
+            ),
             child: const Text("필터 적용"),
           ),
         ],

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -50,17 +49,9 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     }
   }
 
-  Future<XFile?> takePhoto() async {
+  Future<XFile?> pickPhoto(ImageSource source) async {
     try {
-      return await _imagePicker.pickImage(source: ImageSource.camera);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<XFile?> pickPhotoFromGallery() async {
-    try {
-      return await _imagePicker.pickImage(source: ImageSource.gallery);
+      return await _imagePicker.pickImage(source: source);
     } catch (e) {
       return null;
     }

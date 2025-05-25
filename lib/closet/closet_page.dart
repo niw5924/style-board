@@ -2,6 +2,7 @@ import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:style_board/closet/closet_category_tag_dialog.dart';
 import 'package:style_board/closet/closet_filter_bottom_sheet.dart';
 import 'package:style_board/closet/closet_page_cubit.dart';
@@ -24,11 +25,40 @@ class _ClosetPageState extends State<ClosetPage> {
     context.read<ClosetPageCubit>().loadUserPhotos();
   }
 
+  Future<void> _handlePickPhoto(ImageSource source) async {
+    HapticFeedback.mediumImpact();
+    final pickedXFile = await context.read<ClosetPageCubit>().pickPhoto(source);
+
+    if (pickedXFile != null) {
+      final photoDetails = await showDialog<Map<String, dynamic>>(
+        context: context,
+        builder: (_) => ClosetCategoryTagDialog(pickedXFile: pickedXFile),
+      );
+
+      if (photoDetails != null) {
+        final category = photoDetails['category'] as String;
+        final tags = Map<String, String>.from(photoDetails['tags'] as Map);
+        final isLiked = photoDetails['isLiked'] as bool;
+
+        await context.read<ClosetPageCubit>().savePhotoWithDetails(
+              pickedXFile: pickedXFile,
+              category: category,
+              tags: tags,
+              isLiked: isLiked,
+            );
+
+        scaffoldMessengerKey.currentState?.showSnackBar(
+          const SnackBar(content: Text('새로운 사진이 옷장에 추가되었습니다!')),
+        );
+      }
+    }
+  }
+
   Future<void> _openFilterSheet(String section) async {
     final cubit = context.read<ClosetPageCubit>();
     final state = cubit.state;
 
-    final result = await showModalBottomSheet<Map<String, dynamic>>(
+    final result = await showModalBottomSheet<Map<String, String?>>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -46,11 +76,11 @@ class _ClosetPageState extends State<ClosetPage> {
 
     if (result != null) {
       cubit
-        ..updateCategory(result['filterCategory'] as String?)
-        ..updateSeason(result['filterSeason'] as String?)
-        ..updateColor(result['filterColor'] as String?)
-        ..updateStyle(result['filterStyle'] as String?)
-        ..updatePurpose(result['filterPurpose'] as String?);
+        ..updateCategory(result['filterCategory'])
+        ..updateSeason(result['filterSeason'])
+        ..updateColor(result['filterColor'])
+        ..updateStyle(result['filterStyle'])
+        ..updatePurpose(result['filterPurpose']);
     }
   }
 
@@ -67,83 +97,14 @@ class _ClosetPageState extends State<ClosetPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: () async {
-                        HapticFeedback.mediumImpact();
-                        final pickedXFile =
-                            await context.read<ClosetPageCubit>().takePhoto();
-
-                        if (pickedXFile != null) {
-                          final photoDetails =
-                              await showDialog<Map<String, dynamic>>(
-                            context: context,
-                            builder: (_) => ClosetCategoryTagDialog(
-                                pickedXFile: pickedXFile),
-                          );
-
-                          if (photoDetails != null) {
-                            final category = photoDetails['category'] as String;
-                            final tags =
-                                Map<String, String>.from(photoDetails['tags']);
-                            final isLiked = photoDetails['isLiked'] as bool;
-
-                            await context
-                                .read<ClosetPageCubit>()
-                                .savePhotoWithDetails(
-                                  pickedXFile: pickedXFile,
-                                  category: category,
-                                  tags: tags,
-                                  isLiked: isLiked,
-                                );
-
-                            scaffoldMessengerKey.currentState?.showSnackBar(
-                              const SnackBar(
-                                  content: Text('새로운 사진이 옷장에 추가되었습니다!')),
-                            );
-                          }
-                        }
-                      },
+                      onPressed: () => _handlePickPhoto(ImageSource.camera),
                       icon: Icon(Icons.camera_alt,
                           color: Theme.of(context).colorScheme.surface),
                       label: const Text('사진 찍기'),
                     ),
                     const SizedBox(width: 16),
                     ElevatedButton.icon(
-                      onPressed: () async {
-                        HapticFeedback.mediumImpact();
-                        final pickedXFile = await context
-                            .read<ClosetPageCubit>()
-                            .pickPhotoFromGallery();
-
-                        if (pickedXFile != null) {
-                          final photoDetails =
-                              await showDialog<Map<String, dynamic>>(
-                            context: context,
-                            builder: (_) => ClosetCategoryTagDialog(
-                                pickedXFile: pickedXFile),
-                          );
-
-                          if (photoDetails != null) {
-                            final category = photoDetails['category'] as String;
-                            final tags =
-                                Map<String, String>.from(photoDetails['tags']);
-                            final isLiked = photoDetails['isLiked'] as bool;
-
-                            await context
-                                .read<ClosetPageCubit>()
-                                .savePhotoWithDetails(
-                                  pickedXFile: pickedXFile,
-                                  category: category,
-                                  tags: tags,
-                                  isLiked: isLiked,
-                                );
-
-                            scaffoldMessengerKey.currentState?.showSnackBar(
-                              const SnackBar(
-                                  content: Text('새로운 사진이 옷장에 추가되었습니다!')),
-                            );
-                          }
-                        }
-                      },
+                      onPressed: () => _handlePickPhoto(ImageSource.gallery),
                       icon: Icon(Icons.photo,
                           color: Theme.of(context).colorScheme.surface),
                       label: const Text('갤러리'),
@@ -246,7 +207,8 @@ class _ClosetPageState extends State<ClosetPage> {
                                   child: Image.network(
                                     item.path,
                                     width: double.infinity,
-                                    height: 180,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.2,
                                     fit: BoxFit.fill,
                                   ),
                                 ),
