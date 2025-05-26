@@ -128,14 +128,14 @@ class StylingPage extends StatelessWidget {
       return;
     }
 
-    final confirmedPickName = await showDialog<String>(
+    final result = await showDialog<String>(
       context: context,
       builder: (_) => const AddMyPickDialog(),
     );
 
-    if (confirmedPickName != null) {
+    if (result != null) {
       try {
-        await cubit.addToMyPickWithName(confirmedPickName);
+        await cubit.addToMyPickWithName(result);
         scaffoldMessengerKey.currentState?.showSnackBar(
           const SnackBar(content: Text('현재 코디가 나의 Pick에 추가되었습니다!')),
         );

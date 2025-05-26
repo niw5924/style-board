@@ -30,15 +30,15 @@ class _ClosetPageState extends State<ClosetPage> {
     final pickedXFile = await context.read<ClosetPageCubit>().pickPhoto(source);
 
     if (pickedXFile != null) {
-      final photoDetails = await showDialog<Map<String, dynamic>>(
+      final result = await showDialog<Map<String, dynamic>>(
         context: context,
         builder: (_) => ClosetCategoryTagDialog(pickedXFile: pickedXFile),
       );
 
-      if (photoDetails != null) {
-        final category = photoDetails['category'] as String;
-        final tags = Map<String, String>.from(photoDetails['tags'] as Map);
-        final isLiked = photoDetails['isLiked'] as bool;
+      if (result != null) {
+        final category = result['category'] as String;
+        final tags = Map<String, String>.from(result['tags'] as Map);
+        final isLiked = result['isLiked'] as bool;
 
         await context.read<ClosetPageCubit>().savePhotoWithDetails(
               pickedXFile: pickedXFile,
