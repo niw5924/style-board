@@ -6,6 +6,7 @@ class WeatherService {
   final String _baseUrl =
       "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
 
+  /// 기상청 단기예보조회 서비스를 통해 지정된 날짜, 시간, 좌표(nx, ny)의 날씨 데이터를 조회함
   Future<Map<String, dynamic>> fetchWeather({
     required String date,
     required String time,

@@ -1,5 +1,7 @@
 class TimeCalculator {
-  // Base Date 계산
+  static String _twoDigits(int n) => n.toString().padLeft(2, '0');
+
+  /// Base Date 계산
   static String calculateBaseDate(DateTime now) {
     List<int> baseTimes = [2, 5, 8, 11, 14, 17, 20, 23]; // Base Time (시)
     DateTime baseDateTime = now;
@@ -29,7 +31,7 @@ class TimeCalculator {
     return "${baseDateTime.year}${_twoDigits(baseDateTime.month)}${_twoDigits(baseDateTime.day)}";
   }
 
-  // Base Time 계산
+  /// Base Time 계산
   static String calculateBaseTime(DateTime now) {
     List<int> baseTimes = [2, 5, 8, 11, 14, 17, 20, 23]; // Base Time (시)
 
@@ -49,6 +51,4 @@ class TimeCalculator {
 
     return "2300"; // 기본값 (전날 23:00)
   }
-
-  static String _twoDigits(int n) => n.toString().padLeft(2, '0');
 }

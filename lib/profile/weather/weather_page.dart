@@ -5,151 +5,146 @@ import 'package:lottie/lottie.dart';
 import 'package:style_board/profile/weather/weather_page_cubit.dart';
 import 'package:style_board/profile/weather/weather_page_state.dart';
 
-class WeatherPage extends StatefulWidget {
+class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key});
-
-  @override
-  State<WeatherPage> createState() => _WeatherPageState();
-}
-
-class _WeatherPageState extends State<WeatherPage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<WeatherCubit>().fetchWeather();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("코디 추천")),
-      body: BlocBuilder<WeatherCubit, WeatherState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      buildIconWithText(
-                        Icons.thermostat_outlined,
-                        state.filteredData['온도'] ?? "-",
-                      ),
-                      buildIconWithText(
-                        _skyDetails(state.filteredData['하늘 상태'])['icon'],
-                        _skyDetails(state.filteredData['하늘 상태'])['description'],
-                      ),
-                      buildIconWithText(
-                        _precipitationDetails(
-                            state.filteredData['강수 형태'])['icon'],
-                        _precipitationDetails(
-                            state.filteredData['강수 형태'])['description'],
-                      ),
-                      buildIconWithText(
-                        Icons.water_drop,
-                        state.filteredData['강수 확률'] ?? "-",
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  if (state.filteredData['하늘 상태'] != null &&
-                      state.filteredData['강수 형태'] != null)
-                    Lottie.asset(
-                      _getLottiePath(
-                        skyState: state.filteredData['하늘 상태'],
-                        precipitationType: state.filteredData['강수 형태'],
-                      )!,
-                      width: 200,
-                      height: 200,
+      body: BlocProvider(
+        create: (_) => WeatherCubit()..fetchWeather(),
+        child: BlocBuilder<WeatherCubit, WeatherState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        buildIconWithText(
+                          icon: Icons.thermostat_outlined,
+                          text: state.filteredData['온도'] ?? "-",
+                        ),
+                        buildIconWithText(
+                          icon:
+                              _skyDetails(state.filteredData['하늘 상태'])['icon'],
+                          text: _skyDetails(
+                              state.filteredData['하늘 상태'])['description'],
+                        ),
+                        buildIconWithText(
+                          icon: _precipitationDetails(
+                              state.filteredData['강수 형태'])['icon'],
+                          text: _precipitationDetails(
+                              state.filteredData['강수 형태'])['description'],
+                        ),
+                        buildIconWithText(
+                          icon: Icons.water_drop,
+                          text: state.filteredData['강수 확률'] ?? "-",
+                        ),
+                      ],
                     ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "추천 코디",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  if (state.recommendations.isNotEmpty)
-                    Column(
-                      children: state.recommendations.entries.map((entry) {
-                        return FlipCard(
-                          direction: FlipDirection.HORIZONTAL,
-                          front: Card(
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    _getIconForCategory(entry.key),
-                                    size: 32,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    entry.key,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 16),
+                    if (state.filteredData['하늘 상태'] != null &&
+                        state.filteredData['강수 형태'] != null)
+                      Lottie.asset(
+                        _getLottiePath(
+                          skyState: state.filteredData['하늘 상태'],
+                          precipitationType: state.filteredData['강수 형태'],
+                        )!,
+                        width: 200,
+                        height: 200,
+                      ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "추천 코디",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    if (state.recommendations.isNotEmpty)
+                      Column(
+                        children: state.recommendations.entries.map((entry) {
+                          return FlipCard(
+                            direction: FlipDirection.HORIZONTAL,
+                            front: Card(
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      _getIconForCategory(entry.key),
+                                      size: 32,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          back: Card(
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    entry.value,
-                                    style: const TextStyle(
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      entry.key,
+                                      style: const TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
+                            back: Card(
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      entry.value,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      )
+                    else
+                      const Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            "추천 코디 정보를 가져올 수 없습니다.",
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
                           ),
-                        );
-                      }).toList(),
-                    )
-                  else
-                    const Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Text(
-                          "추천 코디 정보를 가져올 수 없습니다.",
-                          style: TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-                ],
-              ),
-            );
-          }
-        },
+                  ],
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
 
-  Widget buildIconWithText(IconData icon, String description) {
+  Widget buildIconWithText({required IconData icon, required String text}) {
     return Row(
       children: [
         Icon(icon, size: 24),
         const SizedBox(width: 8),
         Text(
-          description,
+          text,
           style: const TextStyle(fontSize: 16),
         ),
       ],

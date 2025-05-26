@@ -1,6 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
+  /// 현재 위치(위도, 경도)를 반환하며, 위치 서비스 활성화 및 권한 확인을 포함함
   Future<Position> getCurrentLocation() async {
     // 위치 서비스가 활성화되어 있는지 확인
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();

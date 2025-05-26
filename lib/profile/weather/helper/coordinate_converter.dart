@@ -7,10 +7,14 @@ class CoordinateConverter {
   static const double projLatitude2 = 60.0; // 투영 위도 2(degree)
   static const double baseLongitude = 126.0; // 기준 경도(degree)
   static const double baseLatitude = 38.0; // 기준 위도(degree)
-  static const double baseX = 43; // 기준점 X좌표 (격자)
-  static const double baseY = 136; // 기준점 Y좌표 (격자)
+  static const double baseX = 43; // 기준점 X좌표(격자)
+  static const double baseY = 136; // 기준점 Y좌표(격자)
 
-  static Map<String, int> latLonToGrid(double lat, double lon) {
+  /// 위도(lat), 경도(lon)를 기상청 격자 좌표(nx, ny)로 변환
+  static Map<String, int> latLonToGrid({
+    required double latitude,
+    required double longitude,
+  }) {
     const double degrad = pi / 180.0;
 
     const double re = earthRadius / gridSpacing;
@@ -26,9 +30,9 @@ class CoordinateConverter {
     double ro = tan(pi * 0.25 + olat * 0.5);
     ro = re * sf / pow(ro, sn);
 
-    double ra = tan(pi * 0.25 + lat * degrad * 0.5);
+    double ra = tan(pi * 0.25 + latitude * degrad * 0.5);
     ra = re * sf / pow(ra, sn);
-    double theta = lon * degrad - olon;
+    double theta = longitude * degrad - olon;
     if (theta > pi) theta -= 2.0 * pi;
     if (theta < -pi) theta += 2.0 * pi;
     theta *= sn;
