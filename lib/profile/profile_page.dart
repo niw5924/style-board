@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/main.dart';
-import 'package:style_board/profile/body_info_dialog.dart';
+import 'package:style_board/profile/body_info/body_info_dialog.dart';
 import 'package:style_board/profile/friend_management/friend_management_page.dart';
 import 'package:style_board/profile/my_picks/my_picks_page.dart';
 import 'package:style_board/profile/profile_detail/profile_detail_page.dart';
@@ -17,6 +18,7 @@ class ProfilePage extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
     final userName = authProvider.user?.displayName;
     final userTag = authProvider.userTag;
+    final userId = authProvider.user?.uid;
 
     final displayNameWithTag = userName != null && userTag != null
         ? '$userName#$userTag'
@@ -62,12 +64,17 @@ class ProfilePage extends StatelessWidget {
               title: '신체정보',
               subtitle: '신체정보를 설정합니다.',
               onTap: () async {
-                final confirmed = await showDialog<bool>(
+                final result = await showDialog<Map<String, dynamic>>(
                   context: context,
                   builder: (context) => const BodyInfoDialog(),
                 );
 
-                if (confirmed == true) {
+                if (result != null) {
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(userId)
+                      .set({'bodyInfo': result}, SetOptions(merge: true));
+
                   scaffoldMessengerKey.currentState?.showSnackBar(
                     const SnackBar(content: Text('신체정보가 성공적으로 저장되었습니다!')),
                   );

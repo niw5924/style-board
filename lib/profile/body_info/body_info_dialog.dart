@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
-import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/widgets/validated_action_dialog.dart';
 
 class BodyInfoDialog extends StatefulWidget {
@@ -18,29 +15,8 @@ class _BodyInfoDialogState extends State<BodyInfoDialog> {
 
   final genders = ['남성', '여성'];
 
-  Future<void> saveBodyInfo({
-    required String userId,
-    required String gender,
-    required int height,
-    required int weight,
-  }) async {
-    final bodyInfo = {
-      'gender': gender,
-      'height': height,
-      'weight': weight,
-    };
-
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .set({'bodyInfo': bodyInfo}, SetOptions(merge: true));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.user!.uid;
-
     return ValidatedActionDialog(
       icon: Icons.info,
       title: '신체정보 입력',
@@ -104,14 +80,17 @@ class _BodyInfoDialogState extends State<BodyInfoDialog> {
           return '키와 몸무게는 0보다 큰 숫자를 입력해주세요.';
         }
 
-        await saveBodyInfo(
-          userId: userId,
-          gender: selectedGender!,
-          height: height,
-          weight: weight,
-        );
-
         return null;
+      },
+      onSuccessResult: () {
+        final height = int.parse(heightController.text.trim());
+        final weight = int.parse(weightController.text.trim());
+
+        return {
+          'gender': selectedGender!,
+          'height': height,
+          'weight': weight,
+        };
       },
     );
   }
