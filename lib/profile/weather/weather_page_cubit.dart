@@ -45,18 +45,19 @@ class WeatherCubit extends Cubit<WeatherState> {
       Map<String, dynamic> result = {};
 
       for (var item in items) {
+        final value = item['fcstValue'];
         switch (item['category']) {
           case 'TMP':
-            result['온도'] = "${item['fcstValue']}°C";
+            result['온도'] = value;
             break;
           case 'SKY':
-            result['하늘 상태'] = item['fcstValue'];
+            result['하늘 상태'] = value;
             break;
           case 'PTY':
-            result['강수 형태'] = item['fcstValue'];
+            result['강수 형태'] = value;
             break;
           case 'POP':
-            result['강수 확률'] = "${item['fcstValue']}%";
+            result['강수 확률'] = value;
             break;
         }
       }
@@ -96,7 +97,6 @@ class WeatherCubit extends Cubit<WeatherState> {
     final skyState = getSkyDescription(weatherData['하늘 상태']);
 
     final seasonData = outfitRecommendations['outfits'][season];
-    if (seasonData == null) return _defaultOutfitRecommendations();
 
     final tempData = seasonData['temperatureRanges'][temperatureRange];
     if (tempData == null) return _defaultOutfitRecommendations();

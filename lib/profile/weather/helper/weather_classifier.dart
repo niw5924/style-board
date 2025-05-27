@@ -9,8 +9,7 @@ String getSeason(DateTime date) {
 
 /// 온도 값을 기반으로 추천용 온도 범위 문자열 반환
 String getTemperatureRange(String? temperature) {
-  final temp =
-      int.tryParse(temperature?.replaceAll('°C', '').trim() ?? "0") ?? 0;
+  final temp = int.tryParse(temperature ?? "0") ?? 0;
 
   if (temp <= 0) return "-10-0";
   if (temp <= 10) return "1-10";

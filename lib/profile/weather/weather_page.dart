@@ -19,6 +19,11 @@ class WeatherPage extends StatelessWidget {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
             } else {
+              final lottiePath = _getLottiePath(
+                skyState: state.filteredData['하늘 상태'],
+                precipitationType: state.filteredData['강수 형태'],
+              );
+
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -28,7 +33,9 @@ class WeatherPage extends StatelessWidget {
                       children: [
                         buildIconWithText(
                           icon: Icons.thermostat_outlined,
-                          text: state.filteredData['온도'] ?? "-",
+                          text: state.filteredData['온도'] != null
+                              ? "${state.filteredData['온도']}℃"
+                              : "-",
                         ),
                         buildIconWithText(
                           icon:
@@ -44,18 +51,16 @@ class WeatherPage extends StatelessWidget {
                         ),
                         buildIconWithText(
                           icon: Icons.water_drop,
-                          text: state.filteredData['강수 확률'] ?? "-",
+                          text: state.filteredData['강수 확률'] != null
+                              ? "${state.filteredData['강수 확률']}%"
+                              : "-",
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    if (state.filteredData['하늘 상태'] != null &&
-                        state.filteredData['강수 형태'] != null)
+                    if (lottiePath != null)
                       Lottie.asset(
-                        _getLottiePath(
-                          skyState: state.filteredData['하늘 상태'],
-                          precipitationType: state.filteredData['강수 형태'],
-                        )!,
+                        lottiePath,
                         width: 200,
                         height: 200,
                       ),
@@ -88,9 +93,8 @@ class WeatherPage extends StatelessWidget {
                                     Text(
                                       entry.key,
                                       style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -138,7 +142,10 @@ class WeatherPage extends StatelessWidget {
     );
   }
 
-  Widget buildIconWithText({required IconData icon, required String text}) {
+  Widget buildIconWithText({
+    required IconData icon,
+    required String text,
+  }) {
     return Row(
       children: [
         Icon(icon, size: 24),
