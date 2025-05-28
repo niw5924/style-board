@@ -12,36 +12,33 @@ class Styling3DPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildModelView(context, '상의'),
-              const SizedBox(height: 20),
-              _buildModelView(context, '하의'),
-              const SizedBox(height: 20),
-              _buildModelView(context, '신발'),
-            ],
-          ),
-          const SizedBox(width: 40),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildModelView(context, '아우터'),
-              const SizedBox(height: 100),
-              ElevatedButton(
-                onPressed: () => _showCategorySelectionSheet(context),
-                child: const Text('옷장 열기'),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildModelView(context, '상의'),
+            const SizedBox(height: 20),
+            _buildModelView(context, '하의'),
+            const SizedBox(height: 20),
+            _buildModelView(context, '신발'),
+          ],
+        ),
+        const SizedBox(width: 40),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildModelView(context, '아우터'),
+            const SizedBox(height: 100),
+            ElevatedButton(
+              onPressed: () => _showCategorySelectionSheet(context),
+              child: const Text('옷장 열기'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
