@@ -48,11 +48,11 @@ class StyleBoard extends StatelessWidget {
       builder: (context, userId, child) {
         return MultiProvider(
           providers: [
-            BlocProvider(
-              key: ValueKey('styling-$userId'),
-              create: (context) =>
-                  StylingPageCubit(context.read<AuthProvider>()),
-            ),
+            if (userId != null)
+              BlocProvider(
+                key: ValueKey('styling-$userId'),
+                create: (context) => StylingPageCubit(userId),
+              ),
             BlocProvider(
               key: ValueKey('styling3D-$userId'),
               create: (context) => Styling3DPageCubit(),

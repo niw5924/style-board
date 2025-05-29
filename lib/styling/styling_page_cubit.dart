@@ -1,14 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'styling_page_state.dart';
-import 'package:style_board/auth/auth_provider.dart';
 
 class StylingPageCubit extends Cubit<StylingPageState> {
-  final AuthProvider authProvider;
+  final String userId;
 
-  StylingPageCubit(this.authProvider) : super(const StylingPageState());
-
-  String get _userId => authProvider.user!.uid;
+  StylingPageCubit(this.userId) : super(const StylingPageState());
 
   void updateSelectedTab(int tabIndex) {
     emit(state.copyWith(selectedTab: tabIndex));
@@ -20,7 +17,7 @@ class StylingPageCubit extends Cubit<StylingPageState> {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_userId)
+          .doc(userId)
           .collection('photos')
           .where('category', isEqualTo: category)
           .get();
@@ -62,17 +59,13 @@ class StylingPageCubit extends Cubit<StylingPageState> {
 
     final myPicksRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(_userId)
+        .doc(userId)
         .collection('myPicks');
 
-    try {
-      await myPicksRef.add({
-        'name': pickName,
-        ...selectedPhotos,
-        'createdAt': DateTime.now(),
-      });
-    } catch (e) {
-      throw Exception('나의 Pick 저장 중 오류가 발생했습니다: $e');
-    }
+    await myPicksRef.add({
+      'name': pickName,
+      ...selectedPhotos,
+      'createdAt': DateTime.now(),
+    });
   }
 }

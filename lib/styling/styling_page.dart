@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:style_board/main.dart';
 import 'package:style_board/styling/2d/styling_2d_page.dart';
 import 'package:style_board/styling/3d/styling_3d_page.dart';
 import 'package:style_board/styling/add_my_pick_dialog.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 import 'package:style_board/styling/styling_page_state.dart';
+import 'package:style_board/main.dart';
 
 class StylingPage extends StatelessWidget {
   const StylingPage({super.key});
@@ -16,7 +16,7 @@ class StylingPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Row(
