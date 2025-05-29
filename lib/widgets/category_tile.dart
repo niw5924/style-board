@@ -81,7 +81,8 @@ class CategoryTile extends StatelessWidget {
                                       final photo = state.categoryPhotos[index];
                                       return GestureDetector(
                                         onTap: () {
-                                          cubit.selectPhoto(category, photo);
+                                          cubit.selectPhoto(
+                                              category: category, photo: photo);
                                           Navigator.pop(context);
                                         },
                                         child: _buildImage(photo),
@@ -104,8 +105,8 @@ class CategoryTile extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                    width: 140,
-                    height: 140,
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    height: MediaQuery.of(context).size.width * 0.35,
                     decoration: BoxDecoration(
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(12),

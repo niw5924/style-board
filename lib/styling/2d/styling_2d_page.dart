@@ -20,7 +20,7 @@ class Styling2DPage extends StatelessWidget {
             CategoryTile(category: '신발'),
           ],
         ),
-        SizedBox(width: 40),
+        SizedBox(width: 20),
         CategoryTile(category: '아우터'),
       ],
     );

@@ -26,12 +26,11 @@ class Styling3DPage extends StatelessWidget {
             _buildModelView(context, '신발'),
           ],
         ),
-        const SizedBox(width: 40),
+        const SizedBox(width: 20),
         Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             _buildModelView(context, '아우터'),
-            const SizedBox(height: 100),
+            SizedBox(height: MediaQuery.of(context).size.width * 0.2),
             ElevatedButton(
               onPressed: () => _showCategorySelectionSheet(context),
               child: const Text('옷장 열기'),
@@ -63,8 +62,8 @@ class Styling3DPage extends StatelessWidget {
             return Stack(
               children: [
                 Container(
-                  width: 140,
-                  height: 140,
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  height: MediaQuery.of(context).size.width * 0.35,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(12),

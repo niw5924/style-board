@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../constants/closet_data.dart';
 import 'styling_page_state.dart';
 
 class StylingPageCubit extends Cubit<StylingPageState> {
@@ -25,12 +26,15 @@ class StylingPageCubit extends Cubit<StylingPageState> {
       final photos = snapshot.docs.map((doc) => doc['path'] as String).toList();
 
       emit(state.copyWith(isLoading: false, categoryPhotos: photos));
-    } catch (e) {
+    } catch (_) {
       emit(state.copyWith(isLoading: false));
     }
   }
 
-  void selectPhoto(String category, String photo) {
+  void selectPhoto({
+    required String category,
+    required String photo,
+  }) {
     final updatedPhotos = Map<String, String>.from(state.selectedPhotos)
       ..[category] = photo;
 
@@ -49,8 +53,7 @@ class StylingPageCubit extends Cubit<StylingPageState> {
   }
 
   bool areAllCategoriesSelected() {
-    const requiredCategories = ['상의', '하의', '아우터', '신발'];
-    return requiredCategories
+    return categories
         .every((category) => state.selectedPhotos.containsKey(category));
   }
 
