@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../constants/closet_data.dart';
@@ -26,7 +27,8 @@ class StylingPageCubit extends Cubit<StylingPageState> {
       final photos = snapshot.docs.map((doc) => doc['path'] as String).toList();
 
       emit(state.copyWith(isLoading: false, categoryPhotos: photos));
-    } catch (_) {
+    } catch (e) {
+      debugPrint(e.toString());
       emit(state.copyWith(isLoading: false));
     }
   }

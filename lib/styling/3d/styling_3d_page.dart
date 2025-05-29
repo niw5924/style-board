@@ -94,7 +94,7 @@ class Styling3DPage extends StatelessWidget {
                           : Icon(
                               Icons.threed_rotation,
                               color: Theme.of(context).colorScheme.primary,
-                              size: 40,
+                              size: MediaQuery.of(context).size.width * 0.1,
                             ),
                 ),
                 if (glbUrl != null)
@@ -116,7 +116,7 @@ class Styling3DPage extends StatelessWidget {
                         child: Icon(
                           Icons.close,
                           color: Theme.of(context).colorScheme.surface,
-                          size: 20,
+                          size: MediaQuery.of(context).size.width * 0.05,
                         ),
                       ),
                     ),

@@ -24,8 +24,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeCubit = context.read<HomePageCubit>();
-
     return BlocBuilder<HomePageCubit, HomePageState>(
       builder: (context, state) {
         return Scaffold(
@@ -35,7 +33,7 @@ class HomePage extends StatelessWidget {
           body: _getBody(state.selectedIndex),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: state.selectedIndex,
-            onTap: (index) => homeCubit.changeTab(index),
+            onTap: (index) => context.read<HomePageCubit>().changeTab(index),
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(Icons.accessibility), label: '코디'),
