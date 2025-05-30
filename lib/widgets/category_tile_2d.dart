@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:style_board/styling/styling_page_cubit.dart';
 import 'package:style_board/styling/styling_page_state.dart';
 
-class CategoryTile extends StatelessWidget {
+class CategoryTile2D extends StatelessWidget {
   final String category;
 
-  const CategoryTile({super.key, required this.category});
+  const CategoryTile2D({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {

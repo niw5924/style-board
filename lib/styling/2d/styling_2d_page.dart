@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:style_board/widgets/category_tile.dart';
+import 'package:style_board/widgets/category_tile_2d.dart';
 
 class Styling2DPage extends StatelessWidget {
   const Styling2DPage({super.key});
@@ -13,15 +13,15 @@ class Styling2DPage extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CategoryTile(category: '상의'),
+            CategoryTile2D(category: '상의'),
             SizedBox(height: 20),
-            CategoryTile(category: '하의'),
+            CategoryTile2D(category: '하의'),
             SizedBox(height: 20),
-            CategoryTile(category: '신발'),
+            CategoryTile2D(category: '신발'),
           ],
         ),
         SizedBox(width: 20),
-        CategoryTile(category: '아우터'),
+        CategoryTile2D(category: '아우터'),
       ],
     );
   }
