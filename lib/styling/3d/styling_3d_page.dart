@@ -91,16 +91,17 @@ class Styling3DPage extends StatelessWidget {
                                     .selectedPhotos;
 
                                 if (selectedPhotos.isNotEmpty) {
-                                  final imagePaths =
-                                      selectedPhotos.values.toList();
-                                  final selectedCategories =
-                                      selectedPhotos.keys.toList();
-
                                   try {
-                                    await context
-                                        .read<Styling3DPageCubit>()
-                                        .convertImagesTo3DModels(
-                                            imagePaths, selectedCategories, 0);
+                                    final cubit =
+                                        context.read<Styling3DPageCubit>();
+                                    final entries =
+                                        selectedPhotos.entries.toList();
+                                    for (final entry in entries) {
+                                      await cubit.convertImageTo3DModel(
+                                        category: entry.key,
+                                        imagePath: entry.value,
+                                      );
+                                    }
                                   } catch (e) {
                                     scaffoldMessengerKey.currentState
                                         ?.showSnackBar(

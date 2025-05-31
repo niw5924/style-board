@@ -5,15 +5,6 @@ part 'styling_3d_page_state.freezed.dart';
 @freezed
 class Styling3DPageState with _$Styling3DPageState {
   const factory Styling3DPageState({
-    /// 각 카테고리별 GLB 파일 경로
-    @Default({
-      '상의': null,
-      '하의': null,
-      '아우터': null,
-      '신발': null,
-    })
-    Map<String, String?> glbUrls,
-
     /// 각 카테고리별 로딩 상태
     @Default({
       '상의': false,
@@ -31,5 +22,14 @@ class Styling3DPageState with _$Styling3DPageState {
       '신발': null,
     })
     Map<String, int?> progress,
+
+    /// 각 카테고리별 GLB 파일 경로
+    @Default({
+      '상의': null,
+      '하의': null,
+      '아우터': null,
+      '신발': null,
+    })
+    Map<String, String?> glbUrls,
   }) = _Styling3DPageState;
 }

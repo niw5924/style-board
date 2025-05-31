@@ -1,6 +1,14 @@
 // 카테고리
 const categories = ['상의', '하의', '아우터', '신발'];
 
+// 한글 카테고리를 대응되는 영문 값으로 매핑한 Map
+const categoryToEnglish = {
+  '상의': 'top',
+  '하의': 'bottom',
+  '아우터': 'outer',
+  '신발': 'shoes',
+};
+
 // 계절 태그
 const seasons = ['봄', '여름', '가을', '겨울'];
 
