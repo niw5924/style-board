@@ -105,7 +105,7 @@ class StyleBoard extends StatelessWidget {
                 ),
                 BlocProvider(
                   key: ValueKey('closet-$userId'),
-                  create: (_) => ClosetPageCubit(userId),
+                  create: (_) => ClosetPageCubit(userId)..loadUserPhotos(),
                 ),
               ],
               child: const HomePage(),
