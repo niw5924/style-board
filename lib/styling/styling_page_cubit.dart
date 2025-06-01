@@ -14,7 +14,7 @@ class StylingPageCubit extends Cubit<StylingPageState> {
   }
 
   Future<void> loadPhotosByCategory(String category) async {
-    emit(state.copyWith(isLoading: true, selectedCategory: category));
+    emit(state.copyWith(isLoading: true));
 
     try {
       final snapshot = await FirebaseFirestore.instance
