@@ -7,7 +7,7 @@ import 'friend_requests_tab_page_state.dart';
 class FriendRequestsTabPageCubit extends Cubit<FriendRequestsTabPageState> {
   FriendRequestsTabPageCubit() : super(const FriendRequestsTabPageState());
 
-  Future<void> loadFriendRequests({required String userId}) async {
+  Future<void> loadFriendRequests(String userId) async {
     emit(state.copyWith(isLoading: true));
     try {
       final snapshot = await FirebaseFirestore.instance

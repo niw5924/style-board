@@ -14,8 +14,7 @@ class FriendRequestsTabPage extends StatelessWidget {
     final userId = Provider.of<AuthProvider>(context, listen: false).user!.uid;
 
     return BlocProvider(
-      create: (_) =>
-          FriendRequestsTabPageCubit()..loadFriendRequests(userId: userId),
+      create: (_) => FriendRequestsTabPageCubit()..loadFriendRequests(userId),
       child:
           BlocBuilder<FriendRequestsTabPageCubit, FriendRequestsTabPageState>(
         builder: (context, state) {
