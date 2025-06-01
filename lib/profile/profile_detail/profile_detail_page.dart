@@ -18,19 +18,23 @@ class ProfileDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
+    final user = authProvider.user!;
+    final userId = user.uid;
+    final displayName = user.displayName ?? 'Unknown';
+
     return BlocProvider(
-      create: (context) => ProfileDetailPageCubit(context.read<AuthProvider>())
-        ..loadProfileData(),
+      create: (_) => ProfileDetailPageCubit(userId)..loadProfileData(),
       child: BlocBuilder<ProfileDetailPageCubit, ProfileDetailPageState>(
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          String topSeason = _getTopTag(state.seasonTags);
-          String topColor = _getTopTag(state.colorTags);
-          String topStyle = _getTopTag(state.styleTags);
-          String topPurpose = _getTopTag(state.purposeTags);
+          final topSeason = _getTopTag(state.seasonTags);
+          final topColor = _getTopTag(state.colorTags);
+          final topStyle = _getTopTag(state.styleTags);
+          final topPurpose = _getTopTag(state.purposeTags);
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -46,12 +50,7 @@ class ProfileDetailPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  context
-                          .read<ProfileDetailPageCubit>()
-                          .authProvider
-                          .user
-                          ?.displayName ??
-                      'Unknown',
+                  displayName,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

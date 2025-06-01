@@ -27,7 +27,8 @@ class _ClosetPageState extends State<ClosetPage> {
 
   Future<void> _handlePickPhoto(ImageSource source) async {
     HapticFeedback.mediumImpact();
-    final pickedXFile = await context.read<ClosetPageCubit>().pickPhoto(source);
+
+    final pickedXFile = await ImagePicker().pickImage(source: source);
 
     if (pickedXFile != null) {
       final result = await showDialog<Map<String, dynamic>>(
@@ -41,11 +42,11 @@ class _ClosetPageState extends State<ClosetPage> {
         final isLiked = result['isLiked'] as bool;
 
         await context.read<ClosetPageCubit>().savePhotoWithDetails(
-              pickedXFile: pickedXFile,
-              category: category,
-              tags: tags,
-              isLiked: isLiked,
-            );
+          pickedXFile: pickedXFile,
+          category: category,
+          tags: tags,
+          isLiked: isLiked,
+        );
 
         scaffoldMessengerKey.currentState?.showSnackBar(
           const SnackBar(content: Text('새로운 사진이 옷장에 추가되었습니다!')),
@@ -174,7 +175,7 @@ class _ClosetPageState extends State<ClosetPage> {
                   }
 
                   final filteredItems =
-                      context.read<ClosetPageCubit>().getFilteredClosetItems();
+                  context.read<ClosetPageCubit>().getFilteredClosetItems();
 
                   if (filteredItems.isEmpty) {
                     return const Center(
@@ -241,7 +242,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         item.category,
@@ -255,14 +256,14 @@ class _ClosetPageState extends State<ClosetPage> {
                                         onSelected: (value) async {
                                           if (value == 'delete') {
                                             final confirmed =
-                                                await showDialog<bool>(
+                                            await showDialog<bool>(
                                               context: context,
                                               builder: (_) =>
-                                                  const ConfirmDialog(
+                                              const ConfirmDialog(
                                                 icon: Icons.warning_rounded,
                                                 title: '사진 삭제',
                                                 message:
-                                                    '정말로 이 사진을 삭제하시겠습니까?\n삭제된 사진은 복구할 수 없습니다.',
+                                                '정말로 이 사진을 삭제하시겠습니까?\n삭제된 사진은 복구할 수 없습니다.',
                                                 cancelText: '취소',
                                                 confirmText: '삭제',
                                               ),
@@ -277,7 +278,7 @@ class _ClosetPageState extends State<ClosetPage> {
                                                   ?.showSnackBar(
                                                 const SnackBar(
                                                     content:
-                                                        Text('사진이 삭제되었습니다.')),
+                                                    Text('사진이 삭제되었습니다.')),
                                               );
                                             }
                                           }

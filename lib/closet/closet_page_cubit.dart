@@ -4,17 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:style_board/auth/auth_provider.dart';
 import '../models/closet_item.dart';
 import 'closet_page_state.dart';
 
 class ClosetPageCubit extends Cubit<ClosetPageState> {
-  final AuthProvider authProvider;
-  final ImagePicker _imagePicker = ImagePicker();
+  final String userId;
 
-  ClosetPageCubit(this.authProvider) : super(const ClosetPageState());
-
-  String get _userId => authProvider.user!.uid;
+  ClosetPageCubit(this.userId) : super(const ClosetPageState());
 
   Future<void> loadUserPhotos() async {
     emit(state.copyWith(
@@ -29,7 +25,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_userId)
+          .doc(userId)
           .collection('photos')
           .orderBy('timestamp', descending: false)
           .get();
@@ -49,14 +45,6 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     }
   }
 
-  Future<XFile?> pickPhoto(ImageSource source) async {
-    try {
-      return await _imagePicker.pickImage(source: source);
-    } catch (e) {
-      return null;
-    }
-  }
-
   Future<void> savePhotoWithDetails({
     required XFile pickedXFile,
     required String category,
@@ -73,7 +61,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
       final storageRef = FirebaseStorage.instance
           .ref()
           .child('user_photos')
-          .child(_userId)
+          .child(userId)
           .child(fileName);
 
       final imageFile = File(pickedXFile.path);
@@ -82,7 +70,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(_userId)
+          .doc(userId)
           .collection('photos')
           .add({
         'path': downloadUrl,
@@ -125,7 +113,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_userId)
+          .doc(userId)
           .collection('photos')
           .where('path', isEqualTo: item.path)
           .get();
@@ -146,7 +134,7 @@ class ClosetPageCubit extends Cubit<ClosetPageState> {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_userId)
+          .doc(userId)
           .collection('photos')
           .where('path', isEqualTo: item.path)
           .get();

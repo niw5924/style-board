@@ -2,19 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'profile_detail_page_state.dart';
-import 'package:style_board/auth/auth_provider.dart';
 
 class ProfileDetailPageCubit extends Cubit<ProfileDetailPageState> {
-  final AuthProvider authProvider;
+  final String userId;
 
-  ProfileDetailPageCubit(this.authProvider)
-      : super(const ProfileDetailPageState());
+  ProfileDetailPageCubit(this.userId) : super(const ProfileDetailPageState());
 
   Future<void> loadProfileData() async {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final userId = authProvider.user!.uid;
       final userRef =
           FirebaseFirestore.instance.collection('users').doc(userId);
 
@@ -82,8 +79,6 @@ class ProfileDetailPageCubit extends Cubit<ProfileDetailPageState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final userId = authProvider.user!.uid;
-
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
