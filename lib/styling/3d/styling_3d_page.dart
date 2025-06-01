@@ -33,6 +33,8 @@ class Styling3DPage extends StatelessWidget {
             SizedBox(height: MediaQuery.of(context).size.width * 0.2),
             ElevatedButton(
               onPressed: () {
+                final stylingCubit = context.read<StylingPageCubit>();
+
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -40,85 +42,86 @@ class Styling3DPage extends StatelessWidget {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(16)),
                   ),
-                  builder: (context) {
-                    return FractionallySizedBox(
-                      heightFactor: 0.7,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 5,
-                            margin: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          const Text(
-                            '3D 변환',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Expanded(
-                            child: GridView.builder(
-                              padding: const EdgeInsets.all(16),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
+                  builder: (_) {
+                    return BlocProvider.value(
+                      value: stylingCubit,
+                      child: FractionallySizedBox(
+                        heightFactor: 0.7,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 5,
+                              margin: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              itemCount: categories.length,
-                              itemBuilder: (context, index) {
-                                return CategoryTile2D(
-                                    category: categories[index]);
-                              },
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 30),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
+                            const Text(
+                              '3D 변환',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Expanded(
+                              child: GridView.builder(
+                                padding: const EdgeInsets.all(16),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                ),
+                                itemCount: categories.length,
+                                itemBuilder: (context, index) {
+                                  return CategoryTile2D(
+                                      category: categories[index]);
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 30),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  final selectedPhotos =
+                                      stylingCubit.state.selectedPhotos;
 
-                                final selectedPhotos = context
-                                    .read<StylingPageCubit>()
-                                    .state
-                                    .selectedPhotos;
-
-                                if (selectedPhotos.isNotEmpty) {
-                                  try {
-                                    final cubit =
-                                        context.read<Styling3DPageCubit>();
-                                    final entries =
-                                        selectedPhotos.entries.toList();
-                                    for (final entry in entries) {
-                                      await cubit.convertImageTo3DModel(
-                                        category: entry.key,
-                                        imagePath: entry.value,
+                                  if (selectedPhotos.isNotEmpty) {
+                                    try {
+                                      final styling3DCubit =
+                                          context.read<Styling3DPageCubit>();
+                                      for (final entry
+                                          in selectedPhotos.entries) {
+                                        await styling3DCubit
+                                            .convertImageTo3DModel(
+                                          category: entry.key,
+                                          imagePath: entry.value,
+                                        );
+                                      }
+                                    } catch (e) {
+                                      scaffoldMessengerKey.currentState
+                                          ?.showSnackBar(
+                                        SnackBar(content: Text(e.toString())),
                                       );
                                     }
-                                  } catch (e) {
+                                  } else {
                                     scaffoldMessengerKey.currentState
                                         ?.showSnackBar(
-                                      SnackBar(content: Text(e.toString())),
+                                      const SnackBar(
+                                          content: Text('옷을 선택해주세요!')),
                                     );
                                   }
-                                } else {
-                                  scaffoldMessengerKey.currentState
-                                      ?.showSnackBar(
-                                    const SnackBar(content: Text('옷을 선택해주세요!')),
-                                  );
-                                }
-                              },
-                              child: const Text('변환하기'),
+                                },
+                                child: const Text('변환하기'),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

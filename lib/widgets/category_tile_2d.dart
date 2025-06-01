@@ -26,6 +26,9 @@ class CategoryTile2D extends StatelessWidget {
             const SizedBox(height: 8),
             GestureDetector(
               onTap: () {
+                final stylingCubit = context.read<StylingPageCubit>();
+                stylingCubit.loadPhotosByCategory(category);
+
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -33,71 +36,76 @@ class CategoryTile2D extends StatelessWidget {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(16)),
                   ),
-                  builder: (context) {
-                    final cubit = context.read<StylingPageCubit>();
-                    cubit.loadPhotosByCategory(category);
-                    return FractionallySizedBox(
-                      heightFactor: 0.6,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 5,
-                            margin: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(10),
+                  builder: (_) {
+                    return BlocProvider.value(
+                      value: stylingCubit,
+                      child: FractionallySizedBox(
+                        heightFactor: 0.6,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 5,
+                              margin: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                          Text(
-                            category,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              category,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
-                          BlocBuilder<StylingPageCubit, StylingPageState>(
-                            builder: (context, state) {
-                              if (state.isLoading) {
-                                return const Expanded(
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
-                                );
-                              }
+                            const SizedBox(height: 12),
+                            BlocBuilder<StylingPageCubit, StylingPageState>(
+                              builder: (context, state) {
+                                if (state.isLoading) {
+                                  return const Expanded(
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
+                                  );
+                                }
 
-                              if (state.categoryPhotos.isEmpty) {
-                                return const Expanded(
-                                  child: Center(child: Text('저장된 사진이 없습니다.')),
-                                );
-                              }
+                                if (state.categoryPhotos.isEmpty) {
+                                  return const Expanded(
+                                    child: Center(child: Text('저장된 사진이 없습니다.')),
+                                  );
+                                }
 
-                              return Expanded(
-                                child: GridView.builder(
-                                  padding: const EdgeInsets.all(16),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 16,
-                                    mainAxisSpacing: 16,
+                                return Expanded(
+                                  child: GridView.builder(
+                                    padding: const EdgeInsets.all(16),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 16,
+                                      mainAxisSpacing: 16,
+                                    ),
+                                    itemCount: state.categoryPhotos.length,
+                                    itemBuilder: (context, index) {
+                                      final photo = state.categoryPhotos[index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          context
+                                              .read<StylingPageCubit>()
+                                              .selectPhoto(
+                                                category: category,
+                                                photo: photo,
+                                              );
+                                          Navigator.pop(context);
+                                        },
+                                        child: _buildImage(photo),
+                                      );
+                                    },
                                   ),
-                                  itemCount: state.categoryPhotos.length,
-                                  itemBuilder: (context, index) {
-                                    final photo = state.categoryPhotos[index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        cubit.selectPhoto(
-                                            category: category, photo: photo);
-                                        Navigator.pop(context);
-                                      },
-                                      child: _buildImage(photo),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
