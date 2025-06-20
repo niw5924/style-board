@@ -1,4 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
+import 'package:flutter_naver_login/interface/types/naver_account_result.dart';
+import 'package:flutter_naver_login/interface/types/naver_login_result.dart';
+import 'package:flutter_naver_login/interface/types/naver_login_status.dart';
+import 'package:flutter_naver_login/interface/types/naver_token.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -19,7 +24,7 @@ class AuthService {
   final firebase_auth.FirebaseAuth _firebaseAuth =
       firebase_auth.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Uuid _uuid = const Uuid(); // UUID 생성기
+  final Uuid _uuid = const Uuid();
 
   // Google 로그인 및 Firebase 연결
   Future<firebase_auth.User?> signInWithGoogle() async {
@@ -34,14 +39,12 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-      final user = userCredential.user;
+      await _firebaseAuth.signInWithCredential(credential);
+      firebase_auth.User? user = _firebaseAuth.currentUser;
 
       if (user != null) {
-        // Firestore에 유저 정보 저장
         await _saveUserToFirestore(user);
-        await _saveLoginMethod('google'); // 기기에 구글 로그인 방식 저장
+        await _saveLoginMethod('google');
         debugPrint('Firebase Google 로그인 성공');
       }
 
@@ -71,25 +74,24 @@ class AuthService {
 
       final customToken =
           await FirebaseCustomTokenService.getFirebaseCustomToken(
-        token.accessToken,
+        accessToken: token.accessToken,
+        provider: 'kakao',
       );
       if (customToken == null) {
         debugPrint('Firebase Custom Token 요청 실패');
         return null;
       }
 
-      final userCredential =
-          await _firebaseAuth.signInWithCustomToken(customToken);
-      final user = userCredential.user;
+      await _firebaseAuth.signInWithCustomToken(customToken);
+      firebase_auth.User? user = _firebaseAuth.currentUser;
 
       if (user != null) {
-        // Firebase DisplayName과 PhotoURL 업데이트
         await user.updateDisplayName(kakaoName);
         await user.updatePhotoURL(profileImageUrl);
-
-        // Firestore에 유저 정보 저장
-        await _saveUserToFirestore(user);
-        await _saveLoginMethod('kakao'); // 기기에 카카오 로그인 방식 저장
+        await user.reload(); // 서버에서 갱신된 사용자 정보를 다시 불러옵니다.
+        user = _firebaseAuth.currentUser;
+        await _saveUserToFirestore(user!);
+        await _saveLoginMethod('kakao');
         debugPrint('Firebase Kakao 로그인 성공');
       }
 
@@ -100,7 +102,56 @@ class AuthService {
     return null;
   }
 
-  // 로그인 방식 저장 (구글 or 카카오)
+  Future<firebase_auth.User?> signInWithNaver() async {
+    try {
+      final NaverLoginResult result = await FlutterNaverLogin.logIn();
+
+      if (result.status != NaverLoginStatus.loggedIn ||
+          result.account == null) {
+        debugPrint('Naver 로그인 실패 또는 취소');
+        return null;
+      }
+
+      final NaverToken token = await FlutterNaverLogin.getCurrentAccessToken();
+      if (!token.isValid()) {
+        debugPrint('유효하지 않은 Naver accessToken');
+        return null;
+      }
+
+      final String accessToken = token.accessToken;
+      final NaverAccountResult account = result.account!;
+
+      final customToken =
+          await FirebaseCustomTokenService.getFirebaseCustomToken(
+        accessToken: accessToken,
+        provider: 'naver',
+      );
+      if (customToken == null) {
+        debugPrint('Firebase Custom Token 요청 실패');
+        return null;
+      }
+
+      await _firebaseAuth.signInWithCustomToken(customToken);
+      firebase_auth.User? user = _firebaseAuth.currentUser;
+
+      if (user != null) {
+        await user.updateDisplayName(account.name);
+        await user.updatePhotoURL(account.profileImage);
+        await user.reload(); // 서버에서 갱신된 사용자 정보를 다시 불러옵니다.
+        user = _firebaseAuth.currentUser;
+        await _saveUserToFirestore(user!);
+        await _saveLoginMethod('naver');
+        debugPrint('Firebase Naver 로그인 성공');
+      }
+
+      return user;
+    } catch (e) {
+      debugPrint('Naver 로그인 예외 발생: $e');
+      return null;
+    }
+  }
+
+  // 로그인 방식 저장 (구글, 카카오, 네이버)
   Future<void> _saveLoginMethod(String method) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('login_method', method);
@@ -187,6 +238,12 @@ class AuthService {
           await _firebaseAuth.signOut();
           debugPrint('Kakao 로그아웃 성공');
           break;
+
+        case 'naver':
+          await FlutterNaverLogin.logOut();
+          await _firebaseAuth.signOut();
+          debugPrint('Naver 로그아웃 성공');
+          break;
       }
 
       await _clearLoginMethod(); // 저장된 로그인 방식 삭제
@@ -204,7 +261,13 @@ class AuthService {
       final userRef = _firestore.collection('users').doc(userId);
 
       // 하위 컬렉션 삭제
-      final collections = ['photos', 'friends', 'myPicks'];
+      final collections = [
+        'photos',
+        'myPicks',
+        'friends',
+        'friendRequestsSent',
+        'friendRequestsReceived',
+      ];
       for (var collection in collections) {
         final snapshot = await userRef.collection(collection).get();
         for (var doc in snapshot.docs) {

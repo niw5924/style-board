@@ -64,9 +64,9 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    // OverlayLoader.show(context);
-                    // await authProvider.signInWithNaver();
-                    // OverlayLoader.hide();
+                    OverlayLoader.show(context);
+                    await authProvider.signInWithNaver();
+                    OverlayLoader.hide();
                   },
                   child: _buildLoginButton(
                     color: const Color(0xFF03C75A),

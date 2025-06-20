@@ -6,12 +6,18 @@ import 'package:http/http.dart' as http;
 class FirebaseCustomTokenService {
   static final String _serverUrl = dotenv.env['CUSTOM_TOKEN_API_URL']!;
 
-  static Future<String?> getFirebaseCustomToken(String kakaoAccessToken) async {
+  static Future<String?> getFirebaseCustomToken({
+    required String accessToken,
+    required String provider,
+  }) async {
     try {
       final response = await http.post(
         Uri.parse(_serverUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'kakaoAccessToken': kakaoAccessToken}),
+        body: jsonEncode({
+          'provider': provider,
+          'accessToken': accessToken,
+        }),
       );
 
       if (response.statusCode == 200) {

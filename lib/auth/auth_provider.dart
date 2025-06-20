@@ -65,8 +65,8 @@ class AuthProvider with ChangeNotifier {
     final user = await _authService.signInWithGoogle();
     if (user != null) {
       await setUser(user);
+      debugPrint("Google 로그인 완료");
     }
-    debugPrint("Google 로그인 완료");
   }
 
   /// Kakao 로그인 실행.
@@ -74,8 +74,17 @@ class AuthProvider with ChangeNotifier {
     final user = await _authService.signInWithKakao();
     if (user != null) {
       await setUser(user);
+      debugPrint("Kakao 로그인 완료");
     }
-    debugPrint("Kakao 로그인 완료");
+  }
+
+  /// Naver 로그인 실행.
+  Future<void> signInWithNaver() async {
+    final user = await _authService.signInWithNaver();
+    if (user != null) {
+      await setUser(user);
+      debugPrint("Naver 로그인 완료");
+    }
   }
 
   /// 로그아웃을 수행하고 상태를 초기화.
