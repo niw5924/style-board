@@ -61,6 +61,20 @@ class LoginPage extends StatelessWidget {
                     textColor: Colors.black.withValues(alpha: 0.85),
                   ),
                 ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () async {
+                    // OverlayLoader.show(context);
+                    // await authProvider.signInWithNaver();
+                    // OverlayLoader.hide();
+                  },
+                  child: _buildLoginButton(
+                    color: const Color(0xFF03C75A),
+                    iconPath: 'assets/images/naver_logo.png',
+                    text: '네이버 계정으로 로그인',
+                    textColor: Colors.white,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 const Text(
                   '본 서비스 로그인 시 이용약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.',
