@@ -186,9 +186,7 @@ class ProfileDetailPage extends StatelessWidget {
                             );
                             if (confirmed == true) {
                               OverlayLoader.show(context);
-                              await context
-                                  .read<AuthProvider>()
-                                  .deleteAccount();
+                              await context.read<AuthProvider>().withdraw();
                               OverlayLoader.hide();
                             }
                           },

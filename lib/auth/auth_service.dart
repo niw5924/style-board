@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_naver_login/interface/types/naver_account_result.dart';
@@ -223,44 +224,48 @@ class AuthService {
   // 로그아웃
   Future<void> signOut() async {
     try {
-      // 저장된 로그인 방식 불러오기
       final loginMethod = await getLoginMethod();
 
       switch (loginMethod) {
         case 'google':
           await _googleSignIn.signOut();
-          await _firebaseAuth.signOut();
           debugPrint('Google 로그아웃 성공');
           break;
-
         case 'kakao':
           await UserApi.instance.logout();
-          await _firebaseAuth.signOut();
           debugPrint('Kakao 로그아웃 성공');
           break;
-
         case 'naver':
           await FlutterNaverLogin.logOut();
-          await _firebaseAuth.signOut();
           debugPrint('Naver 로그아웃 성공');
           break;
       }
 
-      await _clearLoginMethod(); // 저장된 로그인 방식 삭제
+      await _firebaseAuth.signOut();
+      await _clearLoginMethod();
       debugPrint('로그아웃 완료');
     } catch (e) {
       debugPrint('로그아웃 중 오류 발생: $e');
     }
   }
 
-  // 회원탈퇴
-  Future<void> deleteAccount() async {
+  // Firebase Storage 이미지, Firestore 사용자 문서, Firebase Auth 계정 삭제
+  Future<void> deleteUserData() async {
     try {
       final user = _firebaseAuth.currentUser!;
       final userId = user.uid;
       final userRef = _firestore.collection('users').doc(userId);
 
-      // 하위 컬렉션 삭제
+      // Firebase Storage의 사용자 이미지 삭제
+      final storageRef =
+          FirebaseStorage.instance.ref().child('user_photos/$userId');
+      final listResult = await storageRef.listAll();
+      for (final item in listResult.items) {
+        await item.delete();
+        debugPrint('삭제된 이미지: ${item.fullPath}');
+      }
+
+      // Firestore의 하위 컬렉션 삭제
       final collections = [
         'photos',
         'myPicks',
@@ -282,8 +287,36 @@ class AuthService {
       // Firebase Authentication 계정 삭제
       await user.delete();
       debugPrint("Firebase Authentication 계정 삭제 완료");
+    } catch (e) {
+      debugPrint('사용자 데이터 삭제 실패: $e');
+    }
+  }
 
-      debugPrint("회원탈퇴 완료");
+  // 회원탈퇴
+  Future<void> withdraw() async {
+    try {
+      final loginMethod = await getLoginMethod();
+
+      switch (loginMethod) {
+        case 'google':
+          await _googleSignIn.disconnect();
+          debugPrint('Google 연결 해제 완료');
+          break;
+        case 'kakao':
+          await UserApi.instance.unlink();
+          debugPrint('Kakao 연결 해제 완료');
+          break;
+        case 'naver':
+          await FlutterNaverLogin.logOutAndDeleteToken();
+          debugPrint('Naver 연결 해제 완료');
+          break;
+      }
+
+      await deleteUserData();
+      await _firebaseAuth.signOut();
+      await _clearLoginMethod();
+      debugPrint('Firebase 로그아웃 완료');
+      debugPrint('회원탈퇴 완료');
     } catch (e) {
       debugPrint('회원탈퇴 실패: $e');
     }
