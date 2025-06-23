@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/utils/overlay_loader.dart';
-
-import '../widgets/typewriter_text.dart';
+import 'package:style_board/widgets/typewriter_rich_text.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
