@@ -18,9 +18,23 @@ class LoginPage extends StatelessWidget {
         children: [
           const Expanded(
             child: Center(
-              child: TypewriterText(
-                text: '스타일보드',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              child: TypewriterRichText(
+                spans: [
+                  TextSpan(
+                    text: '스타일보드\n\n',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '나만의 옷장, 나만의 스타일을 완성하세요.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
