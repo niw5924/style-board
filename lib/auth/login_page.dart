@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:style_board/auth/auth_provider.dart';
 import 'package:style_board/utils/overlay_loader.dart';
 
+import '../widgets/typewriter_text.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -16,8 +18,8 @@ class LoginPage extends StatelessWidget {
         children: [
           const Expanded(
             child: Center(
-              child: Text(
-                '스타일보드',
+              child: TypewriterText(
+                text: '스타일보드',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
