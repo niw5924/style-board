@@ -180,7 +180,7 @@ class _ClosetPageState extends State<ClosetPage> {
                   if (filteredItems.isEmpty) {
                     return const Center(
                       child: Text(
-                        "필터링된 사진이 없습니다.",
+                        "사진이 없습니다.",
                         style: TextStyle(fontSize: 16),
                       ),
                     );
