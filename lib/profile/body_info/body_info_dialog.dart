@@ -23,6 +23,7 @@ class _BodyInfoDialogState extends State<BodyInfoDialog> {
       content: Column(
         children: [
           DropdownButtonFormField<String>(
+            borderRadius: BorderRadius.circular(8),
             decoration: InputDecoration(
               labelText: '성별 선택',
               border:

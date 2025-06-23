@@ -138,6 +138,7 @@ class _ClosetCategoryTagDialogState extends State<ClosetCategoryTagDialog> {
     required ValueChanged<String?> onChanged,
   }) {
     return DropdownButtonFormField<String>(
+      borderRadius: BorderRadius.circular(8),
       decoration: InputDecoration(
         labelText: label,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
