@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.niw.style_board"
     compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    ndkVersion "28.0.12916984"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
